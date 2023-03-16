@@ -1,5 +1,6 @@
 package com.catchtwobirds.soboro.config.sercurity;
 
+import com.catchtwobirds.soboro.auth.token.AuthTokenProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
