@@ -70,7 +70,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         return UserPrincipal.create(savedUser, user.getAttributes());
     }
 
-    // 소셜 로그인 회원가입 (소셜 로그인 시 DB에 없으면 회원가입 로직을 수행함)
+    // 소셜회원가입 (소셜 로그인 시 DB에 없으면 회원가입 로직을 수행함)
     private User createUser(OAuth2UserInfo userInfo, ProviderType providerType) {
         LocalDateTime now = LocalDateTime.now();
         User user = User.builder()
@@ -88,28 +88,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .userActive(true)
                 .build();
 
-//        User user = new User(
-//                userInfo.getId(),
-//                userInfo.getName(),
-//                userInfo.getEmail(),
-//
-//                providerType,
-//                RoleType.USER,
-//                now,
-//        );
-
         return userRepository.saveAndFlush(user);
     }
 
-    // 회원수정
+    // 소셜회원 정보수정
     private User updateUser(User user, OAuth2UserInfo userInfo) {
         if (userInfo.getName() != null && !user.getUserName().equals(userInfo.getName())) {
             user.setUserName(userInfo.getName());
         }
-
-//        if (userInfo.getImageUrl() != null && !user.getProfileImageUrl().equals(userInfo.getImageUrl())) {
-//            user.setProfileImageUrl(userInfo.getImageUrl());
-//        }
 
         return user;
     }
