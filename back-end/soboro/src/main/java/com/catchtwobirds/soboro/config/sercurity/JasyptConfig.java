@@ -1,4 +1,4 @@
-package com.catchtwobirds.soboro.config;
+package com.catchtwobirds.soboro.config.sercurity;
 
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
