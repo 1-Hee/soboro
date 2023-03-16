@@ -1,4 +1,4 @@
-package com.catchtwobirds.soboro.consulting.entity;
+package com.catchtwobirds.soboro.content.entity;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 //@Entity
