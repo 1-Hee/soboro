@@ -1,6 +1,6 @@
 package com.catchtwobirds.soboro.consulting.entity;
 
-import com.catchtwobirds.soboro.entity.User;
+import com.catchtwobirds.soboro.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
