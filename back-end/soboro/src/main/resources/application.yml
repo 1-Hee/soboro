@@ -40,15 +40,15 @@ spring:
         max-active: 10
         max-idle: 10
         min-idle: 2
-    port: 6379
-    host: localhost
+    port: 6363
+    host: host.docker.internal
     password: '1q2w3e4r'
   security:
     oauth2.client:
       registration:
         kakao:
-          clientId: cliId
-          clientSecret: CliSecret
+          clientId: dummyId
+          clientSecret: dummySecret
           clientAuthenticationMethod: post
           authorizationGrantType: authorization_code
           redirectUri: http://localhost:8080/login/oauth2/code/kakao
