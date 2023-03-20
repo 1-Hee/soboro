@@ -4,7 +4,6 @@ import com.catchtwobirds.soboro.config.properties.AppProperties;
 import com.catchtwobirds.soboro.auth.entity.ProviderType;
 import com.catchtwobirds.soboro.auth.entity.RoleType;
 import com.catchtwobirds.soboro.auth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
-import com.catchtwobirds.soboro.user.entity.UserRefreshToken;
 import com.catchtwobirds.soboro.auth.info.OAuth2UserInfo;
 import com.catchtwobirds.soboro.auth.info.OAuth2UserInfoFactory;
 import com.catchtwobirds.soboro.auth.token.AuthToken;
@@ -12,6 +11,7 @@ import com.catchtwobirds.soboro.auth.token.AuthTokenProvider;
 import com.catchtwobirds.soboro.user.repository.UserRefreshTokenRepository;
 
 import com.catchtwobirds.soboro.utils.CookieUtil;
+import com.catchtwobirds.soboro.utils.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -56,6 +56,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final AppProperties appProperties;
     private final UserRefreshTokenRepository userRefreshTokenRepository;
     private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
+    private final RedisUtil redisUtil;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -89,6 +90,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         RoleType roleType = hasAuthority(authorities, RoleType.ADMIN.getCode()) ? RoleType.ADMIN : RoleType.USER;
 
+        // refresh token 생성
         Date now = new Date();
         AuthToken accessToken = tokenProvider.createAuthToken(
                 userInfo.getId(),
@@ -96,7 +98,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
         );
 
-        // refresh 토큰 설정
+        // refresh 토큰 기간 설정
         long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
 
         AuthToken refreshToken = tokenProvider.createAuthToken(
@@ -104,21 +106,31 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 new Date(now.getTime() + refreshTokenExpiry)
         );
 
-        // DB 저장
-        UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserId(userInfo.getId());
+        // rt가져오기
+        String userRefreshToken = redisUtil.getData((String) userInfo.getId());
+
+        // 리프래쉬 토큰이 있으면 삭제합니다.
         if (userRefreshToken != null) {
-            userRefreshToken.setRefreshToken(refreshToken.getToken());
-        } else {
-            userRefreshToken = new UserRefreshToken(userInfo.getId(), refreshToken.getToken());
-            userRefreshTokenRepository.saveAndFlush(userRefreshToken);
+            log.info("refresh token exists so delete and save new token");
+            userRefreshTokenRepository.deleteById((String) userInfo.getId());
         }
 
+        // 새로 발급하기
+//        userRefreshToken = refreshToken.getToken();
+        // 발급한 새 토큰을 redis에 저장함.
+        redisUtil.setDataExpire((String) userInfo.getId(), refreshToken.getToken(), refreshTokenExpiry);
+//        userRefreshToken = new UserRefreshToken(userInfo.getId(), refreshToken.getToken());
+//        userRefreshTokenRepository.saveAndFlush(userRefreshToken);
+
+        // 쿠키
         int cookieMaxAge = (int) refreshTokenExpiry / 60;
 
         CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
         CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
+        
+        // token 생성값 확인
         log.info("Oauth return access token : {}", accessToken.getToken());
-
+        log.info("Oauth redis save refresh token : {}", refreshToken.getToken());
 //        return UriComponentsBuilder.fromHttpRequest("Authrorization", )
 
         return UriComponentsBuilder.fromUriString(targetUrl)

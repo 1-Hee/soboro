@@ -11,6 +11,7 @@ import com.catchtwobirds.soboro.auth.repository.OAuth2AuthorizationRequestBasedO
 import com.catchtwobirds.soboro.auth.service.CustomOAuth2UserService;
 import com.catchtwobirds.soboro.auth.token.AuthTokenProvider;
 import com.catchtwobirds.soboro.user.repository.UserRefreshTokenRepository;
+import com.catchtwobirds.soboro.utils.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,6 +45,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserService oAuth2UserService;
     private final TokenAccessDeniedHandler tokenAccessDeniedHandler;
     private final UserRefreshTokenRepository userRefreshTokenRepository;
+    private final RedisUtil redisUtil;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -63,7 +65,7 @@ public class SecurityConfig {
                 .authorizeRequests()
 //                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 //                .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode())
-                .antMatchers("/api/v1/auth/login").permitAll()
+                .antMatchers("/api/auth/login").permitAll()
 //                .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
                 .anyRequest().authenticated()
                 .and()
@@ -150,7 +152,8 @@ public class SecurityConfig {
                 tokenProvider,
                 appProperties,
                 userRefreshTokenRepository,
-                oAuth2AuthorizationRequestBasedOnCookieRepository()
+                oAuth2AuthorizationRequestBasedOnCookieRepository(),
+                redisUtil
         );
     }
 

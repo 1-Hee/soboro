@@ -25,7 +25,7 @@ public class UserDto {
             this.userName = user.getUserName();
             this.userEmail = user.getUserEmail();
             this.userPhone = user.getUserPhone();
-            this.userBirthDate = user.getUserBirthdate();
+            this.userBirthDate = user.getUserBirthDate();
             this.userGender = user.getUserGender();
             this.userTerms = user.isUserTerms();
         }
@@ -38,7 +38,7 @@ public class UserDto {
                 .userEmail(userEmail)
                 .userPhone(userPhone)
                 .userGender(userGender)
-                .userBirthdate(userBirthDate)
+                .userBirthDate(userBirthDate)
                 .userTerms(userTerms)
                 .build();
     }

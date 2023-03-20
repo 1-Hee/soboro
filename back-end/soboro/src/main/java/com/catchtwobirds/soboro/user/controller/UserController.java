@@ -1,6 +1,8 @@
 package com.catchtwobirds.soboro.user.controller;
 
+import com.catchtwobirds.soboro.common.ApiResponse;
 import com.catchtwobirds.soboro.user.dto.UserDto;
+import com.catchtwobirds.soboro.user.entity.User;
 import com.catchtwobirds.soboro.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,4 +30,30 @@ public class UserController {
         log.info("getUser user : {}", user);
         return ApiResponse.success("user", user);
     }
+
+
+//    @PostMapping("/signup")
+//    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+//        if(userRepository.existsByEmail(signUpRequest.getEmail())) {
+//            throw new BadRequestException("Email address already in use.");
+//        }
+//
+//        // Creating user's account
+//        User user = new User();
+//        user.setName(signUpRequest.getName());
+//        user.setEmail(signUpRequest.getEmail());
+//        user.setPassword(signUpRequest.getPassword());
+//        user.setProvider(AuthProvider.local);
+//
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//
+//        User result = userRepository.save(user);
+//
+//        URI location = ServletUriComponentsBuilder
+//                .fromCurrentContextPath().path("/user/me")
+//                .buildAndExpand(result.getId()).toUri();
+//
+//        return ResponseEntity.created(location)
+//                .body(new ApiResponse(true, "User registered successfully@"));
+//    }
 }

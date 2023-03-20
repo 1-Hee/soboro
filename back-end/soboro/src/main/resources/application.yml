@@ -30,10 +30,10 @@ spring:
   data:
     mongodb:
       host: localhost
-      port: 2701
+      port: 27017
       database: soborodb
       username: root
-      password: 1q2w3e4r
+      password: '1q2w3e4r'
   redis:
     lettuce:
       pool:

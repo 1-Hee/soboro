@@ -7,10 +7,10 @@ import com.catchtwobirds.soboro.auth.entity.RoleType;
 import com.catchtwobirds.soboro.auth.entity.UserPrincipal;
 import com.catchtwobirds.soboro.auth.token.AuthToken;
 import com.catchtwobirds.soboro.auth.token.AuthTokenProvider;
-import com.catchtwobirds.soboro.user.entity.UserRefreshToken;
 import com.catchtwobirds.soboro.user.repository.UserRefreshTokenRepository;
 import com.catchtwobirds.soboro.utils.CookieUtil;
 import com.catchtwobirds.soboro.utils.HeaderUtil;
+import com.catchtwobirds.soboro.utils.RedisUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +35,7 @@ public class AuthController {
     private final AuthTokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
     private final UserRefreshTokenRepository userRefreshTokenRepository;
+    private final RedisUtil redisUtil;
 
     private final static long THREE_DAYS_MSEC = 259200000;
     private final static String REFRESH_TOKEN = "refresh_token";
@@ -75,14 +76,19 @@ public class AuthController {
         log.info("rf token : {} ", refreshToken);
 
         // userId refresh token 으로 DB 확인
-        UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserId(userId);
+        // UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserId(userId);
+        String userRefreshToken = redisUtil.getData((String) userId);
         if (userRefreshToken == null) {
             // 없는 경우 새로 등록
-            userRefreshToken = new UserRefreshToken(userId, refreshToken.getToken());
-            userRefreshTokenRepository.saveAndFlush(userRefreshToken);
+            redisUtil.setDataExpire((String) userId, refreshToken.getToken(), refreshTokenExpiry);
+            // userRefreshToken = new UserRefreshToken(userId, refreshToken.getToken());
+            // userRefreshTokenRepository.saveAndFlush(userRefreshToken);
         } else {
-            // DB에 refresh 토큰 업데이트
-            userRefreshToken.setRefreshToken(refreshToken.getToken());
+            // 기존 refresh 토큰 삭제하기
+            userRefreshTokenRepository.deleteById((String) userId);
+            // DB에 refresh 토큰 새로 넣기
+//            userRefreshToken.setRefreshToken(refreshToken.getToken());
+            redisUtil.setDataExpire((String) userId, refreshToken.getToken(), refreshTokenExpiry);
         }
 
         int cookieMaxAge = (int) refreshTokenExpiry / 60;
@@ -121,7 +127,8 @@ public class AuthController {
         }
 
         // userId refresh token 으로 DB 확인
-        UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserIdAndRefreshToken(userId, refreshToken);
+        String userRefreshToken = redisUtil.getData((String) userId);
+        // UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserIdAndRefreshToken(userId, refreshToken);
         if (userRefreshToken == null) {
             return ApiResponse.invalidRefreshToken();
         }
@@ -146,7 +153,8 @@ public class AuthController {
             );
 
             // DB에 refresh 토큰 업데이트
-            userRefreshToken.setRefreshToken(authRefreshToken.getToken());
+            // userRefreshToken.setRefreshToken(authRefreshToken.getToken());
+            redisUtil.setDataExpire((String) userId, authRefreshToken.getToken(), refreshTokenExpiry);
 
             int cookieMaxAge = (int) refreshTokenExpiry / 60;
             CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
@@ -155,30 +163,5 @@ public class AuthController {
 
         return ApiResponse.success("token", newAccessToken.getToken());
     }
-
-//    @PostMapping("/signup")
-//    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-//        if(userRepository.existsByEmail(signUpRequest.getEmail())) {
-//            throw new BadRequestException("Email address already in use.");
-//        }
-//
-//        // Creating user's account
-//        User user = new User();
-//        user.setName(signUpRequest.getName());
-//        user.setEmail(signUpRequest.getEmail());
-//        user.setPassword(signUpRequest.getPassword());
-//        user.setProvider(AuthProvider.local);
-//
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//
-//        User result = userRepository.save(user);
-//
-//        URI location = ServletUriComponentsBuilder
-//                .fromCurrentContextPath().path("/user/me")
-//                .buildAndExpand(result.getId()).toUri();
-//
-//        return ResponseEntity.created(location)
-//                .body(new ApiResponse(true, "User registered successfully@"));
-//    }
 
 }

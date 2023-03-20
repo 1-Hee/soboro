@@ -1,43 +1,23 @@
 package com.catchtwobirds.soboro.user.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.TimeToLive;
+import org.springframework.data.redis.core.index.Indexed;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.persistence.Id;
 
+@RedisHash("UserRefreshToken")
 @Getter
-@Setter
-@NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "user_refresh_token")
+@Builder
 public class UserRefreshToken {
-    @JsonIgnore
     @Id
-    @Column(name = "refresh_token_seq")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long refreshTokenSeq;
+    @Indexed
+    private String id;
 
-    @Column(name = "user_id", length = 64, unique = true)
-    @NotNull
-    @Size(max = 64)
-    private String userId;
-
-    @Column(name = "refresh_token", length = 256)
-    @NotNull
-    @Size(max = 256)
-    private String refreshToken;
-
-    public UserRefreshToken(
-            @NotNull @Size(max = 64) String userId,
-            @NotNull @Size(max = 256) String refreshToken
-    ) {
-        this.userId = userId;
-        this.refreshToken = refreshToken;
-    }
+    @TimeToLive
+    private Long expire;
 }
