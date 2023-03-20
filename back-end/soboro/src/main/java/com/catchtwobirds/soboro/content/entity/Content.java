@@ -16,7 +16,7 @@ public class Content {
 
     @Id
     @Column(name = "content_no")
-    private Long id;
+    private Long ContentNo;
 
     // 외래키
     private Long consultingNo;
