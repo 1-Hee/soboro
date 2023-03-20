@@ -18,10 +18,10 @@ public class Consulting {
     @Id
     @GeneratedValue
     @Column(name = "consulting_no")
-    private Long id;
+    private Integer consultingNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_no")
+    @JoinColumn(name = "userNo")
     private User user;
     private LocalDateTime consultingVisitDate;
     private String consultingVisitPlace;
