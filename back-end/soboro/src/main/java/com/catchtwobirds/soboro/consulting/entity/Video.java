@@ -16,7 +16,7 @@ public class Video {
     @Id
     @GeneratedValue
     @Column(name = "video_no")
-    private Long id;
+    private Long videoNO;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "consulting_no")
