@@ -47,8 +47,8 @@ spring:
     oauth2.client:
       registration:
         kakao:
-          clientId: dummyId
-          clientSecret: dummySecret
+          clientId: clientId
+          clientSecret: clientSecret
           clientAuthenticationMethod: post
           authorizationGrantType: authorization_code
           redirectUri: http://localhost:8080/login/oauth2/code/kakao
@@ -73,12 +73,12 @@ cors:
   max-age: 3600
 
 # jwt secret key 설정
-jwt.secret: 'sssssssseeeeeeeeeccccccrrrrrreeeettttt'
+jwt.secret: '926D96C90030DD58429D2751AC1BDBBC1AC1BDBBCD2751AC1BDBBC1AC1BDBBC'
 
 # 토큰 관련 secret Key 및 RedirectUri 설정
 app:
   auth:
-    tokenSecret: TTTTTOOOOOKKKKDNNENNSIIIICCCCRREEEETTT
+    tokenSecret: 926D96C90030DD58429D2751AC1BDBBC1AC1BDBBCD2751AC1BDBBC1AC1BDBBC
     tokenExpiry: 1800000
     refreshTokenExpiry: 604800000
   oauth2:

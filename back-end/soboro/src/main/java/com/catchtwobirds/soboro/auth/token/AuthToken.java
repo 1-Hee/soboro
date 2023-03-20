@@ -30,7 +30,6 @@ public class AuthToken {
     @Getter
     private final String token;
     private final Key key;
-
     private static final String AUTHORITIES_KEY = "role";
 
     AuthToken(String id, Date expiry, Key key) {
@@ -98,4 +97,5 @@ public class AuthToken {
         }
         return null;
     }
+
 }

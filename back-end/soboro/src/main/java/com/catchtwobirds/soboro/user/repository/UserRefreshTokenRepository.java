@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * redis Refresh token repository
+ */
 @Repository
 @Component
 public interface UserRefreshTokenRepository extends CrudRepository<UserRefreshToken,String> {

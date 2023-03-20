@@ -1,5 +1,7 @@
 package com.catchtwobirds.soboro.utils;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.util.SerializationUtils;
 
 import javax.servlet.http.Cookie;
@@ -20,11 +22,12 @@ import java.util.Optional;
  * 인증 요청이 필요하지 않은 경우 쿠키를 삭제하거나 만료시간을 0으로 설정합니다.
  */
 
+@Slf4j
 public class CookieUtil {
 
     public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
-
+        log.info("getCookie cookie : {} ", cookies);
         if (cookies != null && cookies.length > 0) {
             for (Cookie cookie : cookies) {
                 if (name.equals(cookie.getName())) {
@@ -34,6 +37,17 @@ public class CookieUtil {
         }
         return Optional.empty();
     }
+
+    public static String getRefreshTokenCookie(HttpServletRequest request) {
+        for (Cookie cookie : request.getCookies()) {
+            log.info("Cookie name = {}, Cookie Value = {}", cookie.getName(),cookie.getValue());
+            if (cookie.getName().equals("refresh_token")) {
+                return cookie.getValue();
+            }
+        }
+        throw new JwtException("RefreshToken is invaild");
+    }
+
 
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
         Cookie cookie = new Cookie(name, value);

@@ -6,9 +6,12 @@ import com.catchtwobirds.soboro.auth.entity.UserPrincipal;
 import com.catchtwobirds.soboro.auth.exception.OAuthProviderMissMatchException;
 import com.catchtwobirds.soboro.auth.info.OAuth2UserInfo;
 import com.catchtwobirds.soboro.auth.info.OAuth2UserInfoFactory;
+import com.catchtwobirds.soboro.config.properties.AppProperties;
 import com.catchtwobirds.soboro.user.entity.User;
 import com.catchtwobirds.soboro.user.repository.UserRepository;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -17,6 +20,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.security.Key;
 import java.time.LocalDateTime;
 
 /**
@@ -29,11 +33,13 @@ import java.time.LocalDateTime;
  * 마지막으로 **`UserPrincipal.create()`**를 호출하여 UserPrincipal 객체를 생성하고, 이를 반환합니다. <br>
  */
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
+    private final AppProperties appProperties;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -98,5 +104,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
         return user;
+    }
+
+    public String getId(String token) {
+        log.info("getId method token : {}", token);
+        return Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(token).getBody().getSubject();
     }
 }

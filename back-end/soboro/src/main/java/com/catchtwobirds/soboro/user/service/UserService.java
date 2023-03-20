@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
 
+    // 회원 정보 가져오기
     public User getUser(String userId) {
         return userRepository.findByUserId(userId);
     }
 
+    // 회원 가입
     public void insertUser(UserDto userDto) {
         userRepository.save(userDto.toEntity());
     }

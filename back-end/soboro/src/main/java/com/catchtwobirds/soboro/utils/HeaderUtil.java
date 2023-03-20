@@ -1,5 +1,7 @@
 package com.catchtwobirds.soboro.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
  * 이 JWT 토큰은 보통 Spring Security와 같은 인증 및 권한 부여 프레임워크에서 사용됩니다.
  */
 
+@Slf4j
 public class HeaderUtil {
 
     private final static String HEADER_AUTHORIZATION = "Authorization";
@@ -18,6 +21,7 @@ public class HeaderUtil {
 
     public static String getAccessToken(HttpServletRequest request) {
         String headerValue = request.getHeader(HEADER_AUTHORIZATION);
+        log.info("Access Token (plus HEADER) = {}", headerValue);
 
         if (headerValue == null) {
             return null;
