@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +25,19 @@ public class TestController {
     @GetMapping
     public ResponseEntity<?> test () {
         return ResponseEntity.ok().body("server call test");
+    }
+
+    @GetMapping("/map")
+    public ResponseEntity<?> testMap () {
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("status", 200);
+        resultMap.put("message", "요청완료");
+        List<TestDto> testDtoList = new ArrayList<>();
+        for (int i = 0; i< 3; i++) {
+            testDtoList.add(new TestDto("testId", "testName", "testPW") );
+        }
+        resultMap.put("data", testDtoList);
+        return ResponseEntity.ok().body(resultMap);
     }
 
     @GetMapping("/auth")

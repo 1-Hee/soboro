@@ -38,7 +38,7 @@ public class UserController {
 
 //    @PostMapping("/signup")
 //    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-//        if(userRepository.existsByEmail(signUpRequest.getEmail())) {
+//        if(userService.getUser(signUpRequest.getUserId())!= null) {
 //            throw new BadRequestException("Email address already in use.");
 //        }
 //
