@@ -1,13 +1,17 @@
 package com.catchtwobirds.soboro.user.controller;
 
+import com.catchtwobirds.soboro.auth.dto.SignUpRequest;
 import com.catchtwobirds.soboro.common.ApiResponse;
 import com.catchtwobirds.soboro.user.dto.UserDto;
 import com.catchtwobirds.soboro.user.entity.User;
 import com.catchtwobirds.soboro.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Slf4j
 @RestController
