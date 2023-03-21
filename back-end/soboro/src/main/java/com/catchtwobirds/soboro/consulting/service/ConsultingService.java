@@ -2,7 +2,6 @@ package com.catchtwobirds.soboro.consulting.service;
 
 import com.catchtwobirds.soboro.consulting.entity.Consulting;
 import com.catchtwobirds.soboro.consulting.repository.ConsultingRepository;
-import com.catchtwobirds.soboro.consulting.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +14,6 @@ import java.util.Optional;
 @Transactional(readOnly = true) // 트랜젝션 안에서만 변경하게
 public class ConsultingService {
     private final ConsultingRepository consultingRepository;
-    private final VideoRepository videoRepository;
 
     // 컨설팅 저장
 
