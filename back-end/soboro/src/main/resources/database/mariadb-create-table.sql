@@ -17,15 +17,10 @@ create table user(
 
 create table consulting(
                    `consulting_no` int NOT NULL AUTO_INCREMENT primary key,
-                   consulting_id int,
+                   `consulting_id` int,
                    `consulting_visit_date` timestamp,
                    `consulting_visit_place` varchar(100),
                    `consulting_visit_class` varchar(100),
-                   CONSTRAINT user_no foreign key (consulting_no) REFERENCES user (user_no) on delete cascade on update cascade
-);
-
-create table video(
-                  `video_no` int NOT NULL AUTO_INCREMENT primary key,
-                  `video_location` varchar(255),
-                  CONSTRAINT consulting_no foreign key (video_no) REFERENCES consulting (consulting_no) on delete cascade on update cascade
+                   `video_location` varchar(255),
+                   CONSTRAINT user_no foreign key (consulting_id) REFERENCES user (user_no) on delete cascade on update cascade
 );
