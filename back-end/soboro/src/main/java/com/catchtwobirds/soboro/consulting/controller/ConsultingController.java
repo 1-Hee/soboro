@@ -5,6 +5,7 @@ import com.catchtwobirds.soboro.consulting.dto.ConsultingDetailDto;
 import com.catchtwobirds.soboro.consulting.dto.ConsultingListDto;
 import com.catchtwobirds.soboro.consulting.entity.Consulting;
 import com.catchtwobirds.soboro.consulting.repository.ConsultingRepository;
+import com.catchtwobirds.soboro.consulting.service.ConsultingService;
 import com.catchtwobirds.soboro.user.entity.User;
 import com.catchtwobirds.soboro.user.service.UserService;
 import com.catchtwobirds.soboro.utils.HeaderUtil;
@@ -28,7 +29,7 @@ import java.util.Optional;
 @Tag(name = "consult", description = "컨설팅 내용 관련 컨트롤러")
 public class ConsultingController {
 
-    private final ConsultingRepository consultingRepository;
+    private final ConsultingService consultingService;
 
     private final CustomOAuth2UserService customOAuth2UserService;
 
@@ -40,29 +41,23 @@ public class ConsultingController {
 
         String token = HeaderUtil.getAccessTokenString(Authorization);
         String id = customOAuth2UserService.getId(token);
-        int userNo = userService.getUser(id).getUserNo();
+        Integer userNo = userService.getUser(id).getUserNo();
 
         log.info("userNo : {}", userNo);
-        List<Consulting> consultingList = consultingRepository.findByUser_UserNo(userNo);
-        log.info("consultingList : {}", consultingList);
-        System.out.println("consultingList = " + consultingList);
-        List<ConsultingListDto> res = new ArrayList<>();
+        List<ConsultingListDto> consultingList = consultingService.consultingList(userNo);
 
-        for (Consulting consulting : consultingList)
-            res.add(new ConsultingListDto(consulting));
-
-        return ResponseEntity.ok().body(res);
+        return ResponseEntity.ok().body(consultingList);
     }
 
-    @GetMapping("detail")
-    @Operation(summary = "컨설팅 디테일 출력", description = "컨설팅 상세 정보를 제공한다", tags = {"consult"})
-    public ResponseEntity<ConsultingDetailDto> consultingDetail(@RequestHeader String Authorization, @RequestParam(value = "consultingNo", required = false) int consultingNo) {
-        // 유저 식별번호 (토큰으로 대체)
-        int userNo = 1;
-        Optional<Consulting> consulting = consultingRepository.findConsultingDetailByUserIdAndConsultingNo(userNo, consultingNo);
-        Optional<ConsultingDetailDto> res = consulting.map(c -> new ConsultingDetailDto(consulting.get()));
-        // 상담 번호
-        return ResponseEntity.ok().body(res.get());
-    }
-//    쿼리스트링으로 넘길때는 RequestParam(value="?이후에 들어갈 이름")
+//    @GetMapping("detail")
+//    @Operation(summary = "컨설팅 디테일 출력", description = "컨설팅 상세 정보를 제공한다", tags = {"consult"})
+//    public ResponseEntity<ConsultingDetailDto> consultingDetail(@RequestHeader String Authorization, @RequestParam(value = "consultingNo", required = false) int consultingNo) {
+//        // 유저 식별번호 (토큰으로 대체)
+//        int userNo = 1;
+//        Optional<Consulting> consulting = consultingRepository.findConsultingDetailByUserIdAndConsultingNo(userNo, consultingNo);
+//        Optional<ConsultingDetailDto> res = consulting.map(c -> new ConsultingDetailDto(consulting.get()));
+//        // 상담 번호
+//        return ResponseEntity.ok().body(res.get());
+//    }
+////    쿼리스트링으로 넘길때는 RequestParam(value="?이후에 들어갈 이름")
 }

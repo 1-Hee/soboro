@@ -15,7 +15,7 @@ public interface ConsultingRepository extends JpaRepository<Consulting, Integer>
 //    @Query("select c from Consulting c where c.user.userNo = :userNo")
 //    List<Consulting> findByUser(@Param("userNo") int userNo);
 //    List<Consulting> findAllByUser(User user);
-    List<Consulting> findByUser_UserNo(int userNo);
+    List<Consulting> findByUser_UserNo(Integer userNo);
 
     @Query("select c from Consulting c join fetch c.user u where u.userNo = :userNo and c.consultingNo = :consultingNo")
     Optional<Consulting> findConsultingDetailByUserIdAndConsultingNo(@Param("userNo") int userNo, @Param("consultingNo") int consultingNo);

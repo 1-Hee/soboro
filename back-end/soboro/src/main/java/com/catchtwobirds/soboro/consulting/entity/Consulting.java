@@ -22,7 +22,7 @@ public class Consulting {
     private Integer consultingNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_no")
+    @JoinColumn(name = "consulting_user_no")
     private User user;
     private LocalDateTime consultingVisitDate;
     private String consultingVisitPlace;
