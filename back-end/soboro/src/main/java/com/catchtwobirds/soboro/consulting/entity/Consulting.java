@@ -1,10 +1,7 @@
 package com.catchtwobirds.soboro.consulting.entity;
 
 import com.catchtwobirds.soboro.user.entity.User;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,7 +11,10 @@ import java.util.List;
 @Entity
 @Table(name = "consulting")
 @Setter @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor//(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
+@ToString
 public class Consulting {
     @Id
     @GeneratedValue
