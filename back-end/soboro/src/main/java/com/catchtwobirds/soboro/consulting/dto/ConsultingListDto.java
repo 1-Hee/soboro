@@ -4,17 +4,17 @@ import com.catchtwobirds.soboro.consulting.entity.Consulting;
 
 import java.time.LocalDateTime;
 
-public class ConsultingDto {
+public class ConsultingListDto {
     private int consultingNo;
-    private LocalDateTime consultingVisitDate;
     private String consultingVisitPlace;
+    private LocalDateTime consultingVisitDate;
     private String consultingVisitClass;
 
     // 상담내역 추가?
 
     // 비디오 추가?
 
-    public ConsultingDto(Consulting consulting) {
+    public ConsultingListDto(Consulting consulting) {
         this.consultingNo = consulting.getConsultingNo();
         this.consultingVisitDate = consulting.getConsultingVisitDate();
         this.consultingVisitPlace = consulting.getConsultingVisitPlace();
