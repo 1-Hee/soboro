@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "consulting")
 @Setter @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Consulting {
@@ -21,7 +22,7 @@ public class Consulting {
     private Integer consultingNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userNo")
+    @JoinColumn(name = "user_no")
     private User user;
     private LocalDateTime consultingVisitDate;
     private String consultingVisitPlace;

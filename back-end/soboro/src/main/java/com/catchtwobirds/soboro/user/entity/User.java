@@ -2,12 +2,16 @@ package com.catchtwobirds.soboro.user.entity;
 
 import com.catchtwobirds.soboro.auth.entity.ProviderType;
 import com.catchtwobirds.soboro.auth.entity.RoleType;
+import com.catchtwobirds.soboro.consulting.entity.Consulting;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.*;
 
 @Builder
@@ -23,7 +27,7 @@ public class User {
     @Id
     @Column(name = "user_no")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userNo;
+    private Integer userNo;
     @Column(name = "user_id", length = 64, unique = true)
     @NotNull
     @Size(max = 64)

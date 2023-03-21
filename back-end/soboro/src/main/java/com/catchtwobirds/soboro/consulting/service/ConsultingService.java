@@ -18,9 +18,9 @@ public class ConsultingService {
     // 컨설팅 저장
 
     // 컨설팅 목록 가져오기
-    public List<Consulting> consultingList(int userNo) {
-        return consultingRepository.findConsultingListByUserId(userNo);
-    }
+//    public List<Consulting> consultingList(int userNo) {
+//        return consultingRepository.findAllByUser(userNo);
+//    }
 
     // 컨설팅 상세 가져오기
     public Optional<Consulting> consultingDetailList(int userNo, int consultingNo) {

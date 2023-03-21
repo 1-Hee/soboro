@@ -1,9 +1,13 @@
 package com.catchtwobirds.soboro.consulting.controller;
 
+import com.catchtwobirds.soboro.auth.service.CustomOAuth2UserService;
 import com.catchtwobirds.soboro.consulting.dto.ConsultingDetailDto;
 import com.catchtwobirds.soboro.consulting.dto.ConsultingListDto;
 import com.catchtwobirds.soboro.consulting.entity.Consulting;
 import com.catchtwobirds.soboro.consulting.repository.ConsultingRepository;
+import com.catchtwobirds.soboro.user.entity.User;
+import com.catchtwobirds.soboro.user.service.UserService;
+import com.catchtwobirds.soboro.utils.HeaderUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -20,19 +24,27 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/consulting")
+@RequestMapping("/api/consulting")
 @Tag(name = "consult", description = "컨설팅 내용 관련 컨트롤러")
 public class ConsultingController {
 
     private final ConsultingRepository consultingRepository;
 
-    @GetMapping("list")
+    private final CustomOAuth2UserService customOAuth2UserService;
+
+    private final UserService userService;
+
+    @GetMapping("/list")
     @Operation(summary = "컨설팅 리스트 출력", description = "컨설팅 정보에 대한 리스트를 제공한다", tags = {"consult"})
     public ResponseEntity consultingAll(@RequestHeader String Authorization) {
-        // MemberDto m = memberService.selectOneMember(HeaderUtil.getAccessTokenString(Authorization));
-        // 추후 토큰으로 대체함
-        int userNo = 1;
-        List<Consulting> consultingList = consultingRepository.findConsultingListByUserId(userNo);
+
+        String token = HeaderUtil.getAccessTokenString(Authorization);
+        String id = customOAuth2UserService.getId(token);
+        int userNo = userService.getUser(id).getUserNo();
+
+        log.info("userNo : {}", userNo);
+        List<Consulting> consultingList = consultingRepository.findByUser_UserNo(userNo);
+        log.info("consultingList : {}", consultingList);
         System.out.println("consultingList = " + consultingList);
         List<ConsultingListDto> res = new ArrayList<>();
 

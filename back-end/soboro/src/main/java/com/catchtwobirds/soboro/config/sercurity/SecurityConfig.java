@@ -12,6 +12,7 @@ import com.catchtwobirds.soboro.auth.service.CustomOAuth2UserService;
 import com.catchtwobirds.soboro.auth.token.AuthTokenProvider;
 import com.catchtwobirds.soboro.auth.handler.CustomLogoutSuccessHandler;
 import com.catchtwobirds.soboro.user.repository.UserRefreshTokenRepository;
+import com.catchtwobirds.soboro.user.service.UserService;
 import com.catchtwobirds.soboro.utils.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -48,6 +49,7 @@ public class SecurityConfig {
     private final UserRefreshTokenRepository userRefreshTokenRepository;
     private final RedisUtil redisUtil;
     private final CustomLogoutSuccessHandler logoutSuccessHandler;
+    private final UserService userService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
