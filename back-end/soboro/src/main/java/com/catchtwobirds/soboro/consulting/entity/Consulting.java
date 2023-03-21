@@ -26,8 +26,7 @@ public class Consulting {
     private LocalDateTime consultingVisitDate;
     private String consultingVisitPlace;
     private String consultingVisitClass;
+    private String videoLocation;
 
-    @OneToMany(mappedBy = "consulting")
-    private List<Video> videos = new ArrayList<>();
 
 }
