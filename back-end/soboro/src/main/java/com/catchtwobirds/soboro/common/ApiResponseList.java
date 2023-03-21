@@ -5,11 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApiResponseHeader {
-    private int code;
-    private String message;
+public class ApiResponseList <T> extends ApiResponseHeader{
+    List<T> data;
 }

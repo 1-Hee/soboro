@@ -7,9 +7,8 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
-public class ApiResponseHeader {
-    private int code;
-    private String message;
+@AllArgsConstructor
+public class ApiResponseSingle<T> extends ApiResponseHeader {
+    T data;
 }
