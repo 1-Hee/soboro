@@ -69,25 +69,22 @@ public class AuthController {
 
         long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
         AuthToken refreshToken = tokenProvider.createAuthToken(
-                appProperties.getAuth().getTokenSecret(),
+                userId,
+                ((UserPrincipal) authentication.getPrincipal()).getRoleType().getCode(),
                 new Date(now.getTime() + refreshTokenExpiry)
         );
 
         log.info("rf token : {} ", refreshToken);
 
         // userId refresh token 으로 DB 확인
-        // UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserId(userId);
         String userRefreshToken = redisUtil.getData((String) userId);
         if (userRefreshToken == null) {
             // 없는 경우 새로 등록
             redisUtil.setDataExpire((String) userId, refreshToken.getToken(), refreshTokenExpiry);
-            // userRefreshToken = new UserRefreshToken(userId, refreshToken.getToken());
-            // userRefreshTokenRepository.saveAndFlush(userRefreshToken);
         } else {
             // 기존 refresh 토큰 삭제하기
             userRefreshTokenRepository.deleteById((String) userId);
             // DB에 refresh 토큰 새로 넣기
-//            userRefreshToken.setRefreshToken(refreshToken.getToken());
             redisUtil.setDataExpire((String) userId, refreshToken.getToken(), refreshTokenExpiry);
         }
 
@@ -148,7 +145,8 @@ public class AuthController {
             long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
 
             authRefreshToken = tokenProvider.createAuthToken(
-                    appProperties.getAuth().getTokenSecret(),
+                    userId,
+                    roleType.getCode(),
                     new Date(now.getTime() + refreshTokenExpiry)
             );
 

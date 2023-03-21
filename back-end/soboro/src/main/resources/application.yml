@@ -41,7 +41,7 @@ spring:
         max-idle: 10
         min-idle: 2
     port: 6363
-    host: host.docker.internal
+    host: localhost
     password: '1q2w3e4r'
   security:
     oauth2.client:

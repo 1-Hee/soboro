@@ -44,7 +44,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User user = super.loadUser(userRequest);
-
         try {
             return this.process(userRequest, user);
         } catch (AuthenticationException ex) {
@@ -72,7 +71,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         } else {
             savedUser = createUser(userInfo, providerType);
         }
-
         return UserPrincipal.create(savedUser, user.getAttributes());
     }
 
@@ -93,7 +91,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .createdAt(now)
                 .userActive(true)
                 .build();
-
         return userRepository.saveAndFlush(user);
     }
 
@@ -102,12 +99,19 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         if (userInfo.getName() != null && !user.getUserName().equals(userInfo.getName())) {
             user.setUserName(userInfo.getName());
         }
-
         return user;
     }
 
     public String getId(String token) {
         log.info("getId method token : {}", token);
-        return Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(token).getBody().getSubject();
+//        log.info("appProperties.getAuth().getTokenSecret() : {}", appProperties.getAuth().getTokenSecret());
+//        log.info("appProperties.getAuth().getTokenSecret().getBytes(): {} ", appProperties.getAuth().getTokenSecret().getBytes());
+        log.info("token.getBody  : {} ", token.getBytes());
+        return Jwts.parserBuilder()
+                .setSigningKey(appProperties.getAuth().getTokenSecret().getBytes())
+                .build()
+                .parseClaimsJws(token).getBody()
+                .getSubject();
     }
+
 }
