@@ -4,4 +4,4 @@ server:
 
 spring:
   profiles:
-    active: server
+    active: local
