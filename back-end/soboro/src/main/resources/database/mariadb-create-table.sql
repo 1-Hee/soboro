@@ -1,6 +1,9 @@
 use soborodb;
 CREATE TABLE `user` (
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a04fb1d (Merge branch 'doyeong' into 'BE')
                     `user_no` int(11) NOT NULL AUTO_INCREMENT,
                     `user_id` varchar(15) DEFAULT NULL,
                     `user_password` varchar(255) DEFAULT NULL,
@@ -26,6 +29,7 @@ CREATE TABLE `consulting` (
                       PRIMARY KEY (`consulting_no`),
                       KEY `fk_user_userno` (`consulting_user_no`),
                       CONSTRAINT `fk_user_userno` FOREIGN KEY (`consulting_user_no`) REFERENCES `user` (`user_no`) ON DELETE CASCADE ON UPDATE CASCADE
+<<<<<<< HEAD
 )
 =======
                         `user_no` int(11) NOT NULL AUTO_INCREMENT,
@@ -59,3 +63,6 @@ CREATE TABLE `consulting` (
                               CONSTRAINT `fk_user_userno` FOREIGN KEY (`consulting_user_no`) REFERENCES `user` (`user_no`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 >>>>>>> 0a72c92 (docs: sql table 수정)
+=======
+)
+>>>>>>> a04fb1d (Merge branch 'doyeong' into 'BE')
