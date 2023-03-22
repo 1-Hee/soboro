@@ -2,6 +2,7 @@ package com.catchtwobirds.soboro.consulting.entity;
 
 import com.catchtwobirds.soboro.user.entity.User;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,13 +18,14 @@ import java.util.List;
 @ToString
 public class Consulting {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "consulting_no")
     private Integer consultingNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "consulting_user_no")
     private User user;
+    @CreationTimestamp
     private LocalDateTime consultingVisitDate;
     private String consultingVisitPlace;
     private String consultingVisitClass;

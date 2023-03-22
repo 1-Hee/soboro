@@ -4,6 +4,7 @@ import com.catchtwobirds.soboro.auth.service.CustomOAuth2UserService;
 import com.catchtwobirds.soboro.consulting.dto.ConsultingDetailDto;
 import com.catchtwobirds.soboro.consulting.dto.ConsultingListDto;
 import com.catchtwobirds.soboro.consulting.dto.ConsultingRequestDto;
+import com.catchtwobirds.soboro.consulting.dto.ConsultingResponseDto;
 import com.catchtwobirds.soboro.consulting.entity.Consulting;
 import com.catchtwobirds.soboro.consulting.repository.ConsultingRepository;
 import com.catchtwobirds.soboro.consulting.service.ConsultingService;
@@ -11,7 +12,7 @@ import com.catchtwobirds.soboro.user.entity.User;
 import com.catchtwobirds.soboro.user.service.UserService;
 import com.catchtwobirds.soboro.utils.HeaderUtil;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+//import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController

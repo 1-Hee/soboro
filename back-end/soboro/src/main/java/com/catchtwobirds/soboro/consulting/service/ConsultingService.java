@@ -45,16 +45,6 @@ public class ConsultingService {
     // 컨설팅 저장하기
     @Transactional
     public ConsultingResponseDto addConsulting(ConsultingRequestDto consultingRequestDto, User user) {
-//
-//        System.out.println("=============================");
-//        System.out.println("consultingRequestDto = " + consultingRequestDto);
-//        System.out.println("=============================");
-
-//        consultingRequestDto.setUser(User.builder().userNo(userNo).build());
-//        userRepository.
-
-
-
         return new ConsultingResponseDto(consultingRepository.saveAndFlush(consultingRequestDto.toEntity(user)));
     }
 

@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 public class ConsultingRequestDto {
-//    private User user;
 
-    private Integer consultingNo;     // 자동 생성
     private User user;
+    private Integer consultingNo;     // 자동 생성
+//    private Integer consultingUserNo;
     private LocalDateTime consultingVisitDate;
     private String consultingVisitPlace;
     private String consultingVisitClass;
@@ -25,10 +25,11 @@ public class ConsultingRequestDto {
 
     @Builder
     public Consulting toEntity(User user) {
+        System.out.println("디티오");
+        System.out.println("user = " + user);
         return Consulting.builder()
                 .consultingNo(consultingNo)
                 .user(user)
-                .consultingVisitDate(consultingVisitDate)
                 .consultingVisitPlace(consultingVisitPlace)
                 .consultingVisitClass(consultingVisitClass)
                 .videoLocation(videoLocation)

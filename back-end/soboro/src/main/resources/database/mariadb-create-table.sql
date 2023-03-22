@@ -19,7 +19,7 @@ CREATE TABLE `user` (
 CREATE TABLE `consulting` (
                       `consulting_no` int(11) NOT NULL AUTO_INCREMENT,
                       `consulting_user_no` int(11) DEFAULT NULL,
-                      `consulting_visit_date` timestamp NULL DEFAULT NULL,
+                      `consulting_visit_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
                       `consulting_visit_place` varchar(100) DEFAULT NULL,
                       `consulting_visit_class` varchar(100) DEFAULT NULL,
                       `video_location` varchar(255) DEFAULT NULL,

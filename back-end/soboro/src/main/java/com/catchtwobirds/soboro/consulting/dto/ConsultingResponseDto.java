@@ -2,10 +2,15 @@ package com.catchtwobirds.soboro.consulting.dto;
 
 import com.catchtwobirds.soboro.consulting.entity.Consulting;
 import com.catchtwobirds.soboro.user.entity.User;
-import lombok.Builder;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+@Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@ToString
 public class ConsultingResponseDto {
 //    private User user;
     private Integer consultingNo;
