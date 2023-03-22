@@ -7,9 +7,10 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 public class ConsultingResponseDto {
-    private User user;
+//    private User user;
     private Integer consultingNo;
     private LocalDateTime consultingVisitDate;
+    private Integer consultingUserNo;
     private String consultingVisitPlace;
     private String consultingVisitClass;
     private String videoLocation;
@@ -17,7 +18,7 @@ public class ConsultingResponseDto {
     @Builder
     public ConsultingResponseDto(Consulting consulting) {
         this.consultingNo = consulting.getConsultingNo();
-        this.user = consulting.getUser();
+        this.consultingUserNo = consulting.getUser().getUserNo();
         this.consultingVisitDate = consulting.getConsultingVisitDate();
         this.consultingVisitPlace = consulting.getConsultingVisitPlace();
         this.consultingVisitClass = consulting.getConsultingVisitClass();
