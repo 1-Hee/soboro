@@ -81,13 +81,13 @@ public class ConsultingController {
         User user = userService.getUser(id);
 //        Integer userNo = userService.getUser(id).getUserNo();
 
-        System.out.println("=============================");
-        System.out.println("user = " + user);
-        System.out.println("=============================");
-
-        System.out.println("=============================");
-        System.out.println("consultingRequestDto = " + consultingRequestDto);
-        System.out.println("=============================");
+//        System.out.println("=============================");
+//        System.out.println("user = " + user);
+//        System.out.println("=============================");
+//
+//        System.out.println("=============================");
+//        System.out.println("consultingRequestDto = " + consultingRequestDto);
+//        System.out.println("=============================");
 
         return ResponseEntity.ok().body(consultingService.addConsulting(consultingRequestDto, user));
     }
