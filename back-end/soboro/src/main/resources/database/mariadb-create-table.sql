@@ -2,8 +2,11 @@ use soborodb;
 CREATE TABLE `user` (
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> a04fb1d (Merge branch 'doyeong' into 'BE')
+=======
+>>>>>>> 37bf35b (Merge branch 'BE' into 'jaeyoon')
                     `user_no` int(11) NOT NULL AUTO_INCREMENT,
                     `user_id` varchar(15) DEFAULT NULL,
                     `user_password` varchar(255) DEFAULT NULL,
@@ -19,6 +22,7 @@ CREATE TABLE `user` (
                     `user_active` tinyint(1) DEFAULT NULL,
                     PRIMARY KEY (`user_no`)
 );
+<<<<<<< HEAD
 CREATE TABLE `consulting` (
                       `consulting_no` int(11) NOT NULL AUTO_INCREMENT,
                       `consulting_user_no` int(11) DEFAULT NULL,
@@ -66,3 +70,16 @@ CREATE TABLE `consulting` (
 =======
 )
 >>>>>>> a04fb1d (Merge branch 'doyeong' into 'BE')
+=======
+CREATE TABLE `consulting` (
+                      `consulting_no` int(11) NOT NULL AUTO_INCREMENT,
+                      `consulting_user_no` int(11) DEFAULT NULL,
+                      `consulting_visit_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+                      `consulting_visit_place` varchar(100) DEFAULT NULL,
+                      `consulting_visit_class` varchar(100) DEFAULT NULL,
+                      `video_location` varchar(255) DEFAULT NULL,
+                      PRIMARY KEY (`consulting_no`),
+                      KEY `fk_user_userno` (`consulting_user_no`),
+                      CONSTRAINT `fk_user_userno` FOREIGN KEY (`consulting_user_no`) REFERENCES `user` (`user_no`) ON DELETE CASCADE ON UPDATE CASCADE
+)
+>>>>>>> 37bf35b (Merge branch 'BE' into 'jaeyoon')
