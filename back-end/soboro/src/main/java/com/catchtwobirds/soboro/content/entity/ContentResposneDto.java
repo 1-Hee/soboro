@@ -1,14 +1,14 @@
-package com.catchtwobirds.soboro.content.dto;
+package com.catchtwobirds.soboro.content.entity;
 
-import com.catchtwobirds.soboro.content.entity.Content;
 import lombok.*;
 
-@Setter @Getter
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @ToString
-public class ContentDto {
+public class ContentResposneDto {
 
     private Long contentNo;
     private Integer consultingNo;
@@ -16,7 +16,7 @@ public class ContentDto {
     private Boolean contentSpeaker;
 
     @Builder
-    public ContentDto(Content content) {
+    public ContentResposneDto(Content content) {
         this.contentNo = content.getContentNo();
         this.consultingNo = content.getConsultingNo();
         this.contentText = content.getContentText();
