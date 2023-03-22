@@ -3,6 +3,7 @@ package com.catchtwobirds.soboro.test;
 import com.catchtwobirds.soboro.auth.service.CustomOAuth2UserService;
 import com.catchtwobirds.soboro.consulting.dto.ConsultingListDto;
 import com.catchtwobirds.soboro.consulting.service.ConsultingService;
+import com.catchtwobirds.soboro.user.service.UserService;
 import com.catchtwobirds.soboro.utils.HeaderUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,6 +13,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +34,7 @@ public class TestController {
 
     private final ConsultingService consultingService;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final UserService userService;
     @GetMapping("/call")
     @Operation(summary = "서버 응답 테스트", description = "서버 응답 테스트 API", tags = {"test"})
     @ApiResponses({
@@ -73,17 +78,17 @@ public class TestController {
         return ResponseEntity.ok().body("server call auth test | token : " + HeaderUtil.getAccessTokenString(Authorization) + " id : " + id);
     }
 
-    @GetMapping("/consult/list/all/noauth")
-    @Operation(summary = "상담내역 출력 테스트", description = "모든 상담내역을 출력한다 (모든 회원정보)", tags = {"test"})
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-    })
-    public ResponseEntity<?> contentAllList() {
-        List<ConsultingListDto> consultingList = consultingService.consultingAllList();
-        return ResponseEntity.ok().body(consultingList);
-    }
+//    @GetMapping("/consult/list/all/noauth")
+//    @Operation(summary = "상담내역 출력 테스트", description = "모든 상담내역을 출력한다 (모든 회원정보)", tags = {"test"})
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "OK"),
+//            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+//            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+//    })
+//    public ResponseEntity<?> contentAllList() {
+//        List<ConsultingListDto> consultingList = consultingService.consultingAllList();
+//        return ResponseEntity.ok().body(consultingList);
+//    }
 
     @GetMapping("/consult/list/noauth")
     @ApiResponses({
@@ -91,9 +96,14 @@ public class TestController {
             @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
-    @Operation(summary = "회원 1번 상담내역 출력 테스트", description = "회원정보의 상담내역 리스트를 출력한다 ", tags = {"test"})
-    public ResponseEntity<?> contentMemberTest(@RequestParam (name = "userno") Integer userNo) {
-        List<ConsultingListDto> consultingList = consultingService.consultingList(userNo);
+    @Operation(summary = "컨설팅 리스트 출력", description = "컨설팅 정보에 대한 리스트를 제공한다 page=0,1... size=10 userno=1", tags = {"consult"})
+    public ResponseEntity consultingAll(
+            @PageableDefault(size = 10) Pageable pageable,
+            @RequestParam (name = "userno") Integer userNo
+    ) {
+        log.info("userNo : {}", userNo);
+        Page<ConsultingListDto> consultingList = consultingService.consultingList(userNo, pageable);
+
         return ResponseEntity.ok().body(consultingList);
     }
 }
