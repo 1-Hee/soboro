@@ -1,38 +1,38 @@
 package com.catchtwobirds.soboro.user.controller;
 
-import com.catchtwobirds.soboro.auth.dto.SignUpRequest;
-import com.catchtwobirds.soboro.common.ApiResponse;
+import com.catchtwobirds.soboro.common.ApiResponseDto;
 import com.catchtwobirds.soboro.user.dto.UserDto;
 import com.catchtwobirds.soboro.user.entity.User;
 import com.catchtwobirds.soboro.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
+@Tag(name = "user", description = "회원 관련 컨트롤러")
 public class UserController {
     private final UserService userService;
 
-    @PostMapping
-    public void addUser(@RequestBody UserDto userDto) {
-        System.out.println(userDto);
-        userService.insertUser(userDto);
-    }
+//    @PostMapping
+//    public void addUser(@RequestBody UserDto userDto) {
+//        System.out.println(userDto);
+//        userService.insertUser(userDto);
+//    }
 
     @GetMapping
-    public ApiResponse<?> getUser() {
+    @Operation(summary = "회원 정보 반환", description = "회원 정보를 반환한다. (ADMIN 요청)", tags = {"user"})
+    public ApiResponseDto<?> getUser() {
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         log.info("getUser principal : {}", principal);
         User user = userService.getUser(principal.getUsername());
         log.info("getUser user : {}", user);
-        return ApiResponse.success("user", user);
+        return ApiResponseDto.success("user", user);
     }
 
 

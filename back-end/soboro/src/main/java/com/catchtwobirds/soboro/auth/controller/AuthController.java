@@ -1,17 +1,19 @@
 package com.catchtwobirds.soboro.auth.controller;
 
 import com.catchtwobirds.soboro.auth.dto.AuthReqModel;
-import com.catchtwobirds.soboro.common.ApiResponse;
+import com.catchtwobirds.soboro.common.ApiResponseDto;
 import com.catchtwobirds.soboro.config.properties.AppProperties;
-import com.catchtwobirds.soboro.auth.entity.RoleType;
 import com.catchtwobirds.soboro.auth.entity.UserPrincipal;
 import com.catchtwobirds.soboro.auth.token.AuthToken;
 import com.catchtwobirds.soboro.auth.token.AuthTokenProvider;
 import com.catchtwobirds.soboro.user.repository.UserRefreshTokenRepository;
 import com.catchtwobirds.soboro.utils.CookieUtil;
-import com.catchtwobirds.soboro.utils.HeaderUtil;
 import com.catchtwobirds.soboro.utils.RedisUtil;
-import io.jsonwebtoken.Claims;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,13 +24,14 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Cookie;
 import java.util.Date;
 
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "Auth", description = "로그인, 로그아웃 API")
+
 public class AuthController {
 
     private final AppProperties appProperties;
@@ -41,10 +44,17 @@ public class AuthController {
     private final static String REFRESH_TOKEN = "refresh_token";
 
     @PostMapping("/login")
-    public ApiResponse<?> login(
+    @Operation(summary = "일반 로그인", description = "일반 로그인 API", tags = {"Auth"})
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+    })
+    public ApiResponseDto<?> login(
             HttpServletRequest request,
             HttpServletResponse response,
-            @RequestBody AuthReqModel authReqModel
+            @Parameter(description = "로그인 아이디, 비밀번호") @RequestBody AuthReqModel authReqModel
     ) {
         log.info("일반로그인 post 요청");
         Authentication authentication = authenticationManager.authenticate(
@@ -76,30 +86,18 @@ public class AuthController {
         );
 
         log.info("rf token : {} ", refreshToken);
-
-        // userId refresh token 으로 DB 확인
-//        log.info("login2");
-//        String userRefreshToken = redisUtil.getData(userId);
-//        log.info("login3");
-//        if (userRefreshToken != null) {
-//            // 있다면 삭제하기
-//            // 기존 refresh 토큰 삭제하기
-//            userRefreshTokenRepository.deleteById(userId);
-//        }
-//        log.info("login4");
-        log.info("2");
-        log.info("userId : {}", userId);
+        
+         // 기존 refresh 토큰 삭제하기
         redisUtil.delData(userId);
-//        userRefreshTokenRepository.deleteById(userId);
-        log.info("3");
         // DB에 refresh 토큰 새로 넣기
         redisUtil.setDataExpire((String) userId, refreshToken.getToken(), refreshTokenExpiry);
-        log.info("4");
+        
+        // 쿠키 만료시간 설정
         int cookieMaxAge = (int) refreshTokenExpiry / 60;
         CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
         CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
 
-        return ApiResponse.success("token", accessToken.getToken());
+        return ApiResponseDto.success("token", accessToken.getToken());
     }
 
 //    @GetMapping("/refresh")
