@@ -59,4 +59,12 @@ public class ConsultingService {
         return new ConsultingResponseDto(consultingRepository.saveAndFlush(consultingRequestDto.toEntity(user)));
     }
 
+    // ======*** TEST 메서드 ***======
+    // 상담내역 전체 가져오기
+    public List<ConsultingListDto> consultingAllList() {
+        List<Consulting> result = consultingRepository.findAll();
+        return result.stream()
+                .map(ConsultingListDto::new)
+                .collect(Collectors.toList());
+    }
 }

@@ -58,13 +58,14 @@ public class AuthController {
 
         String userId = authReqModel.getId();
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
+        log.info("login 1");
         Date now = new Date();
         AuthToken accessToken = tokenProvider.createAuthToken(
                 userId,
                 ((UserPrincipal) authentication.getPrincipal()).getRoleType().getCode(),
                 new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
         );
+
         log.info("ac token : {} ", accessToken);
 
         long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
@@ -77,17 +78,23 @@ public class AuthController {
         log.info("rf token : {} ", refreshToken);
 
         // userId refresh token 으로 DB 확인
-        String userRefreshToken = redisUtil.getData((String) userId);
-        if (userRefreshToken == null) {
-            // 없는 경우 새로 등록
-            redisUtil.setDataExpire((String) userId, refreshToken.getToken(), refreshTokenExpiry);
-        } else {
-            // 기존 refresh 토큰 삭제하기
-            userRefreshTokenRepository.deleteById((String) userId);
-            // DB에 refresh 토큰 새로 넣기
-            redisUtil.setDataExpire((String) userId, refreshToken.getToken(), refreshTokenExpiry);
-        }
-
+//        log.info("login2");
+//        String userRefreshToken = redisUtil.getData(userId);
+//        log.info("login3");
+//        if (userRefreshToken != null) {
+//            // 있다면 삭제하기
+//            // 기존 refresh 토큰 삭제하기
+//            userRefreshTokenRepository.deleteById(userId);
+//        }
+//        log.info("login4");
+        log.info("2");
+        log.info("userId : {}", userId);
+        redisUtil.delData(userId);
+//        userRefreshTokenRepository.deleteById(userId);
+        log.info("3");
+        // DB에 refresh 토큰 새로 넣기
+        redisUtil.setDataExpire((String) userId, refreshToken.getToken(), refreshTokenExpiry);
+        log.info("4");
         int cookieMaxAge = (int) refreshTokenExpiry / 60;
         CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
         CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);

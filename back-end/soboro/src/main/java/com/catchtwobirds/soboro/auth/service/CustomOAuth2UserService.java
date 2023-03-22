@@ -106,7 +106,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         log.info("getId method token : {}", token);
 //        log.info("appProperties.getAuth().getTokenSecret() : {}", appProperties.getAuth().getTokenSecret());
 //        log.info("appProperties.getAuth().getTokenSecret().getBytes(): {} ", appProperties.getAuth().getTokenSecret().getBytes());
-        log.info("token.getBody  : {} ", token.getBytes());
+        // log.info("token.getBody  : {} ", token.getBytes());
         return Jwts.parserBuilder()
                 .setSigningKey(appProperties.getAuth().getTokenSecret().getBytes())
                 .build()
