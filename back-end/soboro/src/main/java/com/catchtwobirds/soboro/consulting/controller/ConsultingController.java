@@ -18,6 +18,9 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,14 +41,14 @@ public class ConsultingController {
 
     @GetMapping("/list")
     @Operation(summary = "컨설팅 리스트 출력", description = "컨설팅 정보에 대한 리스트를 제공한다", tags = {"consult"})
-    public ResponseEntity consultingAll(@RequestHeader String Authorization) {
+    public ResponseEntity consultingAll(@RequestHeader String Authorization, @PageableDefault(size = 10) Pageable pageable) {
 
         String token = HeaderUtil.getAccessTokenString(Authorization);
         String id = customOAuth2UserService.getId(token);
         Integer userNo = userService.getUser(id).getUserNo();
 
         log.info("userNo : {}", userNo);
-        List<ConsultingListDto> consultingList = consultingService.consultingList(userNo);
+        Page<ConsultingListDto> consultingList = consultingService.consultingList(userNo, pageable);
 
         return ResponseEntity.ok().body(consultingList);
     }
@@ -79,15 +82,6 @@ public class ConsultingController {
         String token = HeaderUtil.getAccessTokenString(Authorization);
         String id = customOAuth2UserService.getId(token);
         User user = userService.getUser(id);
-//        Integer userNo = userService.getUser(id).getUserNo();
-
-//        System.out.println("=============================");
-//        System.out.println("user = " + user);
-//        System.out.println("=============================");
-//
-//        System.out.println("=============================");
-//        System.out.println("consultingRequestDto = " + consultingRequestDto);
-//        System.out.println("=============================");
 
         return ResponseEntity.ok().body(consultingService.addConsulting(consultingRequestDto, user));
     }

@@ -9,6 +9,8 @@ import com.catchtwobirds.soboro.consulting.repository.ConsultingRepository;
 import com.catchtwobirds.soboro.user.entity.User;
 import com.catchtwobirds.soboro.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,11 +28,20 @@ public class ConsultingService {
     // 컨설팅 저장
 
     // 컨설팅 목록 가져오기
-    public List<ConsultingListDto> consultingList(Integer userNo) {
-        List<Consulting> result = consultingRepository.findByUser_UserNo(userNo);
-        return result.stream()
-                .map(ConsultingListDto::new)
-                .collect(Collectors.toList());
+//    public List<ConsultingListDto> consultingList(Integer userNo) {
+//        List<Consulting> result = consultingRepository.findByUser_UserNo(userNo);
+//        return result.stream()
+//                .map(ConsultingListDto::new)
+//                .collect(Collectors.toList());
+//    }
+    // 페이지
+    public Page<ConsultingListDto> consultingList(Integer userNo, Pageable pageable) {
+        Page<Consulting> page = consultingRepository.findByUser_UserNo(userNo, pageable);
+        Page<ConsultingListDto> result = page.map(ConsultingListDto::new);
+        return result;
+//        return result.stream()
+//                .map(ConsultingListDto::new)
+//                .collect(Collectors.toList());
     }
     // 컨설팅 상세 가져오기
     public List<ConsultingDetailDto> consultingDetailList(Integer userNo, Integer consultingNo) {

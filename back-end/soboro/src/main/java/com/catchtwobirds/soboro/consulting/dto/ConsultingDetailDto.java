@@ -20,7 +20,6 @@ public class ConsultingDetailDto {
     public String DateToString(LocalDateTime consultingVisitDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy. MM. dd.");
         String formattedDateTime = consultingVisitDate.format(formatter);
-        System.out.println("formattedDateTime = " + formattedDateTime);
         return formattedDateTime;
     }
 
