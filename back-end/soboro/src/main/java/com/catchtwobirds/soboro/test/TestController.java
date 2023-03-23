@@ -58,7 +58,7 @@ public class TestController {
             @ApiResponse(responseCode = "404", description = "NOT FOUND"),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
-    @Operation(summary = "로그인 테스트", description = "HEADER -> body형태로 토큰, ID반환 API", tags = {"test"})
+    @Operation(summary = "AUTH HEADER 테스트", description = "HEADER -> body형태로 토큰, ID반환 API", tags = {"test"})
     public ResponseEntity<?> authTest (@RequestHeader(required = false) String Authorization ) {
         log.info("HeaderUtil.getAccessTokenString(Authorization) : {} ", HeaderUtil.getAccessTokenString(Authorization));
         String token = HeaderUtil.getAccessTokenString(Authorization);
@@ -80,7 +80,7 @@ public class TestController {
 //    }
 
     @GetMapping("/consult/list/noauth")
-    @Operation(summary = "컨설팅 리스트 출력", description = "컨설팅 정보에 대한 리스트를 제공한다 page=0,1... size=10 userno=1", tags = {"consult"})
+    @Operation(summary = "컨설팅 리스트 출력", description = "컨설팅 정보에 대한 리스트를 제공한다 page=0,1... size=10 userno=1 sort는 지우고 요청할 것", tags = {"consult"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK" , content = @Content(schema = @Schema(implementation = ConsultingListDto.class))),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST"),

@@ -30,7 +30,7 @@ import java.util.Date;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "Auth", description = "로그인, 로그아웃 API")
+@Tag(name = "auth", description = "로그인, 로그아웃 API")
 
 public class AuthController {
 
@@ -44,7 +44,7 @@ public class AuthController {
     private final static String REFRESH_TOKEN = "refresh_token";
 
     @PostMapping("/login")
-    @Operation(summary = "일반 로그인", description = "일반 로그인 API", tags = {"Auth"})
+    @Operation(summary = "일반 로그인", description = "일반 로그인 API", tags = {"auth"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK : 성공"),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST : 잘못된 요청"),
@@ -87,9 +87,12 @@ public class AuthController {
         );
 
         log.info("rf token : {} ", refreshToken);
-        
-         // 기존 refresh 토큰 삭제하기
-        redisUtil.delData(userId);
+
+        if (redisUtil.getData(userId) != null) {
+            log.info("refresh token exists.Remove refresh token");
+            userRefreshTokenRepository.deleteById(userId);
+        }
+
         // DB에 refresh 토큰 새로 넣기
         redisUtil.setDataExpire((String) userId, refreshToken.getToken(), refreshTokenExpiry);
         
@@ -167,5 +170,4 @@ public class AuthController {
 //
 //        return ApiResponse.success("token", newAccessToken.getToken());
 //    }
-
 }
