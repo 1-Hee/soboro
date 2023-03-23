@@ -50,10 +50,6 @@ public class User {
     @NotNull
     @Size(max = 50)
     private String userPhone;
-    @Column(name = "user_birthdate", length = 8)
-    @NotNull
-    @Size(max = 8)
-    private String userBirthDate;
     @Column(name = "user_gender", length = 1)
     @NotNull
     @Size(max = 1)

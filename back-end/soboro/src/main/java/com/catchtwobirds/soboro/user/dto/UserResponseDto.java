@@ -15,7 +15,6 @@ public class UserResponseDto {
     private String userName;
     private String userEmail;
     private String userPhone;
-    private String userBirthDate;
     private String userGender;
     private boolean userTerms;
     @Builder
@@ -25,7 +24,6 @@ public class UserResponseDto {
         this.userName = user.getUserName();
         this.userEmail = user.getUserEmail();
         this.userPhone = user.getUserPhone();
-        this.userBirthDate = user.getUserBirthDate();
         this.userGender = user.getUserGender();
         this.userTerms = user.isUserTerms();
     }

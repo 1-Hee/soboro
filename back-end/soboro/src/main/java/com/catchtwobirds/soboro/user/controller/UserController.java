@@ -1,6 +1,8 @@
 package com.catchtwobirds.soboro.user.controller;
 
 import com.catchtwobirds.soboro.auth.service.CustomOAuth2UserService;
+import com.catchtwobirds.soboro.common.error.errorcode.UserErrorCode;
+import com.catchtwobirds.soboro.common.error.exception.RestApiException;
 import com.catchtwobirds.soboro.utils.HeaderUtil;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -53,9 +55,9 @@ public class UserController {
         log.info("/api/user/signup 회원 가입 메서드 요청됨");
         
         // ID 중복 확인
-//        if(userService.getUser(userRequestDto.getUserId())!= null) {
-//
-//        }
+        if(userService.getUser(userRequestDto.getUserId()) != null) {
+            throw new RestApiException(UserErrorCode.USER_401);
+        }
         
         // 비밀번호 암호화
         userRequestDto.setUserPassword(passwordEncoder.encode(userRequestDto.getUserPassword()));
