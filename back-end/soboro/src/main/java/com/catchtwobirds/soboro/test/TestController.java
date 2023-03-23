@@ -67,18 +67,6 @@ public class TestController {
         return ResponseEntity.ok().body("server call auth test | token : " + HeaderUtil.getAccessTokenString(Authorization) + " id : " + id);
     }
 
-//    @GetMapping("/consult/list/all/noauth")
-//    @Operation(summary = "상담내역 출력 테스트", description = "모든 상담내역을 출력한다 (모든 회원정보)", tags = {"test"})
-//    @ApiResponses({
-//            @ApiResponse(responseCode = "200", description = "OK"),
-//            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-//            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-//    })
-//    public ResponseEntity<?> contentAllList() {
-//        List<ConsultingListDto> consultingList = consultingService.consultingAllList();
-//        return ResponseEntity.ok().body(consultingList);
-//    }
-
     @GetMapping("/consult/list/noauth")
     @Operation(summary = "컨설팅 리스트 출력", description = "컨설팅 정보에 대한 리스트를 제공한다 page=0,1... size=10 userno=1 sort는 지우고 요청할 것", tags = {"test"})
     @ApiResponses({
@@ -86,7 +74,7 @@ public class TestController {
             @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
-    public ResponseEntity consultingAll(
+    public ResponseEntity<?> consultingAll(
             @Parameter(description = "페이지 관련") @PageableDefault(size = 10) Pageable pageable,
             @Parameter(description = "회원 식별번호") @RequestParam (name = "userno") Integer userNo
     ) {
@@ -107,6 +95,20 @@ public class TestController {
         throw new RestApiException(UserErrorCode.USER_401);
     }
 
+
+    @GetMapping("/error/exception")
+    @Operation(summary = "에러 응답 ", description = "에러 응답 코드", tags = {"test"})
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK" , content = @Content(schema = @Schema(implementation = ConsultingListDto.class))),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+    })
+    public ResponseEntity<?> errorException() throws Exception {
+
+        throw new Exception();
+
+    }
+
     @GetMapping("/response/single")
     @Operation(summary = "단일 응답 ", description = "객체 응답 코드", tags = {"test"})
     @ApiResponses({
@@ -116,7 +118,7 @@ public class TestController {
     })
     public ResponseEntity<?> responseSingle(HttpServletRequest request) {
         
-        return ResponseEntity.ok().body(new RestApiResponse("응답됨", request, "데이터"));
+        return ResponseEntity.ok().body(new RestApiResponse("응답됨", "데이터"));
     }
 
     @GetMapping("/response/list")
@@ -128,8 +130,7 @@ public class TestController {
     })
     public ResponseEntity<?> responseList(HttpServletRequest request) {
         List<ConsultingListDto> consultingListDtoLis = consultingService.consultingAllList();
-        return ResponseEntity.ok().body(new RestApiResponse("응답됨", request, consultingListDtoLis));
-
+        return ResponseEntity.ok().body(new RestApiResponse("응답됨", consultingListDtoLis));
 
     }
 }

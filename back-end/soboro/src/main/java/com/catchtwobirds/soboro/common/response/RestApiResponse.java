@@ -14,15 +14,13 @@ public class RestApiResponse {
     LocalDateTime timestamp;
     int status;
     String message;
-    String path;
     Object data;
 
     @Builder
-    public RestApiResponse(String message, HttpServletRequest request, Object data) {
+    public RestApiResponse(String message, Object data) {
         this.timestamp = LocalDateTime.now();
         this.status = 200;
         this.message = message;
-        this.path = request.getServletPath();
         this.data = data;
     }
 }

@@ -18,6 +18,20 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 자바 코드는 Spring Framework에서 제공하는 @RestControllerAdvice 어노테이션을 이용하여 전역 예외 처리를 담당하는 GlobalExceptionHandler 클래스입니다.
+ * 이 클래스는 ResponseEntityExceptionHandler 클래스를 상속받아 구현되었습니다.
+ * ResponseEntityExceptionHandler 클래스는 Spring Framework에서 제공하는 예외 처리 클래스로, 다양한 예외에 대한 기본 처리를 제공합니다. 이 클래스를 상속받으면 기본 예외 처리 이외에 추가적인 예외 처리를 정의할 수 있습니다.
+ * 해당 클래스에서는 @ExceptionHandler 어노테이션을 이용하여 예외 처리 메서드를 정의하고 있습니다.
+ * `@ExceptionHandler` 어노테이션은 해당 메서드가 어떤 예외를 처리하는지 명시해줍니다.
+ *
+ * handleQuizException 메서드는 RestApiException 예외를 처리합니다. 해당 예외의 ErrorCode를 가져와 handleExceptionInternal 메서드를 호출합니다.
+ * handleIllegalArgument 메서드는 IllegalArgumentException 예외를 처리합니다. 로그를 남기고 CommonErrorCode.INVALID_PARAMETER 에러 코드를 사용하여 handleExceptionInternal 메서드를 호출합니다.
+ * handleMethodArgumentNotValid 메서드는 MethodArgumentNotValidException 예외를 처리합니다. 로그를 남기고 CommonErrorCode.INVALID_PARAMETER 에러 코드를 사용하여 handleExceptionInternal 메서드를 호출합니다.
+ * handleAllException 메서드는 모든 예외를 처리합니다. 로그를 남기고 CommonErrorCode.INTERNAL_SERVER_ERROR 에러 코드를 사용하여 handleExceptionInternal 메서드를 호출합니다.
+ * handleExceptionInternal 메서드는 ErrorCode를 이용하여 ErrorResponse 객체를 생성하고 이를 ResponseEntity에 담아 반환합니다. makeErrorResponse 메서드는 ErrorCode와 필요한 경우 메시지를 이용하여 ErrorResponse 객체를 생성합니다.
+ */
+
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {

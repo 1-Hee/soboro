@@ -14,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ErrorResponse {
 
+    private final LocalDateTime timestamp = LocalDateTime.now();
     private final String status;
     private final String message;
 
