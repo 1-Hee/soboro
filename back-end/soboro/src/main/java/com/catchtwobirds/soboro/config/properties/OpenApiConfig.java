@@ -23,22 +23,7 @@ public class OpenApiConfig {
                 .contact(new Contact().name("Soboro").url("http://localhost:8080").email("soboroservice@soboro.com"))
                 .license(new License().name("MIT Licence").url("https://opensource.org/licenses/MIT"));
 
-//        // SecuritySecheme명
-//        String jwtSchemeName = "jwtAuth";
-//        // API 요청헤더에 인증정보 포함
-//        SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwtSchemeName);
-//        // SecuritySchemes 등록
-//        Components components = new Components()
-//                .addSecuritySchemes(jwtSchemeName, new SecurityScheme()
-//                        .name(jwtSchemeName)
-//                        .type(SecurityScheme.Type.HTTP) // HTTP 방식
-//                        .scheme("bearer")
-//                        .bearerFormat("JWT")); // 토큰 형식을 지정하는 임의의 문자(Optional)
-
         return new OpenAPI()
-//                .addSecurityItem(securityRequirement)
-                .addSecurityItem(new SecurityRequirement()
-                        .addList(securitySchemeName))
                 .info(info)
                 .components(new Components()
                         .addSecuritySchemes(securitySchemeName, new SecurityScheme()

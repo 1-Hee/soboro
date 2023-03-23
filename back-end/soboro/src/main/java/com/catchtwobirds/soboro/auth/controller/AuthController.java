@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @Slf4j
 @Tag(name = "Auth", description = "로그인, 로그아웃 API")
@@ -46,10 +46,11 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(summary = "일반 로그인", description = "일반 로그인 API", tags = {"Auth"})
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+            @ApiResponse(responseCode = "200", description = "OK : 성공"),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST : 잘못된 요청"),
+            @ApiResponse(responseCode = "401", description = "NOT AUTH : 로그인 실패 (아이디 또는 비밀번호 일치하지 않음) "),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND : 잘못된 서버 경로 요청"),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR : 서버 에러")
     })
     public ApiResponseDto<?> login(
             HttpServletRequest request,

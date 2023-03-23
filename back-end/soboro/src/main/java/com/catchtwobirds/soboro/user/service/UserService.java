@@ -1,6 +1,7 @@
 package com.catchtwobirds.soboro.user.service;
 
-import com.catchtwobirds.soboro.user.dto.UserDto;
+import com.catchtwobirds.soboro.user.dto.UserRequestDto;
+import com.catchtwobirds.soboro.user.dto.UserResponseDto;
 import com.catchtwobirds.soboro.user.entity.User;
 import com.catchtwobirds.soboro.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,8 @@ public class UserService {
     }
 
     // 회원 가입
-    public void insertUser(UserDto userDto) {
-        userRepository.save(userDto.toEntity());
+    public User insertUser(UserRequestDto userDto) {
+        return userRepository.save(userDto.toEntity());
     }
 
 

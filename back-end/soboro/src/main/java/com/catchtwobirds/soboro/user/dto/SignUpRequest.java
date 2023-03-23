@@ -1,4 +1,4 @@
-package com.catchtwobirds.soboro.auth.dto;
+package com.catchtwobirds.soboro.user.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;

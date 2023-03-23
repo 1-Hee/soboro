@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +50,7 @@ public class TestController {
     }
 
     @GetMapping("/tokenheader")
+    @SecurityRequirement(name = "bearerAuth")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
@@ -57,7 +59,7 @@ public class TestController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
     @Operation(summary = "로그인 테스트", description = "HEADER -> body형태로 토큰, ID반환 API", tags = {"test"})
-    public ResponseEntity<?> authTest (@RequestHeader String Authorization) {
+    public ResponseEntity<?> authTest (@RequestHeader(required = false) String Authorization ) {
         log.info("HeaderUtil.getAccessTokenString(Authorization) : {} ", HeaderUtil.getAccessTokenString(Authorization));
         String token = HeaderUtil.getAccessTokenString(Authorization);
         String id = customOAuth2UserService.getId(token);

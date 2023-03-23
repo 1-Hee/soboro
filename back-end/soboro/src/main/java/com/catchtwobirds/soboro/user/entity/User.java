@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Builder
 @Getter
@@ -69,7 +70,7 @@ public class User {
     @NotNull
     private RoleType roleType;
     @Column(name = "user_created_time")
-    @NotNull
+    @CreationTimestamp
     private LocalDateTime createdAt;
     @Column(name = "user_active")
     @NotNull

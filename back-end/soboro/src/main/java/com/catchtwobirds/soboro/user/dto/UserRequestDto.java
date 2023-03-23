@@ -1,5 +1,7 @@
 package com.catchtwobirds.soboro.user.dto;
 
+import com.catchtwobirds.soboro.auth.entity.ProviderType;
+import com.catchtwobirds.soboro.auth.entity.RoleType;
 import com.catchtwobirds.soboro.user.entity.User;
 import lombok.*;
 
@@ -8,7 +10,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
+public class UserRequestDto {
     private String userId;
     private String userPassword;
     private String userName;
@@ -18,19 +20,7 @@ public class UserDto {
     private String userGender;
     private boolean userTerms;
 
-    @Builder
-    public UserDto(User user) {
-            this.userId = user.getUserId();
-            this.userPassword = user.getUserPassword();
-            this.userName = user.getUserName();
-            this.userEmail = user.getUserEmail();
-            this.userPhone = user.getUserPhone();
-            this.userBirthDate = user.getUserBirthDate();
-            this.userGender = user.getUserGender();
-            this.userTerms = user.isUserTerms();
-        }
-
-        public User toEntity() {
+    public User toEntity() {
         return User.builder()
                 .userId(userId)
                 .userPassword(userPassword)
@@ -40,6 +30,8 @@ public class UserDto {
                 .userGender(userGender)
                 .userBirthDate(userBirthDate)
                 .userTerms(userTerms)
+                .roleType(RoleType.USER)
+                .providerType(ProviderType.LOCAL)
                 .build();
     }
 }

@@ -88,7 +88,7 @@ public class SecurityConfig {
                 .failureHandler(oAuth2AuthenticationFailureHandler())
                 .and()
                 .logout()
-                .logoutUrl("/api/v1/auth/logout")
+                .logoutUrl("/api/auth/logout")
                 .logoutSuccessHandler(logoutSuccessHandler)
                 .logoutSuccessUrl("/")
                 .and()

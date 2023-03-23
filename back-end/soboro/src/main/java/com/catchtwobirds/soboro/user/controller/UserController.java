@@ -1,15 +1,23 @@
 package com.catchtwobirds.soboro.user.controller;
 
+import com.catchtwobirds.soboro.auth.service.CustomOAuth2UserService;
+import com.catchtwobirds.soboro.utils.HeaderUtil;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import com.catchtwobirds.soboro.common.ApiResponseDto;
-import com.catchtwobirds.soboro.user.dto.UserDto;
+import com.catchtwobirds.soboro.user.dto.UserRequestDto;
 import com.catchtwobirds.soboro.user.entity.User;
 import com.catchtwobirds.soboro.user.service.UserService;
+import com.sun.jdi.request.DuplicateRequestException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Slf4j
 @RestController
@@ -18,6 +26,8 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "user", description = "회원 관련 컨트롤러")
 public class UserController {
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
 //    @PostMapping
 //    public void addUser(@RequestBody UserDto userDto) {
@@ -36,28 +46,29 @@ public class UserController {
     }
 
 
-//    @PostMapping("/signup")
-//    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-//        if(userService.getUser(signUpRequest.getUserId())!= null) {
-//            throw new BadRequestException("Email address already in use.");
-//        }
-//
-//        // Creating user's account
-//        User user = new User();
-//        user.setName(signUpRequest.getName());
-//        user.setEmail(signUpRequest.getEmail());
-//        user.setPassword(signUpRequest.getPassword());
-//        user.setProvider(AuthProvider.local);
-//
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//
-//        User result = userRepository.save(user);
-//
-//        URI location = ServletUriComponentsBuilder
-//                .fromCurrentContextPath().path("/user/me")
-//                .buildAndExpand(result.getId()).toUri();
-//
-//        return ResponseEntity.created(location)
-//                .body(new ApiResponse(true, "User registered successfully@"));
-//    }
+    @PostMapping("/signup")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRequestDto userRequestDto) {
+
+        // ID 중복
+        if(userService.getUser(userRequestDto.getUserId())!= null) {
+            throw new DuplicateRequestException("Email address already in use.");
+        }
+
+        userRequestDto.setUserPassword(passwordEncoder.encode(userRequestDto.getUserPassword()));
+        log.info("회원 가입 :  {}", userRequestDto);
+        User result = userService.insertUser(userRequestDto);
+        log.info("result : {} ", result);
+        userRequestDto.setUserPassword(null);
+        return ResponseEntity.status(HttpStatus.OK).body(userRequestDto);
+    }
+
+    @GetMapping("/infoooo")
+    public ResponseEntity<?> getUserInfo(@RequestHeader String Authorization) {
+        log.info("Authorization : {}", Authorization);
+        String token = HeaderUtil.getAccessTokenString(Authorization);
+        String id = customOAuth2UserService.getId(token);
+        User user = userService.getUser(id);
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
 }

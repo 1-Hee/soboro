@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mariadb://localhost:3306/soborodb
+    url: jdbc:mariadb://j8b202.p.ssafy.io:3306/soborodb
     driver-class-name: org.mariadb.jdbc.Driver
     username: root
     password: root
@@ -25,7 +25,7 @@ spring:
     defer-datasource-initialization: true
   data:
     mongodb:
-      host: localhost
+      host: j8b202.p.ssafy.io
       port: 27017
       database: soborodb
       username: root
@@ -37,7 +37,7 @@ spring:
         max-idle: 10
         min-idle: 2
     port: 6363
-    host: localhost
+    host: j8b202.p.ssafy.io
     password: '1q2w3e4r'
   security:
     oauth2.client:
