@@ -34,7 +34,8 @@ public class ConsultingService {
 //                .map(ConsultingListDto::new)
 //                .collect(Collectors.toList());
 //    }
-    // 페이지
+
+    // 컨설팅 리스트 페이지화
     public Page<ConsultingListDto> consultingList(Integer userNo, Pageable pageable) {
         Page<Consulting> page = consultingRepository.findByUser_UserNo(userNo, pageable);
         Page<ConsultingListDto> result = page.map(ConsultingListDto::new);
@@ -45,7 +46,8 @@ public class ConsultingService {
     }
     // 컨설팅 상세 가져오기
     public List<ConsultingDetailDto> consultingDetailList(Integer userNo, Integer consultingNo) {
-        List<Consulting> result = consultingRepository.findConsultingDetail(userNo, consultingNo);
+//        List<Consulting> result = consultingRepository.findConsultingDetail(userNo, consultingNo);
+        List<Consulting> result = consultingRepository.findByUser_UserNoAndConsultingNo(userNo, consultingNo);
         return result.stream()
                 .map(ConsultingDetailDto::new)
                 .collect(Collectors.toList());
