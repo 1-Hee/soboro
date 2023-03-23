@@ -1,4 +1,4 @@
-package com.catchtwobirds.soboro.common.exception;
+package com.catchtwobirds.soboro.common.error.errorcode;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum UserErrorCode implements ErrorCode {
-
-    INACTIVE_USER(HttpStatus.FORBIDDEN, "User is inactive"),
+    USER_401(HttpStatus.BAD_REQUEST, "회원 아이디 중복됨"),
+    USER_402(HttpStatus.BAD_REQUEST, "회원 휴대폰 미인증"),
     ;
 
     private final HttpStatus httpStatus;

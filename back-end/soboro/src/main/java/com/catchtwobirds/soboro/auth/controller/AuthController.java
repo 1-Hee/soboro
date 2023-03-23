@@ -1,7 +1,6 @@
 package com.catchtwobirds.soboro.auth.controller;
 
 import com.catchtwobirds.soboro.auth.dto.AuthReqModel;
-import com.catchtwobirds.soboro.common.ApiResponseDto;
 import com.catchtwobirds.soboro.config.properties.AppProperties;
 import com.catchtwobirds.soboro.auth.entity.UserPrincipal;
 import com.catchtwobirds.soboro.auth.token.AuthToken;
@@ -16,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -52,7 +52,7 @@ public class AuthController {
             @ApiResponse(responseCode = "404", description = "NOT FOUND : 잘못된 서버 경로 요청"),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR : 서버 에러")
     })
-    public ApiResponseDto<?> login(
+    public ResponseEntity<?> login(
             HttpServletRequest request,
             HttpServletResponse response,
             @Parameter(description = "로그인 아이디, 비밀번호") @RequestBody AuthReqModel authReqModel
@@ -101,7 +101,7 @@ public class AuthController {
         CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
         CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
 
-        return ApiResponseDto.success("token", accessToken.getToken());
+        return ResponseEntity.ok().body(accessToken.getToken());
     }
 
 //    @GetMapping("/refresh")

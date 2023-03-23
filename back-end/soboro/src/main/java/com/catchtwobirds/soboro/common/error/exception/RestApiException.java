@@ -1,5 +1,6 @@
-package com.catchtwobirds.soboro.common.exception;
+package com.catchtwobirds.soboro.common.error.exception;
 
+import com.catchtwobirds.soboro.common.error.errorcode.ErrorCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

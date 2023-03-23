@@ -1,4 +1,4 @@
-package com.catchtwobirds.soboro.common.exception;
+package com.catchtwobirds.soboro.common.error.errorcode;
 
 import org.springframework.http.HttpStatus;
 

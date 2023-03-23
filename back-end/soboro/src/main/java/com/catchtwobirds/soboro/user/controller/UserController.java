@@ -1,7 +1,6 @@
 package com.catchtwobirds.soboro.user.controller;
 
 import com.catchtwobirds.soboro.auth.service.CustomOAuth2UserService;
-import com.catchtwobirds.soboro.common.exception.DuplicationIdException;
 import com.catchtwobirds.soboro.utils.HeaderUtil;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -10,7 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.catchtwobirds.soboro.user.dto.UserRequestDto;
 import com.catchtwobirds.soboro.user.entity.User;
 import com.catchtwobirds.soboro.user.service.UserService;
-import com.sun.jdi.request.DuplicateRequestException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

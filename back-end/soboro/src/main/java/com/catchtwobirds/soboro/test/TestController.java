@@ -1,8 +1,11 @@
 package com.catchtwobirds.soboro.test;
 
 import com.catchtwobirds.soboro.auth.service.CustomOAuth2UserService;
+import com.catchtwobirds.soboro.common.response.RestApiResponse;
 import com.catchtwobirds.soboro.consulting.dto.ConsultingListDto;
 import com.catchtwobirds.soboro.consulting.service.ConsultingService;
+import com.catchtwobirds.soboro.common.error.errorcode.UserErrorCode;
+import com.catchtwobirds.soboro.common.error.exception.RestApiException;
 import com.catchtwobirds.soboro.user.service.UserService;
 import com.catchtwobirds.soboro.utils.HeaderUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,14 +21,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -80,7 +80,7 @@ public class TestController {
 //    }
 
     @GetMapping("/consult/list/noauth")
-    @Operation(summary = "컨설팅 리스트 출력", description = "컨설팅 정보에 대한 리스트를 제공한다 page=0,1... size=10 userno=1 sort는 지우고 요청할 것", tags = {"consult"})
+    @Operation(summary = "컨설팅 리스트 출력", description = "컨설팅 정보에 대한 리스트를 제공한다 page=0,1... size=10 userno=1 sort는 지우고 요청할 것", tags = {"test"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK" , content = @Content(schema = @Schema(implementation = ConsultingListDto.class))),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
@@ -94,5 +94,40 @@ public class TestController {
         Page<ConsultingListDto> consultingList = consultingService.consultingList(userNo, pageable);
 
         return ResponseEntity.ok().body(consultingList);
+    }
+
+    @GetMapping("/error/user401")
+    @Operation(summary = "에러 응답 ", description = "에러 응답 코드", tags = {"test"})
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK" , content = @Content(schema = @Schema(implementation = ConsultingListDto.class))),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+    })
+    public ResponseEntity<?> errorUser401() {
+        throw new RestApiException(UserErrorCode.USER_401);
+    }
+
+    @GetMapping("/response/single")
+    @Operation(summary = "단일 응답 ", description = "객체 응답 코드", tags = {"test"})
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK" , content = @Content(schema = @Schema(implementation = ConsultingListDto.class))),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+    })
+    public ResponseEntity<?> responseSingle(HttpServletRequest request) {
+        
+        return ResponseEntity.ok().body(new RestApiResponse("응답됨", request, "데이터"));
+    }
+
+    @GetMapping("/response/list")
+    @Operation(summary = "단일 응답 ", description = "객체 응답 코드", tags = {"test"})
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK" , content = @Content(schema = @Schema(implementation = ConsultingListDto.class))),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+    })
+    public ResponseEntity<?> responseList(HttpServletRequest request) {
+        List<ConsultingListDto> consultingListDtoLis = consultingService.consultingAllList();
+        return ResponseEntity.ok().body(new RestApiResponse("응답됨", request, consultingListDtoLis));
     }
 }
