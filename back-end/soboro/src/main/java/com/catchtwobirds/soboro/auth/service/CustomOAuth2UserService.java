@@ -83,7 +83,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .userName(userInfo.getName())
                 .userEmail(userInfo.getEmail() != null ? userInfo.getEmail() : "NO_EMAIL")
                 .userPhone("NO_PHONE")
-                .userBirthDate("BD")
                 .userGender("N")
                 .userTerms(true)
                 .providerType(providerType)
