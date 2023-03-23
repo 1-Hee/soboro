@@ -14,10 +14,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ErrorResponse {
 
-    private final LocalDateTime localDateTime;
     private final String status;
     private final String message;
-    private final String path;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private final List<ValidationError> errors;

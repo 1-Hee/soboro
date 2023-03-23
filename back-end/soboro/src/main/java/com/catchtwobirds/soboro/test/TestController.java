@@ -129,5 +129,7 @@ public class TestController {
     public ResponseEntity<?> responseList(HttpServletRequest request) {
         List<ConsultingListDto> consultingListDtoLis = consultingService.consultingAllList();
         return ResponseEntity.ok().body(new RestApiResponse("응답됨", request, consultingListDtoLis));
+
+
     }
 }
