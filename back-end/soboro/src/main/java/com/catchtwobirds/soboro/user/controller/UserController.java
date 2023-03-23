@@ -48,7 +48,7 @@ public class UserController {
 //    }
 
 
-    @PostMapping("/signup")
+    @PostMapping
     @Operation(summary = "회원 가입", description = "회원 가입 API", tags = {"user"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK", content = {
@@ -60,8 +60,8 @@ public class UserController {
             @ApiResponse(responseCode = "USER_500", description = "DB저장실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     public RestApiResponse<?> registerUser(@Valid @RequestBody UserRequestDto userRequestDto) {
-        log.info("/api/user/signup 회원 가입 메서드 요청됨");
-        
+        log.info("/api/user | POST method | 회원 가입 요청됨");
+        log.info("userRequestDto : {}", userRequestDto);
         // ID 중복 확인
         if(userService.getUser(userRequestDto.getUserId()) != null) {
             throw new RestApiException(UserErrorCode.USER_401);
@@ -81,7 +81,7 @@ public class UserController {
         return new RestApiResponse<>("회원 가입 완료", result);
     }
 
-    @GetMapping("/info")
+    @GetMapping
     @Operation(summary = "회원 정보 반환", description = "회원 정보 반환 API", tags = {"user"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK", content = {
@@ -89,16 +89,79 @@ public class UserController {
                     @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "USER_410", description = "회원 ID중복", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "USER_500", description = "DB저장실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "USER_401", description = "회원 정보 없음", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @SecurityRequirement(name = "bearerAuth")
-    public ResponseEntity<?> getUserInfo(@RequestHeader(required = false) String Authorization) {
+    public RestApiResponse<?> getUserInfo(@RequestHeader(required = false) String Authorization) {
+        log.info("/api/user | GET method | 회원 정보 반환 요청됨");
         log.info("Authorization : {}", Authorization);
         String token = HeaderUtil.getAccessTokenString(Authorization);
         String id = customOAuth2UserService.getId(token);
-        User user = userService.getUser(id);
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+        // DB에서 회원 정보 가져오기
+        UserResponseDto result = userService.getUser(id);
+        // 회원 정보가 없다면
+        if(result == null) {
+            throw new RestApiException(UserErrorCode.USER_401);
+        }
+        // 반환 전 비밀번호 필터
+        result.setUserPassword(null);
+        return new RestApiResponse<>("회원 정보 반환 완료", result);
     }
 
+    @PostMapping("/duplicate/id")
+    @Operation(summary = "회원 아이디 중복 확인", description = "회원 아이디 중복 확인 API", tags = {"user"})
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)),
+                    @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "USER_410", description = "회원 ID중복", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    public RestApiResponse<?> checkUserId(@Valid @RequestParam("idCheck") String idCheck) {
+        log.info("/api/user/duplicate/id | POST method | 회원 아이디 중복 확인 요청됨");
+        log.info("idCheck : {}", idCheck);
+    
+        // 아이디 중복 체크
+        if (userService.getUser(idCheck) != null) {
+            throw new RestApiException(UserErrorCode.USER_401);
+        }
+
+        return new RestApiResponse<>("아이디 사용 가능");
+    }
+
+    // 미구현
+//    @PostMapping("/certification")
+//    @Operation(summary = "인증번호 확인", description = "인증번호 확인 API", tags = {"user"})
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "OK", content = {
+//                    @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)),
+//                    @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
+//            @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+//            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+//            @ApiResponse(responseCode = "USER_410", description = "회원 ID중복", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+//            @ApiResponse(responseCode = "USER_500", description = "DB저장실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+//    })
+//    public RestApiResponse<?> certificateNumber(@Valid @RequestParam("number") String number) {
+//        log.info("/api/user/certification | POST method | 인증번호 확인 요청됨");
+//        log.info("number : {}", number);
+//
+//        return new RestApiResponse<>("아이디 사용 가능");
+//    }
+
+    @PostMapping("/sendnumber/id")
+    @Operation(summary = "인증번호 전송", description = "인증번호 전송 API", tags = {"user"})
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)),
+                    @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    public RestApiResponse<?> certificateNumber(@Valid @RequestParam("number") String number) {
+        log.info("/api/user/certification | POST method | 인증번호 확인 요청됨");
+        log.info("number : {}", number);
+
+        return new RestApiResponse<>("아이디 사용 가능");
+    }
 }

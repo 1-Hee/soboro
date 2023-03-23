@@ -28,4 +28,12 @@ public class RestApiResponse<T> {
         this.message = message;
         this.data = data;
     }
+
+    @Builder
+    public RestApiResponse(String message) {
+        this.timestamp = LocalDateTime.now();
+        this.status = 200;
+        this.message = message;
+        this.data = null;
+    }
 }
