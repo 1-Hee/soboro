@@ -1,9 +1,14 @@
 package com.catchtwobirds.soboro.content.entity;
 
 import lombok.*;
+//import org.springframework.data.annotation.Id;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.MongoId;
+
 import javax.persistence.Column;
-import javax.persistence.Id;
 
 //@Entity
 @Document
@@ -14,12 +19,15 @@ import javax.persistence.Id;
 @ToString
 public class Content {
 
-    @Id
-    @Column(name = "content_no")
+    @MongoId
+    @Field(name = "content_no")
     private Long contentNo;
+//    private ObjectId contentNo;
 
-    // 외래키
+    // 상담 관련 외래키
     private Integer consultingNo;
+    // 유저관련 외래키
+    private Integer userNo;
     private String contentText;
     private Boolean contentSpeaker;
 }

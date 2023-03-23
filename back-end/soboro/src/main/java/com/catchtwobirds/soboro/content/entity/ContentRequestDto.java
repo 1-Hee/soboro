@@ -1,6 +1,7 @@
 package com.catchtwobirds.soboro.content.entity;
 
 import lombok.*;
+import org.bson.types.ObjectId;
 
 @Setter
 @Getter

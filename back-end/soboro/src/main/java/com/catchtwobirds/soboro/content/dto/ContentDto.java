@@ -2,8 +2,10 @@ package com.catchtwobirds.soboro.content.dto;
 
 import com.catchtwobirds.soboro.content.entity.Content;
 import lombok.*;
+import org.bson.types.ObjectId;
 
-@Setter @Getter
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
