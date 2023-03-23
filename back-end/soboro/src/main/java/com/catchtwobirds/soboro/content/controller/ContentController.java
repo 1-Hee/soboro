@@ -2,6 +2,7 @@ package com.catchtwobirds.soboro.content.controller;
 
 import com.catchtwobirds.soboro.auth.service.CustomOAuth2UserService;
 import com.catchtwobirds.soboro.content.dto.ContentDto;
+import com.catchtwobirds.soboro.content.dto.ContentRequestDto;
 import com.catchtwobirds.soboro.content.entity.Content;
 import com.catchtwobirds.soboro.content.service.ContentService;
 import com.catchtwobirds.soboro.user.service.UserService;
@@ -21,30 +22,32 @@ import java.util.List;
 public class ContentController {
 
     private final ContentService contentService;
-    private final CustomOAuth2UserService customOAuth2UserService;
-    private final UserService userService;
 
-// /content/detail?consultingNo={consultingNo}
+    // 컨설팅 번호와 일치하는 모든 텍스트를 가져옵니다.
     @GetMapping("/content/detail")
     @Operation(summary = "컨설팅 컨텐츠 출력", description = "컨설팅 컨텐츠를 출력한다", tags = {"consult"})
     public ResponseEntity contentDetail(
-//            @RequestHeader String Authorization,
             @RequestParam(value = "consultingNo", required = false) Integer consultingNo
     ) {
-//        String token = HeaderUtil.getAccessTokenString(Authorization);
-//        String id = customOAuth2UserService.getId(token);
-//        Integer userNo = userService.getUser(id).getUserNo();
-
         List<ContentDto> contentList = contentService.contentDetailList(consultingNo);
         return ResponseEntity.ok().body(contentList);
     }
 
+    // 상담 텍스트를 저장
+    @GetMapping("/save/text")
+    @Operation(summary = "컨설팅 컨텐츠 저장", description = "컨설팅 컨텐츠를 저장한다", tags = {"consult"})
+    public ResponseEntity contentSave(
+            @RequestBody ContentRequestDto contentRequestDto
+    ) {
 
-    // 테스트용입니다
+        return null;//ResponseEntity.ok().body(contentService.addContent())
+    }
+
+    // 모든 상담텍스트를 조회하는 테스트용도입니다
     @GetMapping("/content/findall")
     @Operation(summary = "컨설팅 컨텐츠 출력", description = "컨설팅 컨텐츠를 출력한다", tags = {"consult"})
-    public ResponseEntity test2() {
-        List<ContentDto> contentList = contentService.allTest();
+    public ResponseEntity findAllTest() {
+        List<ContentDto> contentList = contentService.findAllTest();
         return ResponseEntity.ok().body(contentList);
     }
 }

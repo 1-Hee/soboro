@@ -1,6 +1,8 @@
 package com.catchtwobirds.soboro.content.service;
 
 import com.catchtwobirds.soboro.content.dto.ContentDto;
+import com.catchtwobirds.soboro.content.dto.ContentRequestDto;
+import com.catchtwobirds.soboro.content.dto.ContentResponseDto;
 import com.catchtwobirds.soboro.content.entity.Content;
 import com.catchtwobirds.soboro.content.repository.ContentRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,37 +19,24 @@ public class ContentService {
 
     private final ContentRepository contentRepository;
 
-    // 컨텐츠 조회
-//    public List<ContentDto> contentDetailList(Integer UserNo, Integer consultingNo) {
-//        List<Content> res = contentRepository.findAllByConsultingNoAndUserNo(UserNo, consultingNo);
-//        System.out.println("테스트입니다 = " + res);
-//        return res.stream()
-//                .map(ContentDto::new)
-//                .collect(Collectors.toList());
-//    }
+    // 컨설팅 번호를 찍어서 해당 컨텐츠를 전체조회
     public List<ContentDto> contentDetailList(Integer consultingNo) {
-        List<Content> res = contentRepository.findContentByConsultingNo(consultingNo);
-        System.out.println("테스트입니다 = " + res);
-        return res.stream()
-                .map(ContentDto::new)
-                .collect(Collectors.toList());
-    }
-
-    //테스트용 전체조회
-    public List<ContentDto> test(Integer consultingNo) {
         List<Content> res = contentRepository.findAllByConsultingNo(consultingNo);
-        System.out.println("나오나 보는겁니다 = " + res);
         return res.stream()
                 .map(ContentDto::new)
                 .collect(Collectors.toList());
     }
 
     //테스트용 전체조회
-    public List<ContentDto> allTest() {
+    public List<ContentDto> findAllTest() {
         List<Content> res = contentRepository.findAll();
-        System.out.println("나오나 보는겁니다 = " + res);
         return res.stream()
                 .map(ContentDto::new)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public ContentResponseDto addContent(ContentRequestDto contentRequestDto, Integer consultingNo) {
+        return new ContentResponseDto(contentRepository.save(contentRequestDto.toEntity(consultingNo)));
     }
 }

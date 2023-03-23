@@ -1,5 +1,6 @@
-package com.catchtwobirds.soboro.content.entity;
+package com.catchtwobirds.soboro.content.dto;
 
+import com.catchtwobirds.soboro.content.entity.Content;
 import lombok.*;
 import org.bson.types.ObjectId;
 
@@ -10,13 +11,13 @@ import org.bson.types.ObjectId;
 @Builder
 @ToString
 public class ContentRequestDto {
-    private Long contentNo;
+    private ObjectId contentNo;
     private Integer consultingNo;
     private String contentText;
     private Boolean contentSpeaker;
 
     @Builder
-    public Content toEntity() {
+    public Content toEntity(Integer consultingNo) {
         return Content.builder()
                 .contentNo(contentNo)
                 .consultingNo(consultingNo)

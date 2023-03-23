@@ -12,7 +12,7 @@ import org.bson.types.ObjectId;
 @ToString
 public class ContentDto {
 
-    private Long contentNo;
+    private ObjectId contentNo;
     private Integer consultingNo;
     private String contentText;
     private Boolean contentSpeaker;
