@@ -18,8 +18,8 @@ public class UserService {
     }
 
     // 회원 가입
-    public User insertUser(UserRequestDto userDto) {
-        return userRepository.save(userDto.toEntity());
+    public UserResponseDto insertUser(UserRequestDto userDto) {
+        return new UserResponseDto(userRepository.save(userDto.toEntity()));
     }
 
 

@@ -3,7 +3,12 @@ package com.catchtwobirds.soboro.user.controller;
 import com.catchtwobirds.soboro.auth.service.CustomOAuth2UserService;
 import com.catchtwobirds.soboro.common.error.errorcode.UserErrorCode;
 import com.catchtwobirds.soboro.common.error.exception.RestApiException;
+import com.catchtwobirds.soboro.common.error.response.ErrorResponse;
+import com.catchtwobirds.soboro.common.response.RestApiResponse;
+import com.catchtwobirds.soboro.user.dto.UserResponseDto;
 import com.catchtwobirds.soboro.utils.HeaderUtil;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -46,12 +51,15 @@ public class UserController {
     @PostMapping("/signup")
     @Operation(summary = "회원 가입", description = "회원 가입 API", tags = {"user"})
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDto.class)),
+                            @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "USER_410", description = "회원 ID중복", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "USER_500", description = "DB저장실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRequestDto userRequestDto) {
+    public RestApiResponse<?> registerUser(@Valid @RequestBody UserRequestDto userRequestDto) {
         log.info("/api/user/signup 회원 가입 메서드 요청됨");
         
         // ID 중복 확인
@@ -63,20 +71,26 @@ public class UserController {
         userRequestDto.setUserPassword(passwordEncoder.encode(userRequestDto.getUserPassword()));
         log.info("회원 가입 :  {}", userRequestDto);
         // 회원 정보 DB 입력
-        User result = userService.insertUser(userRequestDto);
-        log.info("result : {} ", result);
+        UserResponseDto result = userService.insertUser(userRequestDto);
+        // DB 저장 확인
+        if(result == null) {
+            throw new RestApiException(UserErrorCode.USER_500);
+        }
         // 반환시 password null처리
-        userRequestDto.setUserPassword(null);
-        return ResponseEntity.status(HttpStatus.OK).body(userRequestDto);
+        result.setUserPassword(null);
+        return new RestApiResponse<>("회원 가입 완료", result);
     }
 
     @GetMapping("/info")
     @Operation(summary = "회원 정보 반환", description = "회원 정보 반환 API", tags = {"user"})
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDto.class)),
+                    @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "USER_410", description = "회원 ID중복", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "USER_500", description = "DB저장실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<?> getUserInfo(@RequestHeader(required = false) String Authorization) {

@@ -24,17 +24,17 @@ public class UserRequestDto {
     @Schema(description = "회원 비밀번호")
     private String userPassword;
     @NotBlank
-    @Schema(description = "회원 이름")
+    @Schema(description = "회원 이름", example = "testName")
     private String userName;
     @NotBlank
     @Email
-    @Schema(description = "회원 이메일")
+    @Schema(description = "회원 이메일",  example = "testEmail@domain.com")
     private String userEmail;
     @NotNull
-    @Schema(description = "회원 휴대폰 번호")
+    @Schema(description = "회원 휴대폰 번호", example = "01012345678")
     private String userPhone;
     @NotNull
-    @Schema(description = "회원 성별")
+    @Schema(description = "회원 성별", example = "M")
     private String userGender;
     @NotNull
     @Schema(description = "회원 이용 약관 동의")
