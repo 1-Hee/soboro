@@ -27,6 +27,7 @@ spring:
     mongodb:
       host: j8b202.p.ssafy.io
       port: 27017
+      authentication-database: admin
       database: soborodb
       username: root
       password: '1q2w3e4r'
