@@ -6,6 +6,8 @@ import com.catchtwobirds.soboro.auth.entity.UserPrincipal;
 import com.catchtwobirds.soboro.auth.exception.OAuthProviderMissMatchException;
 import com.catchtwobirds.soboro.auth.info.OAuth2UserInfo;
 import com.catchtwobirds.soboro.auth.info.OAuth2UserInfoFactory;
+import com.catchtwobirds.soboro.common.error.errorcode.UserErrorCode;
+import com.catchtwobirds.soboro.common.error.exception.RestApiException;
 import com.catchtwobirds.soboro.config.properties.AppProperties;
 import com.catchtwobirds.soboro.user.entity.User;
 import com.catchtwobirds.soboro.user.repository.UserRepository;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 /**
  * 위 코드는 Spring Security와 OAuth2.0을 이용한 소셜 로그인에 사용되는 CustomOAuth2UserService 클래스입니다. <br>
@@ -58,7 +61,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         ProviderType providerType = ProviderType.valueOf(userRequest.getClientRegistration().getRegistrationId().toUpperCase());
 
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, user.getAttributes());
-        User savedUser = userRepository.findByUserId(userInfo.getId());
+//        User savedUser = userRepository.findByUserId(userInfo.getId());
+        // 수정부분
+        Optional<User> result = userRepository.findByUserId(userInfo.getId());
+        User savedUser = result.orElseThrow(()->new RestApiException(UserErrorCode.USER_402));
 
         if (savedUser != null) {
             if (providerType != savedUser.getProviderType()) {

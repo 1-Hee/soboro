@@ -39,6 +39,9 @@ public class UserRequestDto {
     @NotNull
     @Schema(description = "회원 이용 약관 동의")
     private boolean userTerms;
+    @NotNull
+    @Schema(description = "회원 활성화 여부")
+    private boolean userActive;
 
     public User toEntity() {
         return User.builder()
@@ -51,6 +54,7 @@ public class UserRequestDto {
                 .userTerms(userTerms)
                 .roleType(RoleType.USER)
                 .providerType(ProviderType.LOCAL)
+                .userActive(userActive)
                 .build();
     }
 }

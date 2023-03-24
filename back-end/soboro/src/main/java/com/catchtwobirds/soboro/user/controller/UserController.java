@@ -123,7 +123,10 @@ public class UserController {
         log.info("idCheck : {}", idCheck);
     
         // 아이디 중복 체크
-        if (userService.getUser(idCheck) != null) {
+        UserResponseDto userResponseDto = userService.getUser(idCheck);
+        log.info("userResponseDto : {}", userResponseDto);
+        // 아이디 DB에 있으면 에러반환
+        if (userResponseDto != null) {
             throw new RestApiException(UserErrorCode.USER_401);
         }
 

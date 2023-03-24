@@ -1,6 +1,8 @@
 package com.catchtwobirds.soboro.auth.service;
 
 import com.catchtwobirds.soboro.auth.entity.UserPrincipal;
+import com.catchtwobirds.soboro.common.error.errorcode.UserErrorCode;
+import com.catchtwobirds.soboro.common.error.exception.RestApiException;
 import com.catchtwobirds.soboro.user.entity.User;
 import com.catchtwobirds.soboro.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * 위 코드는 Spring Security를 사용하여 사용자 인증을 구현하는 과정에서 사용자 정보를 조회하는 CustomUserDetailsService 클래스의 구현 코드입니다. <br>
@@ -28,10 +32,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUserId(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("Can not find username.");
-        }
+//        User user = userRepository.findByUserId(username);
+        Optional<User> result = userRepository.findByUserId(username);
+
+        User user = result.orElseThrow(()->new RestApiException(UserErrorCode.USER_402));
+//        if (user == null) {
+//            throw new UsernameNotFoundException("Can not find username.");
+//        }
         return UserPrincipal.create(user);
     }
 }
