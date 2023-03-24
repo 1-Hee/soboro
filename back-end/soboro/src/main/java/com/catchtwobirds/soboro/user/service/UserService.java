@@ -2,6 +2,7 @@ package com.catchtwobirds.soboro.user.service;
 
 import com.catchtwobirds.soboro.common.error.errorcode.UserErrorCode;
 import com.catchtwobirds.soboro.common.error.exception.RestApiException;
+import com.catchtwobirds.soboro.common.error.response.ErrorResponse;
 import com.catchtwobirds.soboro.user.dto.UserModifyDto;
 import com.catchtwobirds.soboro.user.dto.UserRequestDto;
 import com.catchtwobirds.soboro.user.dto.UserResponseDto;
@@ -50,6 +51,15 @@ public class UserService {
     }
     
     // 회원 삭제
-//    public boolean
+    @Transactional
+    public boolean deleteUser(String userId) {
+        User user = userRepository.findByUserId(userId).orElseThrow(()-> new RestApiException(UserErrorCode.USER_402));
+        try {
+            user.setUserActive(false);
+        } catch (RestApiException e) {
+            throw new RestApiException(UserErrorCode.USER_501);
+        }
+        return true;
+    }
 
 }

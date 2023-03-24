@@ -127,6 +127,27 @@ public class UserController {
         return new RestApiResponse<>("회원 정보 수정 완료", result);
     }
 
+    @DeleteMapping
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "회원 정보 삭제", description = "회원 정보 삭제 API", tags = {"user"})
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = UserModifyDto.class)),
+                    @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "USER_501", description = "DB 회원정보 삭제 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    public RestApiResponse<?> modifyUserInfo(
+            @RequestHeader(required = false) String Authorization) {
+        log.info("/api/user | PATCH method | 회원 정보 삭제 요청됨");
+        log.info("HeaderUtil.getAccessTokenString(Authorization) : {} ", HeaderUtil.getAccessTokenString(Authorization));
+
+        String token = HeaderUtil.getAccessTokenString(Authorization);
+        String id = customOAuth2UserService.getId(token);
+        userService.deleteUser(id);
+        return new RestApiResponse<>("회원 정보 삭제 완료");
+    }
 
     @PostMapping("/duplicate/id")
     @Operation(summary = "회원 아이디 중복 확인", description = "회원 아이디 중복 확인 API", tags = {"user"})

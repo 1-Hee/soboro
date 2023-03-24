@@ -15,6 +15,7 @@ public enum UserErrorCode implements ErrorCode {
     USER_410(HttpStatus.BAD_REQUEST, "회원 아이디 중복됨"),
     USER_411(HttpStatus.BAD_REQUEST, "회원 휴대폰 미인증"),
     USER_500(HttpStatus.INTERNAL_SERVER_ERROR, "DB 등록 실패"),
+    USER_501(HttpStatus.INTERNAL_SERVER_ERROR, "DB 수정 실패"),
     ;
 
     private final HttpStatus httpStatus;
