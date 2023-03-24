@@ -14,9 +14,9 @@ import java.time.LocalDateTime;
 public class RestApiResponse<T> {
     @Schema(description = "응답 시간")
     LocalDateTime timestamp;
-    @Schema(description = "상태 코드")
+    @Schema(description = "상태 코드", example = "200")
     int status = 200;
-    @Schema(description = "상태 메세지")
+    @Schema(description = "상태 메세지", example = "상태메세지")
     String message;
     @Schema(description = "응답 데이터")
     T data;
