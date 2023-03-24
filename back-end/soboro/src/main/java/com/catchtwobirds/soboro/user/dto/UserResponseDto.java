@@ -18,8 +18,6 @@ public class UserResponseDto {
     private Integer userNo;
     @Schema(description = "회원 아이디")
     private String userId;
-    @Schema(description = "회원 비밀번호")
-    private String userPassword;
     @Schema(description = "회원 이름")
     private String userName;
     @Schema(description = "회원 이메일", example = "testEmail@email.com")
@@ -35,7 +33,6 @@ public class UserResponseDto {
     public UserResponseDto(User user) {
         this.userNo = user.getUserNo();
         this.userId = user.getUserId();
-        this.userPassword = user.getUserPassword();
         this.userName = user.getUserName();
         this.userEmail = user.getUserEmail();
         this.userPhone = user.getUserPhone();

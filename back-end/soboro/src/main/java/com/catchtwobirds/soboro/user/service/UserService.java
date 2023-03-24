@@ -2,14 +2,14 @@ package com.catchtwobirds.soboro.user.service;
 
 import com.catchtwobirds.soboro.common.error.errorcode.UserErrorCode;
 import com.catchtwobirds.soboro.common.error.exception.RestApiException;
-import com.catchtwobirds.soboro.common.error.response.ErrorResponse;
-import com.catchtwobirds.soboro.common.response.RestApiResponse;
+import com.catchtwobirds.soboro.user.dto.UserModifyDto;
 import com.catchtwobirds.soboro.user.dto.UserRequestDto;
 import com.catchtwobirds.soboro.user.dto.UserResponseDto;
 import com.catchtwobirds.soboro.user.entity.User;
 import com.catchtwobirds.soboro.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -34,16 +34,22 @@ public class UserService {
     }
 
     // 회원 가입
+    @Transactional
     public UserResponseDto insertUser(UserRequestDto userDto) {
         return new UserResponseDto(userRepository.save(userDto.toEntity()));
     }
     
     // 회원 수정
-//    public UserResponseDto modifyUser(UserRequestDto userRequestDto) {
-//        User user = userRepository.findByUserId(userRequestDto.getUserId()).orElseThrow(()-> new RestApiException(UserErrorCode.USER_402));
-//
-//    }
+    @Transactional
+    public UserModifyDto modifyUser(UserModifyDto userModifyDto) {
+        User user = userRepository.findByUserId(userModifyDto.getUserId()).orElseThrow(()-> new RestApiException(UserErrorCode.USER_402));
+        user.setUserName(userModifyDto.getUserName());
+        user.setUserEmail(userModifyDto.getUserEmail());
+        user.setUserPhone(userModifyDto.getUserPhone());
+        return new UserModifyDto(user);
+    }
     
     // 회원 삭제
+//    public boolean
 
 }

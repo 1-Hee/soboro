@@ -5,6 +5,7 @@ import com.catchtwobirds.soboro.common.error.errorcode.UserErrorCode;
 import com.catchtwobirds.soboro.common.error.exception.RestApiException;
 import com.catchtwobirds.soboro.common.error.response.ErrorResponse;
 import com.catchtwobirds.soboro.common.response.RestApiResponse;
+import com.catchtwobirds.soboro.user.dto.UserModifyDto;
 import com.catchtwobirds.soboro.user.dto.UserResponseDto;
 import com.catchtwobirds.soboro.utils.HeaderUtil;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,14 +15,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.catchtwobirds.soboro.user.dto.UserRequestDto;
-import com.catchtwobirds.soboro.user.entity.User;
 import com.catchtwobirds.soboro.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -69,8 +67,7 @@ public class UserController {
         if(result == null) {
             throw new RestApiException(UserErrorCode.USER_401);
         }
-        // 반환 전 비밀번호 필터
-        result.setUserPassword(null);
+
         return new RestApiResponse<>("회원 정보 반환 완료", result);
     }
 
@@ -102,33 +99,32 @@ public class UserController {
         if(result == null) {
             throw new RestApiException(UserErrorCode.USER_500);
         }
-        // 반환시 password null처리
-        result.setUserPassword(null);
         return new RestApiResponse<>("회원 가입 완료", result);
     }
 
     @PatchMapping
     @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "회원 정보 수정 (미구현)", description = "회원 정보 수정 API", tags = {"user"})
+    @Operation(summary = "회원 정보 수정", description = "회원 정보 수정 API", tags = {"user"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDto.class)),
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = UserModifyDto.class)),
                     @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     public RestApiResponse<?> modifyUserInfo(
             @RequestHeader(required = false) String Authorization,
-            @Valid @RequestBody UserRequestDto userRequestDto) {
+            @Valid @RequestBody UserModifyDto userModifyDto) {
         log.info("/api/user | PATCH method | 회원 정보 수정 요청됨");
         log.info("HeaderUtil.getAccessTokenString(Authorization) : {} ", HeaderUtil.getAccessTokenString(Authorization));
+        log.info("userModifyRequestDto : {}", userModifyDto);
+
         String token = HeaderUtil.getAccessTokenString(Authorization);
         String id = customOAuth2UserService.getId(token);
+        userModifyDto.setUserId(id);
+        UserModifyDto result = userService.modifyUser(userModifyDto);
 
-
-        log.info("userRequestDto : {}", userRequestDto);
-
-        return new RestApiResponse<>();
+        return new RestApiResponse<>("회원 정보 수정 완료", result);
     }
 
 
