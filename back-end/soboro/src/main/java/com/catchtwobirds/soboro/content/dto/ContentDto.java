@@ -1,6 +1,7 @@
 package com.catchtwobirds.soboro.content.dto;
 
 import com.catchtwobirds.soboro.content.entity.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.bson.types.ObjectId;
 
@@ -10,11 +11,20 @@ import org.bson.types.ObjectId;
 @NoArgsConstructor
 @Builder
 @ToString
+@Schema(description = "상담 텍스트 DTO")
 public class ContentDto {
+<<<<<<< HEAD
 
 
+=======
+    @Schema(description = "상담 텍스트 식별번호")
+    private ObjectId contentNo;
+    @Schema(description = "상담 식별번호")
+>>>>>>> bf67778 (fix : Dto schema 어노테이션 정의)
     private Integer consultingNo;
+    @Schema(description = "상담 텍스트 내용")
     private String contentText;
+    @Schema(description = "상담 텍스트 발화자")
     private Boolean contentSpeaker;
 
     @Builder

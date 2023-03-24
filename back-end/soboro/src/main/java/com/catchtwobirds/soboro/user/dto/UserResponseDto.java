@@ -28,6 +28,7 @@ public class UserResponseDto {
     private String userGender;
     @Schema(description = "회원 이용약관 동의")
     private boolean userTerms;
+    @Schema(description = "회원 활성화 여부")
     private boolean userActive;
     @Builder
     public UserResponseDto(User user) {
