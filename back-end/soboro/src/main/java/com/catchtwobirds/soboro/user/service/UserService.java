@@ -25,15 +25,26 @@ public class UserService {
     }
 
     // 회원 ID 체크하기
-//    public UserResponseDto getUserId(String userId) {
-//        Optional<User> result = userRepository.findByUserId(userId);
-//        return new UserResponseDto(result.orElseThrow(()->new RestApiResponse("회원 ID 없음")));
-//    }
+    public Object getUserId(String userId) {
+        Optional<User> result = userRepository.findByUserId(userId);
+        // 회원 ID가 있다면 중복 예외 터치기
+        if (result.isPresent()) {
+            throw new RestApiException(UserErrorCode.USER_401);
+        }
+        // 회원이 없으면 null
+        else {
+            return null;
+        }
+    }
 
     // 회원 가입
     public UserResponseDto insertUser(UserRequestDto userDto) {
         return new UserResponseDto(userRepository.save(userDto.toEntity()));
     }
-
+    
+    // 회원 수정
+    
+    
+    // 회원 삭제
 
 }

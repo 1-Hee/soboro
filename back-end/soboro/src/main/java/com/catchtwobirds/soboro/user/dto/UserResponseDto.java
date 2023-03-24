@@ -14,28 +14,20 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @Schema(description = "회원 정보 반환 DTO")
 public class UserResponseDto {
-    @NotBlank
     @Schema(description = "회원 식별번호")
     private Integer userNo;
-    @NotBlank
     @Schema(description = "회원 아이디")
     private String userId;
-    @NotBlank
     @Schema(description = "회원 비밀번호")
     private String userPassword;
-    @NotBlank
     @Schema(description = "회원 이름")
     private String userName;
-    @NotBlank
     @Schema(description = "회원 이메일", example = "testEmail@email.com")
     private String userEmail;
-    @NotBlank
     @Schema(description = "회원 휴대전화번호", example = "01012345678")
     private String userPhone;
-    @NotBlank
     @Schema(description = "회원 성별", example = "M")
     private String userGender;
-    @NotBlank
     @Schema(description = "회원 이용약관 동의")
     private boolean userTerms;
     private boolean userActive;
