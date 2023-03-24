@@ -20,8 +20,7 @@ import javax.persistence.Column;
 public class Content {
 
     @MongoId
-    @Field(name = "content_no")
-    private ObjectId contentNo;
+    private ObjectId id;
 
     // 상담 관련 외래키
     private Integer consultingNo;

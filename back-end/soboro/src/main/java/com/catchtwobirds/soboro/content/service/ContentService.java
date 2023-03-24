@@ -6,6 +6,8 @@ import com.catchtwobirds.soboro.content.dto.ContentResponseDto;
 import com.catchtwobirds.soboro.content.entity.Content;
 import com.catchtwobirds.soboro.content.repository.ContentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +22,18 @@ public class ContentService {
     private final ContentRepository contentRepository;
 
     // 컨설팅 번호를 찍어서 해당 컨텐츠를 전체조회
-    public List<ContentDto> contentDetailList(Integer consultingNo) {
-        List<Content> res = contentRepository.findAllByConsultingNo(consultingNo);
-        return res.stream()
-                .map(ContentDto::new)
-                .collect(Collectors.toList());
+    public Page<ContentDto> contentDetailList(Integer consultingNo, Pageable pageable) {
+        Page<Content> page = contentRepository.findAllByConsultingNo(consultingNo, pageable);
+        Page<ContentDto> res = page.map(ContentDto::new);
+        return res;
     }
+
+//    public List<ContentDto> contentDetailList(Integer consultingNo) {
+//        List<Content> res = contentRepository.findAllByConsultingNo(consultingNo);
+//        return res.stream()
+//                .map(ContentDto::new)
+//                .collect(Collectors.toList());
+//    }
 
     //테스트용 전체조회
     public List<ContentDto> findAllTest() {
@@ -36,7 +44,7 @@ public class ContentService {
     }
 
     @Transactional
-    public ContentResponseDto addContent(ContentRequestDto contentRequestDto, Integer consultingNo) {
-        return new ContentResponseDto(contentRepository.save(contentRequestDto.toEntity(consultingNo)));
+    public ContentResponseDto addContent(ContentRequestDto contentRequestDto ) {
+        return new ContentResponseDto(contentRepository.save(contentRequestDto.toEntity()));
     }
 }

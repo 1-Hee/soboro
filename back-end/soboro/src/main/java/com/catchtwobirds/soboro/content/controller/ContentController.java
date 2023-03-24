@@ -10,6 +10,9 @@ import com.catchtwobirds.soboro.utils.HeaderUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,25 +30,24 @@ public class ContentController {
     @GetMapping("/content/detail")
     @Operation(summary = "컨설팅 컨텐츠 출력", description = "컨설팅 컨텐츠를 출력한다", tags = {"consult"})
     public ResponseEntity contentDetail(
-            @RequestParam(value = "consultingNo", required = false) Integer consultingNo
+            @RequestParam(value = "consultingNo", required = false) Integer consultingNo,
+            @PageableDefault(size = 10) Pageable pageable
     ) {
-        List<ContentDto> contentList = contentService.contentDetailList(consultingNo);
+        Page<ContentDto> contentList = contentService.contentDetailList(consultingNo, pageable);
         return ResponseEntity.ok().body(contentList);
     }
 
     // 상담 텍스트를 저장
-    @GetMapping("/save/text")
+    @PostMapping("/save/text")
     @Operation(summary = "컨설팅 컨텐츠 저장", description = "컨설팅 컨텐츠를 저장한다", tags = {"consult"})
     public ResponseEntity contentSave(
             @RequestBody ContentRequestDto contentRequestDto
     ) {
-
-        return null;//ResponseEntity.ok().body(contentService.addContent())
+        return ResponseEntity.ok().body(contentService.addContent(contentRequestDto));
     }
 
     // 모든 상담텍스트를 조회하는 테스트용도입니다
     @GetMapping("/content/findall")
-    @Operation(summary = "컨설팅 컨텐츠 출력", description = "컨설팅 컨텐츠를 출력한다", tags = {"consult"})
     public ResponseEntity findAllTest() {
         List<ContentDto> contentList = contentService.findAllTest();
         return ResponseEntity.ok().body(contentList);

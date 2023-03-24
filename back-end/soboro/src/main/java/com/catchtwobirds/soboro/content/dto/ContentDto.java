@@ -12,14 +12,13 @@ import org.bson.types.ObjectId;
 @ToString
 public class ContentDto {
 
-    private ObjectId contentNo;
+
     private Integer consultingNo;
     private String contentText;
     private Boolean contentSpeaker;
 
     @Builder
     public ContentDto(Content content) {
-        this.contentNo = content.getContentNo();
         this.consultingNo = content.getConsultingNo();
         this.contentText = content.getContentText();
         this.contentSpeaker = content.getContentSpeaker();

@@ -11,15 +11,13 @@ import org.bson.types.ObjectId;
 @Builder
 @ToString
 public class ContentRequestDto {
-    private ObjectId contentNo;
     private Integer consultingNo;
     private String contentText;
     private Boolean contentSpeaker;
 
     @Builder
-    public Content toEntity(Integer consultingNo) {
+    public Content toEntity() {
         return Content.builder()
-                .contentNo(contentNo)
                 .consultingNo(consultingNo)
                 .contentText(contentText)
                 .contentSpeaker(contentSpeaker)
