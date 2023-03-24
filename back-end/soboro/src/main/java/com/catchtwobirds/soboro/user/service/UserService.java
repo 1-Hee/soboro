@@ -28,13 +28,9 @@ public class UserService {
     public Object getUserId(String userId) {
         Optional<User> result = userRepository.findByUserId(userId);
         // 회원 ID가 있다면 중복 예외 터치기
-        if (result.isPresent()) {
-            throw new RestApiException(UserErrorCode.USER_401);
-        }
+        if (result.isPresent()) throw new RestApiException(UserErrorCode.USER_401);
         // 회원이 없으면 null
-        else {
-            return null;
-        }
+        else return null;
     }
 
     // 회원 가입
@@ -43,7 +39,10 @@ public class UserService {
     }
     
     // 회원 수정
-    
+//    public UserResponseDto modifyUser(UserRequestDto userRequestDto) {
+//        User user = userRepository.findByUserId(userRequestDto.getUserId()).orElseThrow(()-> new RestApiException(UserErrorCode.USER_402));
+//
+//    }
     
     // 회원 삭제
 

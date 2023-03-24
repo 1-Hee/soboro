@@ -1,15 +1,20 @@
 package com.catchtwobirds.soboro.auth.controller;
 
 import com.catchtwobirds.soboro.auth.dto.AuthReqModel;
+import com.catchtwobirds.soboro.common.error.response.ErrorResponse;
+import com.catchtwobirds.soboro.common.response.RestApiResponse;
 import com.catchtwobirds.soboro.config.properties.AppProperties;
 import com.catchtwobirds.soboro.auth.entity.UserPrincipal;
 import com.catchtwobirds.soboro.auth.token.AuthToken;
 import com.catchtwobirds.soboro.auth.token.AuthTokenProvider;
+import com.catchtwobirds.soboro.user.dto.UserResponseDto;
 import com.catchtwobirds.soboro.user.repository.UserRefreshTokenRepository;
 import com.catchtwobirds.soboro.utils.CookieUtil;
 import com.catchtwobirds.soboro.utils.RedisUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,11 +51,13 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(summary = "일반 로그인", description = "일반 로그인 API", tags = {"auth"})
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK : 성공"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST : 잘못된 요청"),
-            @ApiResponse(responseCode = "401", description = "NOT AUTH : 로그인 실패 (아이디 또는 비밀번호 일치하지 않음) "),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND : 잘못된 서버 경로 요청"),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR : 서버 에러")
+            @ApiResponse(responseCode = "200", description = "OK : 성공", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)),
+                    @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST : 잘못된 요청", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "NOT AUTH : 로그인 실패 (아이디 또는 비밀번호 일치하지 않음) ", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND : 잘못된 서버 경로 요청", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR : 서버 에러", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     public ResponseEntity<?> login(
             HttpServletRequest request,
@@ -58,6 +65,7 @@ public class AuthController {
             @Parameter(description = "로그인 아이디, 비밀번호") @RequestBody AuthReqModel authReqModel
     ) {
         log.info("일반로그인 post 요청");
+        log.info("authReqModel : {}", authReqModel);
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authReqModel.getId(),
@@ -101,7 +109,7 @@ public class AuthController {
         CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
         CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
 
-        return ResponseEntity.ok().body(accessToken.getToken());
+        return ResponseEntity.ok().body(new RestApiResponse<>("로그인 완료", accessToken.getToken()));
     }
 
 //    @GetMapping("/refresh")

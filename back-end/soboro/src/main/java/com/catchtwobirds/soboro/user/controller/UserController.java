@@ -47,6 +47,32 @@ public class UserController {
 //        return ApiResponseDto.success("user", user);
 //    }
 
+    @GetMapping
+    @Operation(summary = "회원 정보 반환", description = "회원 정보 반환 API", tags = {"user"})
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDto.class)),
+                    @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "USER_401", description = "회원 정보 없음", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    @SecurityRequirement(name = "bearerAuth")
+    public RestApiResponse<?> getUserInfo(@RequestHeader(required = false) String Authorization) {
+        log.info("/api/user | GET method | 회원 정보 반환 요청됨");
+        log.info("Authorization : {}", Authorization);
+        String token = HeaderUtil.getAccessTokenString(Authorization);
+        String id = customOAuth2UserService.getId(token);
+        // DB에서 회원 정보 가져오기
+        UserResponseDto result = userService.getUser(id);
+        // 회원 정보가 없다면
+        if(result == null) {
+            throw new RestApiException(UserErrorCode.USER_401);
+        }
+        // 반환 전 비밀번호 필터
+        result.setUserPassword(null);
+        return new RestApiResponse<>("회원 정보 반환 완료", result);
+    }
 
     @PostMapping
     @Operation(summary = "회원 가입", description = "회원 가입 API", tags = {"user"})
@@ -81,32 +107,30 @@ public class UserController {
         return new RestApiResponse<>("회원 가입 완료", result);
     }
 
-    @GetMapping
-    @Operation(summary = "회원 정보 반환", description = "회원 정보 반환 API", tags = {"user"})
+    @PatchMapping
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "회원 정보 수정 (미구현)", description = "회원 정보 수정 API", tags = {"user"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDto.class)),
                     @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "USER_401", description = "회원 정보 없음", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    @SecurityRequirement(name = "bearerAuth")
-    public RestApiResponse<?> getUserInfo(@RequestHeader(required = false) String Authorization) {
-        log.info("/api/user | GET method | 회원 정보 반환 요청됨");
-        log.info("Authorization : {}", Authorization);
+    public RestApiResponse<?> modifyUserInfo(
+            @RequestHeader(required = false) String Authorization,
+            @Valid @RequestBody UserRequestDto userRequestDto) {
+        log.info("/api/user | PATCH method | 회원 정보 수정 요청됨");
+        log.info("HeaderUtil.getAccessTokenString(Authorization) : {} ", HeaderUtil.getAccessTokenString(Authorization));
         String token = HeaderUtil.getAccessTokenString(Authorization);
         String id = customOAuth2UserService.getId(token);
-        // DB에서 회원 정보 가져오기
-        UserResponseDto result = userService.getUser(id);
-        // 회원 정보가 없다면
-        if(result == null) {
-            throw new RestApiException(UserErrorCode.USER_401);
-        }
-        // 반환 전 비밀번호 필터
-        result.setUserPassword(null);
-        return new RestApiResponse<>("회원 정보 반환 완료", result);
+
+
+        log.info("userRequestDto : {}", userRequestDto);
+
+        return new RestApiResponse<>();
     }
+
 
     @PostMapping("/duplicate/id")
     @Operation(summary = "회원 아이디 중복 확인", description = "회원 아이디 중복 확인 API", tags = {"user"})
@@ -131,32 +155,16 @@ public class UserController {
     }
 
     // 미구현
-//    @PostMapping("/certification")
-//    @Operation(summary = "인증번호 확인", description = "인증번호 확인 API", tags = {"user"})
-//    @ApiResponses({
-//            @ApiResponse(responseCode = "200", description = "OK", content = {
-//                    @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)),
-//                    @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
-//            @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-//            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-//            @ApiResponse(responseCode = "USER_410", description = "회원 ID중복", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-//            @ApiResponse(responseCode = "USER_500", description = "DB저장실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-//    })
-//    public RestApiResponse<?> certificateNumber(@Valid @RequestParam("number") String number) {
-//        log.info("/api/user/certification | POST method | 인증번호 확인 요청됨");
-//        log.info("number : {}", number);
-//
-//        return new RestApiResponse<>("아이디 사용 가능");
-//    }
-
-    @PostMapping("/sendnumber/id")
-    @Operation(summary = "인증번호 전송", description = "인증번호 전송 API", tags = {"user"})
+    @PostMapping("/certification")
+    @Operation(summary = "인증번호 확인 (미구현)", description = "인증번호 확인 API", tags = {"user"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)),
                     @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "USER_410", description = "회원 ID중복", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "USER_500", description = "DB저장실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     public RestApiResponse<?> certificateNumber(@Valid @RequestParam("number") String number) {
         log.info("/api/user/certification | POST method | 인증번호 확인 요청됨");
@@ -164,4 +172,42 @@ public class UserController {
 
         return new RestApiResponse<>("아이디 사용 가능");
     }
+
+//    @PostMapping("/sendnumber/id")
+//    @Operation(summary = "인증번호 전송", description = "인증번호 전송 API", tags = {"user"})
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "OK", content = {
+//                    @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)),
+//                    @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
+//            @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+//            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+//    })
+//    public RestApiResponse<?> certificateNumber(@Valid @RequestParam("number") String number) {
+//        log.info("/api/user/sendnumber/id| POST method | 인증번호 전송 요청됨");
+//        log.info("number : {}", number);
+//
+//        return new RestApiResponse<>("아이디 사용 가능");
+//    }
+//
+//    @PostMapping("/find/id")
+//    @Operation(summary = "회원 아이디 찾기", description = "휴대폰 번호를 통한 회원 찾기 API", tags = {"user"})
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "OK", content = {
+//                    @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)),
+//                    @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
+//            @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+//            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+//            @ApiResponse(responseCode = "USER_410", description = "회원 ID중복", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+//    })
+//    public RestApiResponse<?> findUserId(@Valid @RequestParam("address") String address) {
+//        log.info("/api/user/find/id | POST method | 회원 아이디 찾기 요청됨");
+//        log.info("address : {}", address);
+//
+//        // 아이디 중복 체크
+//        Object userResponseDto = userService.getUserId(idCheck);
+//        log.info("userResponseDto : {}", userResponseDto);
+//        // 아이디 DB에 있으면 에러반환
+//
+//        return new RestApiResponse<>("아이디 사용 가능");
+//    }
 }
