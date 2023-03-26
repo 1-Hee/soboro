@@ -15,6 +15,7 @@ import com.catchtwobirds.soboro.user.repository.UserRefreshTokenRepository;
 import com.catchtwobirds.soboro.user.service.UserService;
 import com.catchtwobirds.soboro.utils.RedisUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,6 +39,7 @@ import java.util.Arrays;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig {
 
     private final CorsProperties corsProperties;
@@ -54,18 +56,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                // 지정된 필터 앞에 커스텀 필터를 추가 (UsernamePasswordAuthenticationFilter 보다 먼저 실행된다)
                 .cors()
                 .and()
+                // 스프링 시큐리티 세션 정책
                 .sessionManagement()
+                // 스프링 시큐리티가 생성하지 않고 기존것을 사용하지 않음 (JWT 토큰 방식 사용시 설정)
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                // CSRF, Form Login, Http Basic 비활성화 (JWT 를 사용하므로 생략함)
                 .csrf().disable()
-//                .formLogin().disable()
+                .formLogin().disable()
                 .httpBasic().disable()
+                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .accessDeniedHandler(tokenAccessDeniedHandler)
                 .and()
+                // 요청에 의한 보안검사 시작
                 .authorizeRequests()
 //                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 //                .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode())
@@ -90,9 +98,9 @@ public class SecurityConfig {
                 .logout()
                 .logoutUrl("/api/auth/logout")
                 .logoutSuccessHandler(logoutSuccessHandler)
-                .logoutSuccessUrl("/")
-                .and()
-                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .logoutSuccessUrl("/");
+
+
         return http.build();
     }
 
@@ -124,6 +132,7 @@ public class SecurityConfig {
      * */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration auth) throws Exception {
+        log.info("authenticationManager 메서드 호출됨");
         return auth.getAuthenticationManager();
     }
 

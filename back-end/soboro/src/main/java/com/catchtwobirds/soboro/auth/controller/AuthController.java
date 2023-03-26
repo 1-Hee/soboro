@@ -97,7 +97,7 @@ public class AuthController {
         log.info("rf token : {} ", refreshToken);
 
         if (redisUtil.getData(userId) != null) {
-            log.info("refresh token exists.Remove refresh token");
+            log.info("refresh token exists and Remove refresh token");
             userRefreshTokenRepository.deleteById(userId);
         }
 

@@ -2,10 +2,15 @@ package com.catchtwobirds.soboro.auth.filter;
 
 import com.catchtwobirds.soboro.auth.token.AuthToken;
 import com.catchtwobirds.soboro.auth.token.AuthTokenProvider;
+import com.catchtwobirds.soboro.common.error.response.ErrorResponse;
 import com.catchtwobirds.soboro.utils.HeaderUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -15,6 +20,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 이 코드는 Spring Security에서 JWT 토큰을 검증하고 인증을 수행하는 필터인 `TokenAuthenticationFilter` 클래스입니다. <br>
@@ -38,15 +46,35 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain)  throws ServletException, IOException {
+        log.info("TokenAuthenticationFilter 호출됨");
 
-        String tokenStr = HeaderUtil.getAccessToken(request);
-        AuthToken token = tokenProvider.convertAuthToken(tokenStr);
-
-        if (token.validate()) {
-            Authentication authentication = tokenProvider.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        try {
+            String tokenStr = HeaderUtil.getAccessToken(request);
+            if (tokenStr != null) {
+                AuthToken token = tokenProvider.convertAuthToken(tokenStr);
+                log.info("TokenAuthenticationFilter token : {}", token);
+                if (token.validate()) {
+                    Authentication authentication = tokenProvider.getAuthentication(token);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            }
+            filterChain.doFilter(request, response);
+        } catch (Exception e) {
+            // 예외 발생하면 바로 setErrorResponse 호출
+            setErrorResponse(request, response, e);
         }
+    }
 
-        filterChain.doFilter(request, response);
+    public void setErrorResponse(HttpServletRequest req, HttpServletResponse res, Throwable ex) throws IOException {
+        log.info("JwtExceptionFilter 에서 에러 받기");
+        res.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+        ErrorResponse result = new ErrorResponse(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized", ex.getMessage());
+        log.info("JwtExceptionFilter ErrorResponse : {}", result);
+        final ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mapper.writeValue(res.getOutputStream(), result);
+        res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }

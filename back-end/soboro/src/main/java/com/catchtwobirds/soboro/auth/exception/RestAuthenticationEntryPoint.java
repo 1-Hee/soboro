@@ -1,6 +1,11 @@
 package com.catchtwobirds.soboro.auth.exception;
 
+import com.catchtwobirds.soboro.common.error.errorcode.CommonErrorCode;
+import com.catchtwobirds.soboro.common.error.exception.RestApiException;
+import com.catchtwobirds.soboro.common.error.response.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
@@ -31,19 +36,17 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
             HttpServletResponse response,
             AuthenticationException authException
     ) throws IOException, ServletException {
+        log.info("RestAuthenticationEntryPoint 메서드 호출");
         
         // Unauthorized 응답 커스터 마이징
-        Map<String, Object> resultMap = new HashMap<>();
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        resultMap.put("status", HttpServletResponse.SC_UNAUTHORIZED);
-        resultMap.put("error", "Unauthorized");
-        resultMap.put("message", authException.getMessage());
-        resultMap.put("path", request.getServletPath());
-
+        ErrorResponse result = new ErrorResponse(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized", authException.getMessage());
+        log.info("RestAuthenticationEntryPoint ErrorResponse : {}", result);
         final ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(response.getOutputStream(), resultMap);
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mapper.writeValue(response.getOutputStream(), result);
         response.setStatus(HttpServletResponse.SC_OK);
-
         authException.printStackTrace();
         log.info("Responding with unauthorized error. Message := {}", authException.getMessage());
 
