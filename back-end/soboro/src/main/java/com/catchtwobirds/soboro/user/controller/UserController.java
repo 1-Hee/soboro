@@ -85,11 +85,12 @@ public class UserController {
     public RestApiResponse<?> registerUser(@Valid @RequestBody UserRequestDto userRequestDto) {
         log.info("/api/user | POST method | 회원 가입 요청됨");
         log.info("userRequestDto : {}", userRequestDto);
-        // ID 중복 확인
 
-//        if (userService.getUser(userRequestDto.getUserId()) != null) {
-//            throw new RestApiException(UserErrorCode.USER_401);
-//        }
+        // ID 중복 확인
+        UserResponseDto userResponseDto = userService.getUser(userRequestDto.getUserId());
+        if (userResponseDto != null) {
+            throw new RestApiException(UserErrorCode.USER_401);
+        }
 
         // 비밀번호 암호화
         userRequestDto.setUserPassword(passwordEncoder.encode(userRequestDto.getUserPassword()));
@@ -163,12 +164,13 @@ public class UserController {
     public RestApiResponse<?> checkUserId(@Valid @RequestParam("idCheck") String idCheck) {
         log.info("/api/user/duplicate/id | POST method | 회원 아이디 중복 확인 요청됨");
         log.info("idCheck : {}", idCheck);
-    
         // 아이디 중복 체크
-        Object userResponseDto = userService.getUserId(idCheck);
-        log.info("userResponseDto : {}", userResponseDto);
+        UserResponseDto userResponseDto = userService.getUser(idCheck);
         // 아이디 DB에 있으면 에러반환
-
+        log.info("userResponseDto : {}", userResponseDto);
+        if (userResponseDto !=null) {
+            throw new RestApiException(UserErrorCode.USER_401);
+        }
         return new RestApiResponse<>("아이디 사용 가능");
     }
 
