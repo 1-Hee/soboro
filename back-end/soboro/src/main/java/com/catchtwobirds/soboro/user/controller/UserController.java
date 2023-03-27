@@ -8,6 +8,7 @@ import com.catchtwobirds.soboro.common.error.response.ErrorResponse;
 import com.catchtwobirds.soboro.common.response.RestApiResponse;
 import com.catchtwobirds.soboro.user.dto.UserModifyDto;
 import com.catchtwobirds.soboro.user.dto.UserResponseDto;
+import com.catchtwobirds.soboro.user.service.EmailService;
 import com.catchtwobirds.soboro.utils.HeaderUtil;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,6 +36,7 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomUserDetailsService customUserDetailsService;
+    private final EmailService emailService;
 
     // 중요한 코드 삭제하지 말것
 //    @GetMapping
@@ -178,11 +180,13 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public RestApiResponse<?> sendNumber(@Valid @RequestParam("number") String number) {
-        log.info("/api/user/sendnumber/id| POST method | 인증번호 전송 요청됨");
-        log.info("number : {}", number);
+    public RestApiResponse<?> sendNumber(@Valid @RequestParam("email") String email) throws Exception {
+        log.info("/api/user/sendnumber| POST method | 인증번호 전송 요청됨");
+        log.info("email : {}", email);
+        String confirm = emailService.sendSimpleMessage(email);
 
-        return new RestApiResponse<>("아이디 사용 가능");
+
+        return new RestApiResponse<>("인증번호 전송됨");
     }
 
 
