@@ -34,6 +34,7 @@ CREATE TABLE `consulting` (
                       KEY `fk_user_userno` (`consulting_user_no`),
                       CONSTRAINT `fk_user_userno` FOREIGN KEY (`consulting_user_no`) REFERENCES `user` (`user_no`) ON DELETE CASCADE ON UPDATE CASCADE
 <<<<<<< HEAD
+<<<<<<< HEAD
 )
 =======
                         `user_no` int(11) NOT NULL AUTO_INCREMENT,
@@ -83,3 +84,13 @@ CREATE TABLE `consulting` (
                       CONSTRAINT `fk_user_userno` FOREIGN KEY (`consulting_user_no`) REFERENCES `user` (`user_no`) ON DELETE CASCADE ON UPDATE CASCADE
 )
 >>>>>>> 37bf35b (Merge branch 'BE' into 'jaeyoon')
+=======
+);
+
+CREATE TABLE `emailauth` (
+                             `emailauth_no` int NOT NULL AUTO_INCREMENT,
+                             `emailauth_email` varchar(50) DEFAULT NULL,
+                             `emailauth_code` varchar(20) DEFAULT NULL,
+                             PRIMARY KEY (`emailauth_no`)
+) ;
+>>>>>>> b937cc5 (fix : 이메일 코드 발송 구현)

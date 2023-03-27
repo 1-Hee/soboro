@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class EmailService {
-    
-    JavaMailSender emailSender;
+
+    private final JavaMailSender emailSender;
 
     public static final String ePw = createKey();
 
@@ -25,7 +25,7 @@ public class EmailService {
         MimeMessage  message = emailSender.createMimeMessage();
 
         message.addRecipients(RecipientType.TO, to);//보내는 대상
-        message.setSubject("[가자 방보러] 이메일 인증 메일 입니다.");//제목
+        message.setSubject("[소보로] 이메일 인증 메일 입니다.");//제목
 
         String msgg="";
         msgg+= "<div style='margin:20px;'>";
@@ -73,7 +73,6 @@ public class EmailService {
     }
 
     public String sendSimpleMessage(String to)throws Exception {
-        // TODO Auto-generated method stub
         MimeMessage message = createMessage(to);
         try{//예외처리
             emailSender.send(message);

@@ -56,9 +56,8 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 
 	// https://mvnrepository.com/artifact/javax.mail/mail
-	implementation group: 'javax.mail', name: 'mail', version: '1.4.7'
-
-
+//	implementation group: 'javax.mail', name: 'mail', version: '1.4.7'
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 //	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'

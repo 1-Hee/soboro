@@ -7,17 +7,16 @@ spring:
     active: server
 
 AdminMail:
-  password: nbqzsbcbubzikfsv
+  password: qeogczoriszdrykk
   id: soboroservice@gmail.com
-
 mail:
   smtp:
     socketFactory:
       class: javax.net.ssl.SSLSocketFactory
-      fallback: "false"
-      port: "465"
+      fallback: 'false'
+      port: '465'
     starttls:
-      required: "true"
-      enable: "true"
-    port: "465"
-    auth: "true"
+      required: 'true'
+      enable: 'true'
+    port: '465'
+    auth: 'true'

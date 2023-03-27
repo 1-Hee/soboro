@@ -22,9 +22,15 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    // 회원 정보 가져오기
+    // 회원 정보 가져오기 (아이디)
     public UserResponseDto getUser(String userId) {
         Optional<User> result = userRepository.findByUserId(userId);
+        return result.map(UserResponseDto::new).orElse(null);
+    }
+
+    // 회원 정보 가져오기 (이메일)
+    public UserResponseDto getUserByEmail(String email) {
+        Optional<User> result = userRepository.findByUserEmail(email);
         return result.map(UserResponseDto::new).orElse(null);
     }
 

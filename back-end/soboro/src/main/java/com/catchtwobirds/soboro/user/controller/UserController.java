@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 
 @Slf4j
 @RestController
@@ -172,27 +173,29 @@ public class UserController {
     }
 
     @PostMapping("/sendnumber")
-    @Operation(summary = "인증번호 전송", description = "인증번호 전송 API", tags = {"user"})
+    @Operation(summary = "인증번호 전송", description = "인증번호 전송 API : 파라미터에 이메일을 입력하세요. (ex. email@naver.com)", tags = {"user"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)),
                     @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "USER_401", description = "이메일 중복됨", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public RestApiResponse<?> sendNumber(@Valid @RequestParam("email") String email) throws Exception {
+    public RestApiResponse<?> sendNumber(@Valid @Email @RequestParam("email") String email) throws Exception {
+        // 동일한 이메일이 있는지 확인함.
+        UserResponseDto getUser = userService.getUserByEmail(email);
+        if(getUser != null) throw new RestApiException(UserErrorCode.USER_401);
+
         log.info("/api/user/sendnumber| POST method | 인증번호 전송 요청됨");
         log.info("email : {}", email);
-        String confirm = emailService.sendSimpleMessage(email);
-
-
-        return new RestApiResponse<>("인증번호 전송됨");
+        String number = emailService.sendSimpleMessage(email);
+        return new RestApiResponse<>("인증번호 전송됨", number);
     }
-
 
     // 미구현
     @PostMapping("/certification")
-    @Operation(summary = "인증번호 확인 (미구현)", description = "인증번호 확인 API", tags = {"user"})
+    @Operation(summary = "인증번호 확인", description = "인증번호 확인 API", tags = {"user"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)),
