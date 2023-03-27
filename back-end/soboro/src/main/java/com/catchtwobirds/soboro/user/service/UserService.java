@@ -37,6 +37,8 @@ public class UserService {
     // 회원 가입
     @Transactional
     public UserResponseDto insertUser(UserRequestDto userDto) {
+        userDto.setUserActive(true);
+        userDto.setUserTerms(true);
         return new UserResponseDto(userRepository.save(userDto.toEntity()));
     }
     

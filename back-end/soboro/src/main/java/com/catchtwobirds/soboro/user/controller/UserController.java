@@ -86,10 +86,11 @@ public class UserController {
         log.info("/api/user | POST method | 회원 가입 요청됨");
         log.info("userRequestDto : {}", userRequestDto);
         // ID 중복 확인
-        if(userService.getUser(userRequestDto.getUserId()) != null) {
-            throw new RestApiException(UserErrorCode.USER_401);
-        }
-        
+
+//        if (userService.getUser(userRequestDto.getUserId()) != null) {
+//            throw new RestApiException(UserErrorCode.USER_401);
+//        }
+
         // 비밀번호 암호화
         userRequestDto.setUserPassword(passwordEncoder.encode(userRequestDto.getUserPassword()));
         log.info("회원 가입 :  {}", userRequestDto);

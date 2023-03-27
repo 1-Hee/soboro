@@ -83,31 +83,25 @@ public class AuthToken {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-//            throw new SecurityException("Invalid JWT signature.");
         } catch (MalformedJwtException e) {
-//            log.warn("Invalid JWT token.");
-//            throw new RestApiException(CommonErrorCode.MAL_FORMED_JWT_EXCEPTION);
+            log.warn("MalformedJwtException JWT token.");
             throw new MalformedJwtException("잘못된 형식의 JWT 토큰");
         } catch (ExpiredJwtException e) {
             log.warn("Expired JWT token.");
-//            throw new RestApiException(CommonErrorCode.EXPIRED_JWT_EXCEPTION);
             throw new ExpiredJwtException(Jwts.header(), Jwts.claims(), "JWT 토큰 만료");
         } catch (UnsupportedJwtException e) {
             log.warn("Unsupported JWT token.");
-//            throw new RestApiException(CommonErrorCode.UNSUPPORTED_JWT_EXCEPTION);
             throw new UnsupportedJwtException("지원하지 않는 방식의 JWT 토큰");
         } catch (IllegalArgumentException e) {
             log.warn("JWT token compact of handler are invalid.");
-//            throw new RestApiException(CommonErrorCode.ILLEGALARGUMENT_JWT_EXCEPTION);
             throw new IllegalArgumentException("핸들러의 JWT 토큰 압축이 잘못됨");
         } catch (JwtException e) {
-          throw new JwtException("토큰이 위변조 되었음");
+            log.warn("invalid JWT TOKEN");
+            throw new JwtException("토큰이 위변조 되었음");
         } catch (SecurityException e) {
             log.warn("SecurityException");
-//            throw new RestApiException(CommonErrorCode.SECURITY_EXCEPTION);
             throw new SecurityException("Security 에러");
         }
-//        return null;
     }
 
 //    public Claims getExpiredTokenClaims() {

@@ -1,11 +1,13 @@
 package com.catchtwobirds.soboro.test;
 
 import com.catchtwobirds.soboro.auth.service.CustomOAuth2UserService;
+import com.catchtwobirds.soboro.auth.service.CustomUserDetailsService;
 import com.catchtwobirds.soboro.common.response.RestApiResponse;
 import com.catchtwobirds.soboro.consulting.dto.ConsultingListDto;
 import com.catchtwobirds.soboro.consulting.service.ConsultingService;
 import com.catchtwobirds.soboro.common.error.errorcode.UserErrorCode;
 import com.catchtwobirds.soboro.common.error.exception.RestApiException;
+import com.catchtwobirds.soboro.user.dto.UserResponseDto;
 import com.catchtwobirds.soboro.user.service.UserService;
 import com.catchtwobirds.soboro.utils.HeaderUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,6 +38,7 @@ public class TestController {
 
     private final ConsultingService consultingService;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomUserDetailsService customUserDetailsService;
     private final UserService userService;
     @GetMapping("/call")
     @Operation(summary = "서버 응답 테스트", description = "서버 응답 테스트 API", tags = {"test"})
@@ -133,4 +136,15 @@ public class TestController {
         return ResponseEntity.ok().body(new RestApiResponse("응답됨", consultingListDtoLis));
 
     }
+
+
+    @GetMapping("/context")
+    public ResponseEntity<?> contextTest() {
+        UserResponseDto result = customUserDetailsService.currentLoadUserByUserId();
+        log.info("result : {}", result);
+        return ResponseEntity.ok().body(new RestApiResponse<>("응답됨", result));
+
+    }
+
+
 }

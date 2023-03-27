@@ -3,9 +3,12 @@ package com.catchtwobirds.soboro.auth.service;
 import com.catchtwobirds.soboro.auth.entity.UserPrincipal;
 import com.catchtwobirds.soboro.common.error.errorcode.UserErrorCode;
 import com.catchtwobirds.soboro.common.error.exception.RestApiException;
+import com.catchtwobirds.soboro.user.dto.UserResponseDto;
 import com.catchtwobirds.soboro.user.entity.User;
 import com.catchtwobirds.soboro.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,19 +29,36 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("loadUserByUsername 호출됨");
 //        User user = userRepository.findByUserId(username);
         Optional<User> result = userRepository.findByUserId(username);
-
         User user = result.orElseThrow(()->new RestApiException(UserErrorCode.USER_402));
 //        if (user == null) {
 //            throw new UsernameNotFoundException("Can not find username.");
 //        }
         return UserPrincipal.create(user);
     }
+
+    public UserResponseDto currentLoadUserByUserId() throws UsernameNotFoundException {
+        UserResponseDto userResponseDto = null;
+        try {
+            org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            log.info("SecurityContextHolder.getContext().getAuthentication().getPrincipal() : {} ", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+            String id = principal.getUsername();
+            Optional<User> result = userRepository.findByUserId(id);
+            userResponseDto = new UserResponseDto(result.orElseThrow(()->new RestApiException(UserErrorCode.USER_402)));
+        } catch (ClassCastException e) {
+            log.info("예외발생");
+        }
+
+        return userResponseDto;
+    }
+
 }

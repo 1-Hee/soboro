@@ -77,7 +77,7 @@ public class AuthController {
 
         String userId = authReqModel.getId();
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        log.info("login 1");
+
         Date now = new Date();
         AuthToken accessToken = tokenProvider.createAuthToken(
                 userId,
