@@ -69,7 +69,21 @@ public class ConsultingService {
     // 컨설팅 저장하기
     @Transactional
     public ConsultingResponseDto addConsulting(ConsultingRequestDto consultingRequestDto, User user) {
-        return new ConsultingResponseDto(consultingRepository.saveAndFlush(consultingRequestDto.toEntity(user)));
+//        return new ConsultingResponseDto(consultingRepository.saveAndFlush(consultingRequestDto.toEntity(user)));
+        return new ConsultingResponseDto(consultingRepository.save(consultingRequestDto.toEntity(user)));
+    }
+
+    @Transactional
+    public ConsultingResponseDto findOne(Integer consultingNo, ConsultingRequestDto ConsultingRequestDto) {
+//        System.out.println("videoLocation = " + videoLocation);
+        Consulting getConsulting = consultingRepository.findById(consultingNo).get();
+        getConsulting.setVideoLocation(ConsultingRequestDto.getVideoLocation());
+
+        return new ConsultingResponseDto(getConsulting);
+//        return getConsulting.setVideoLocation(videoLocation);
+//        return new ConsultingResponseDto(getConsulting.setVideoLocation(videoLocation));
+
+//        return new ConsultingResponseDto(consultingRepository.findById(consultingNo).get());
     }
 
     // ======*** TEST 메서드 ***======

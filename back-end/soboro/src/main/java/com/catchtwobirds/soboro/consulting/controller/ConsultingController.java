@@ -89,7 +89,7 @@ public class ConsultingController {
      */
     @PostMapping("/save")
     @Operation(summary = "상담정보 저장", description = "상담 정보를 저장한다", tags = {"consult"})
-    public ResponseEntity consultingSave(
+    public RestApiResponse<?> consultingSave(
             @RequestHeader String Authorization,
             @RequestBody ConsultingRequestDto consultingRequestDto
             ) {
@@ -97,6 +97,24 @@ public class ConsultingController {
         String id = getUser.getUserId();
         User user = userService.getUserEntity(id);
 
-        return ResponseEntity.ok().body(consultingService.addConsulting(consultingRequestDto, user));
+        ConsultingResponseDto consultingResponseDto = consultingService.addConsulting(consultingRequestDto, user);
+        return new RestApiResponse<>("상담 테이블 저장", consultingResponseDto.getConsultingNo());
+//        return ResponseEntity.ok().body(consultingService.addConsulting(consultingRequestDto, user));
+    }
+
+    @PatchMapping("/save/final/{consultingNo}")
+    public RestApiResponse<?> consultingSaveFinal(
+            @RequestHeader String Authorization,
+            @PathVariable Integer consultingNo,
+            @RequestBody ConsultingRequestDto consultingRequestDto
+    ) {
+        UserResponseDto getUser = customUserDetailsService.currentLoadUserByUserId();
+        String id = getUser.getUserId();
+        User user = userService.getUserEntity(id);
+
+//        System.out.println("비디오 = " + consultingRequestDto);
+        ConsultingResponseDto getConsultingResponseDto = consultingService.findOne(consultingNo, consultingRequestDto);
+
+        return new RestApiResponse<>("상담 테이블 수정", getConsultingResponseDto);
     }
 }

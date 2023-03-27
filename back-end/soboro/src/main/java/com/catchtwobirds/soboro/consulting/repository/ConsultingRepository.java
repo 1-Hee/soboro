@@ -32,4 +32,5 @@ public interface ConsultingRepository extends JpaRepository<Consulting, Integer>
 //    List<Consulting> findConsultingDetail(@Param("userNo") int userNo, @Param("consultingNo") int consultingNo);
 
     List<Consulting> findByUser_UserNoAndConsultingNo(@Param("userNo") Integer userNo, @Param("consultingNo") Integer consultingNo);
+
 }
