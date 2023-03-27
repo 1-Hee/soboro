@@ -6,13 +6,11 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 
-@Builder
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
+@NoArgsConstructor
 @Table(name = "emailauth")
 public class EmailAuth {
     @Id
@@ -25,4 +23,10 @@ public class EmailAuth {
     @Valid
     @Column(name = "emailauth_code")
     private String code;
+
+    @Builder
+    public EmailAuth(String email, String code) {
+        this.email = email;
+        this.code = code;
+    }
 }

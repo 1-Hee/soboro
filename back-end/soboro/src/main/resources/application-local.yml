@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mariadb://j8b202.p.ssafy.io:3306/soborodb
+    url: jdbc:mariadb://host.docker.internal:3306/soborodb
     driver-class-name: org.mariadb.jdbc.Driver
     username: root
     password: root
@@ -25,7 +25,7 @@ spring:
     defer-datasource-initialization: true
   data:
     mongodb:
-      host: j8b202.p.ssafy.io
+      host: host.docker.internal
       port: 27017
       authentication-database: admin
       database: soborodb
@@ -38,7 +38,7 @@ spring:
         max-idle: 10
         min-idle: 2
     port: 6363
-    host: j8b202.p.ssafy.io
+    host: host.docker.internal
     password: '1q2w3e4r'
   security:
     oauth2.client:

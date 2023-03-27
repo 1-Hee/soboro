@@ -6,16 +6,21 @@ import javax.mail.Message.RecipientType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import com.catchtwobirds.soboro.common.error.errorcode.UserErrorCode;
+import com.catchtwobirds.soboro.common.error.exception.RestApiException;
+import com.catchtwobirds.soboro.utils.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class EmailService {
 
     private final JavaMailSender emailSender;
+    private final RedisUtil redisUtil;
 
     public static final String ePw = createKey();
 
@@ -72,14 +77,28 @@ public class EmailService {
         return key.toString();
     }
 
+    @Transactional
     public String sendSimpleMessage(String to)throws Exception {
         MimeMessage message = createMessage(to);
-        try{//예외처리
+        try {
             emailSender.send(message);
-        }catch(MailException es){
+            redisUtil.setDataExpire(to, ePw, 1000L * 60L * 5L);
+        } catch (MailException es){
             es.printStackTrace();
             throw new IllegalArgumentException();
+        } catch (RuntimeException e) {
+            throw new RestApiException(UserErrorCode.USER_500);
         }
         return ePw;
     }
+
+    public void checkCode(String email, String code) throws Exception{
+        String getValue = redisUtil.getData(email);
+        if (getValue == null) {
+            throw new RestApiException(UserErrorCode.USER_411);
+        } else if (!getValue.equals(code)) {
+            throw new RestApiException(UserErrorCode.USER_411);
+        }
+    }
+
 }
