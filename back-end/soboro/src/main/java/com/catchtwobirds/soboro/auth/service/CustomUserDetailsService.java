@@ -37,26 +37,24 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("loadUserByUsername 호출됨");
-//        User user = userRepository.findByUserId(username);
         Optional<User> result = userRepository.findByUserId(username);
         User user = result.orElseThrow(()->new RestApiException(UserErrorCode.USER_402));
-//        if (user == null) {
-//            throw new UsernameNotFoundException("Can not find username.");
-//        }
         return UserPrincipal.create(user);
     }
 
     public UserResponseDto currentLoadUserByUserId() throws UsernameNotFoundException {
         UserResponseDto userResponseDto = null;
+        org.springframework.security.core.userdetails.User principal = null;
         try {
-            org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            log.info("SecurityContextHolder.getContext().getAuthentication().getPrincipal() : {} ", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-            String id = principal.getUsername();
-            Optional<User> result = userRepository.findByUserId(id);
-            userResponseDto = new UserResponseDto(result.orElseThrow(()->new RestApiException(UserErrorCode.USER_402)));
-        } catch (RuntimeException e) {
-            log.info("contextholder에 유저 정보 가져올 수 없음");
+            principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        } catch (ClassCastException e){
+            throw new RestApiException(UserErrorCode.USER_403);
         }
+        log.info("SecurityContextHolder : {} ", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        String id = principal.getUsername();
+        Optional<User> result = userRepository.findByUserId(id);
+        log.info("result: {}", result);
+        userResponseDto = new UserResponseDto(result.orElseThrow(() -> new RestApiException(UserErrorCode.USER_402)));
         return userResponseDto;
     }
 
