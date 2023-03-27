@@ -54,8 +54,8 @@ public class CustomUserDetailsService implements UserDetailsService {
             String id = principal.getUsername();
             Optional<User> result = userRepository.findByUserId(id);
             userResponseDto = new UserResponseDto(result.orElseThrow(()->new RestApiException(UserErrorCode.USER_402)));
-        } catch (ClassCastException e) {
-            log.info("예외발생");
+        } catch (RuntimeException e) {
+            log.info("contextholder에 유저 정보 가져올 수 없음");
         }
         return userResponseDto;
     }

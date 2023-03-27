@@ -63,15 +63,12 @@ public class TestController {
     })
     @Operation(summary = "AUTH HEADER 테스트", description = "HEADER -> body형태로 토큰, ID반환 API", tags = {"test"})
     public ResponseEntity<?> authTest (@RequestHeader(required = false) String Authorization ) {
-        log.info("HeaderUtil.getAccessTokenString(Authorization) : {} ", HeaderUtil.getAccessTokenString(Authorization));
-        String token = HeaderUtil.getAccessTokenString(Authorization);
-        String id = customOAuth2UserService.getId(token);
-        log.info("id");
-        return ResponseEntity.ok().body("server call auth test | token : " + HeaderUtil.getAccessTokenString(Authorization) + " id : " + id);
+        UserResponseDto getUser = customUserDetailsService.currentLoadUserByUserId();
+        return ResponseEntity.ok().body("server call auth test | token : " + HeaderUtil.getAccessTokenString(Authorization) + " id : " + getUser.getUserName());
     }
 
     @GetMapping("/consult/list/noauth")
-    @Operation(summary = "컨설팅 리스트 출력", description = "컨설팅 정보에 대한 리스트를 제공한다 page=0,1... size=10 userno=1 sort는 지우고 요청할 것", tags = {"test"})
+    @Operation(summary = "컨설팅 리스트 출력 (회원정보X)", description = "컨설팅 정보에 대한 리스트를 제공한다 page=0,1... size=10 userno=1 sort는 지우고 요청할 것", tags = {"test"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK" , content = @Content(schema = @Schema(implementation = ConsultingListDto.class))),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
@@ -88,7 +85,7 @@ public class TestController {
     }
 
     @GetMapping("/error/user401")
-    @Operation(summary = "에러 응답 ", description = "에러 응답 코드", tags = {"test"})
+    @Operation(summary = "커스텀 응답은 이렇게 반환됩니다.", description = "에러 응답 코드", tags = {"test"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK" , content = @Content(schema = @Schema(implementation = ConsultingListDto.class))),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
@@ -100,7 +97,7 @@ public class TestController {
 
 
     @GetMapping("/error/exception")
-    @Operation(summary = "에러 응답 ", description = "에러 응답 코드", tags = {"test"})
+    @Operation(summary = "일반 응답은 이렇게 반환됩니다.", description = "에러 응답 코드", tags = {"test"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK" , content = @Content(schema = @Schema(implementation = ConsultingListDto.class))),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
@@ -113,7 +110,7 @@ public class TestController {
     }
 
     @GetMapping("/response/single")
-    @Operation(summary = "단일 응답 ", description = "객체 응답 코드", tags = {"test"})
+    @Operation(summary = "단일 응답은 이렇게 반환됩니다.", description = "객체 응답 코드", tags = {"test"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK" , content = @Content(schema = @Schema(implementation = ConsultingListDto.class))),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
@@ -121,11 +118,11 @@ public class TestController {
     })
     public ResponseEntity<?> responseSingle(HttpServletRequest request) {
         
-        return ResponseEntity.ok().body(new RestApiResponse("응답됨", "데이터"));
+        return ResponseEntity.ok().body(new RestApiResponse<>("응답됨", "데이터"));
     }
 
     @GetMapping("/response/list")
-    @Operation(summary = "단일 응답 ", description = "객체 응답 코드", tags = {"test"})
+    @Operation(summary = "리스트 응답은 이렇게 반환됩니다.", description = "객체 응답 코드", tags = {"test"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK" , content = @Content(schema = @Schema(implementation = ConsultingListDto.class))),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
@@ -133,15 +130,15 @@ public class TestController {
     })
     public ResponseEntity<?> responseList(HttpServletRequest request) {
         List<ConsultingListDto> consultingListDtoLis = consultingService.consultingAllList();
-        return ResponseEntity.ok().body(new RestApiResponse("응답됨", consultingListDtoLis));
+        return ResponseEntity.ok().body(new RestApiResponse<>("응답됨", consultingListDtoLis));
 
     }
 
     @GetMapping("/context")
     public ResponseEntity<?> contextTest() {
-        UserResponseDto result = customUserDetailsService.currentLoadUserByUserId();
-        log.info("result : {}", result);
-        return ResponseEntity.ok().body(new RestApiResponse<>("응답됨", result));
+        UserResponseDto getUser = customUserDetailsService.currentLoadUserByUserId();
+        log.info("result : {}", getUser);
+        return ResponseEntity.ok().body(new RestApiResponse<>("응답됨", getUser));
 
     }
 
