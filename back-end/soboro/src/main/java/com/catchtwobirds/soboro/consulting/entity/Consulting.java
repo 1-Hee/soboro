@@ -3,11 +3,10 @@ package com.catchtwobirds.soboro.consulting.entity;
 import com.catchtwobirds.soboro.user.entity.User;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "consulting")
@@ -29,6 +28,7 @@ public class Consulting {
     private LocalDateTime consultingVisitDate;
     private String consultingVisitPlace;
     private String consultingVisitClass;
+    @Nullable
     private String videoLocation;
 
 
