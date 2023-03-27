@@ -44,6 +44,15 @@ public class ConsultingService {
 //                .map(ConsultingListDto::new)
 //                .collect(Collectors.toList());
     }
+
+    // 컨설팅 리스트 검색 + 페이징
+    public Page<ConsultingListDto> consultingListPaging(Integer userNo, String consultingVisitClass, Pageable pageable) {
+//        Page<Consulting> page = consultingRepository.findByUser_UserNoAndConsultingVisitClass(userNo, consultingVisitClass, pageable);
+        Page<Consulting> page = consultingRepository.findByUser_UserNoAndConsultingVisitClassContaining(userNo, consultingVisitClass, pageable);
+        Page<ConsultingListDto> result = page.map(ConsultingListDto::new);
+        return result;
+    }
+
     // 컨설팅 상세 가져오기
     public List<ConsultingDetailDto> consultingDetailList(Integer userNo, Integer consultingNo) {
 //        List<Consulting> result = consultingRepository.findConsultingDetail(userNo, consultingNo);

@@ -22,6 +22,12 @@ public interface ConsultingRepository extends JpaRepository<Consulting, Integer>
 
     Page<Consulting> findByUser_UserNo(Integer userNo, Pageable pageable);
 
+//    Page<Consulting> findByUser_UserNoAndConsultingVisitClass(Integer userNo, String consultingVisitClass, Pageable pageable);
+
+    Page<Consulting> findByUser_UserNoAndConsultingVisitClassContaining(Integer userNo, String consultingVisitClass, Pageable pageable);
+
+
+
 //    @Query("select c from Consulting c join fetch c.user u where u.userNo = :userNo and c.consultingNo = :consultingNo")
 //    List<Consulting> findConsultingDetail(@Param("userNo") int userNo, @Param("consultingNo") int consultingNo);
 

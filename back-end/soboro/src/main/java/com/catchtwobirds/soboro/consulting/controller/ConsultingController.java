@@ -53,6 +53,21 @@ public class ConsultingController {
 //        return ResponseEntity.ok().body(consultingList);
 //    }
 
+    @GetMapping("/list/search/{consultingVisitClass}")
+    @Operation(summary = "컨설팅 리스트 검색", description = "검색 후 컨설팅 리스트를 제공한다", tags = {"consult"})
+    public ResponseEntity consultingSearch(
+            @RequestHeader String Authorization,
+            @PathVariable String consultingVisitClass,
+            @PageableDefault(size = 10) Pageable pageable
+    ) {
+        String token = HeaderUtil.getAccessTokenString(Authorization);
+        String id = customOAuth2UserService.getId(token);
+        Integer userNo = userService.getUser(id).getUserNo();
+
+        Page<ConsultingListDto> consultingListPaging = consultingService.consultingListPaging(userNo, consultingVisitClass, pageable);
+        return ResponseEntity.ok().body(consultingListPaging);
+    }
+
     //쿼리스트링으로 넘길때는 RequestParam(value="?이후에 들어갈 이름")
 //    @GetMapping("/detail")
 //    @Operation(summary = "컨설팅 디테일 출력", description = "컨설팅 상세 정보를 제공한다", tags = {"consult"})
