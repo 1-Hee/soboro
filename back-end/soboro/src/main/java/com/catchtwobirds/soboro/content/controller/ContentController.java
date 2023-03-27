@@ -29,7 +29,7 @@ public class ContentController {
     // 컨설팅 번호와 일치하는 모든 텍스트를 가져옵니다.
     @GetMapping("/content/detail")
     @Operation(summary = "컨설팅 컨텐츠 출력", description = "컨설팅 컨텐츠를 출력한다", tags = {"consult"})
-    public ResponseEntity contentDetail(
+    public ResponseEntity<?> contentDetail(
             @RequestParam(value = "consultingNo", required = false) Integer consultingNo,
             @PageableDefault(size = 10) Pageable pageable
     ) {
@@ -40,7 +40,7 @@ public class ContentController {
     // 상담 텍스트를 저장
     @PostMapping("/save/text")
     @Operation(summary = "컨설팅 컨텐츠 저장", description = "컨설팅 컨텐츠를 저장한다", tags = {"consult"})
-    public ResponseEntity contentSave(
+    public ResponseEntity<?> contentSave(
             @RequestBody ContentRequestDto contentRequestDto
     ) {
         return ResponseEntity.ok().body(contentService.addContent(contentRequestDto));
@@ -48,7 +48,7 @@ public class ContentController {
 
     // 모든 상담텍스트를 조회하는 테스트용도입니다
     @GetMapping("/content/findall")
-    public ResponseEntity findAllTest() {
+    public ResponseEntity<?> findAllTest() {
         List<ContentDto> contentList = contentService.findAllTest();
         return ResponseEntity.ok().body(contentList);
     }

@@ -1,6 +1,8 @@
 package com.catchtwobirds.soboro.consulting.controller;
 
 import com.catchtwobirds.soboro.auth.service.CustomOAuth2UserService;
+import com.catchtwobirds.soboro.auth.service.CustomUserDetailsService;
+import com.catchtwobirds.soboro.common.response.RestApiResponse;
 import com.catchtwobirds.soboro.consulting.dto.ConsultingDetailDto;
 import com.catchtwobirds.soboro.consulting.dto.ConsultingListDto;
 import com.catchtwobirds.soboro.consulting.dto.ConsultingRequestDto;
@@ -8,6 +10,7 @@ import com.catchtwobirds.soboro.consulting.dto.ConsultingResponseDto;
 import com.catchtwobirds.soboro.consulting.entity.Consulting;
 import com.catchtwobirds.soboro.consulting.repository.ConsultingRepository;
 import com.catchtwobirds.soboro.consulting.service.ConsultingService;
+import com.catchtwobirds.soboro.user.dto.UserResponseDto;
 import com.catchtwobirds.soboro.user.entity.User;
 import com.catchtwobirds.soboro.user.service.UserService;
 import com.catchtwobirds.soboro.utils.HeaderUtil;
@@ -34,38 +37,30 @@ import java.util.List;
 public class ConsultingController {
 
     private final ConsultingService consultingService;
+    private final CustomUserDetailsService customUserDetailsService;
 
-    private final CustomOAuth2UserService customOAuth2UserService;
-
-    private final UserService userService;
-
-//    @GetMapping("/list")
-//    @Operation(summary = "컨설팅 리스트 출력", description = "컨설팅 정보에 대한 리스트를 제공한다", tags = {"consult"})
-//    public ResponseEntity consultingAll(@RequestHeader String Authorization, @PageableDefault(size = 10) Pageable pageable) {
-//
-//        String token = HeaderUtil.getAccessTokenString(Authorization);
-//        String id = customOAuth2UserService.getId(token);
-//        Integer userNo = userService.getUser(id).getUserNo();
-//
-//        log.info("userNo : {}", userNo);
-//        Page<ConsultingListDto> consultingList = consultingService.consultingList(userNo, pageable);
-//
+    @GetMapping("/list")
+    @Operation(summary = "컨설팅 리스트 출력", description = "컨설팅 정보에 대한 리스트를 제공한다", tags = {"consult"})
+    public RestApiResponse<?> consultingAll(@RequestHeader String Authorization, @PageableDefault(size = 10) Pageable pageable) {
+        UserResponseDto getUser = customUserDetailsService.currentLoadUserByUserId();
+        Integer userNo = getUser.getUserNo();
+        log.info("userNo : {}", userNo);
+        Page<ConsultingListDto> consultingList = consultingService.consultingList(userNo, pageable);
+        return new RestApiResponse<>("상담 내역 출력 완료", consultingList);
 //        return ResponseEntity.ok().body(consultingList);
-//    }
+    }
 
     @GetMapping("/list/search/{consultingVisitClass}")
     @Operation(summary = "컨설팅 리스트 검색", description = "검색 후 컨설팅 리스트를 제공한다", tags = {"consult"})
-    public ResponseEntity consultingSearch(
+    public RestApiResponse<?> consultingSearch(
             @RequestHeader String Authorization,
             @PathVariable String consultingVisitClass,
             @PageableDefault(size = 10) Pageable pageable
     ) {
-        String token = HeaderUtil.getAccessTokenString(Authorization);
-        String id = customOAuth2UserService.getId(token);
-        Integer userNo = userService.getUser(id).getUserNo();
-
+        Integer userNo = customUserDetailsService.currentLoadUserByUserId().getUserNo();
         Page<ConsultingListDto> consultingListPaging = consultingService.consultingListPaging(userNo, consultingVisitClass, pageable);
-        return ResponseEntity.ok().body(consultingListPaging);
+        return new RestApiResponse<>("상담 검색 리스트 출력", consultingListPaging);
+//        return ResponseEntity.ok().body(consultingListPaging);
     }
 
     //쿼리스트링으로 넘길때는 RequestParam(value="?이후에 들어갈 이름")
