@@ -137,7 +137,6 @@ public class TestController {
 
     }
 
-
     @GetMapping("/context")
     public ResponseEntity<?> contextTest() {
         UserResponseDto result = customUserDetailsService.currentLoadUserByUserId();
@@ -145,6 +144,5 @@ public class TestController {
         return ResponseEntity.ok().body(new RestApiResponse<>("응답됨", result));
 
     }
-
 
 }

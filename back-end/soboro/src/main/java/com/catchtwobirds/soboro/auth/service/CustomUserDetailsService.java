@@ -57,7 +57,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         } catch (ClassCastException e) {
             log.info("예외발생");
         }
-
         return userResponseDto;
     }
 

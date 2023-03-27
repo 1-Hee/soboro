@@ -52,7 +52,7 @@ public class AuthTokenProvider {
 
     public Authentication getAuthentication(AuthToken authToken) {
 
-        if(authToken.validate()) {
+//        if(authToken.validate()) {
 
             Claims claims = authToken.getTokenClaims();
             Collection<? extends GrantedAuthority> authorities =
@@ -64,8 +64,9 @@ public class AuthTokenProvider {
             User principal = new User(claims.getSubject(), "", authorities);
 
             return new UsernamePasswordAuthenticationToken(principal, authToken, authorities);
-        } else {
-            throw new TokenValidFailedException();
-        }
+//        }
+//        else {
+//            throw new TokenValidFailedException();
+//        }
     }
 }
