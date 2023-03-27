@@ -2,7 +2,6 @@ package com.catchtwobirds.soboro.user.service;
 
 import com.catchtwobirds.soboro.common.error.errorcode.UserErrorCode;
 import com.catchtwobirds.soboro.common.error.exception.RestApiException;
-import com.catchtwobirds.soboro.common.error.response.ErrorResponse;
 import com.catchtwobirds.soboro.user.dto.UserModifyDto;
 import com.catchtwobirds.soboro.user.dto.UserRequestDto;
 import com.catchtwobirds.soboro.user.dto.UserResponseDto;
@@ -13,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.mail.internet.MimeMessage;
 import java.util.Optional;
 
 @Service
@@ -66,9 +64,21 @@ public class UserService {
         try {
             user.setUserActive(false);
             return true;
-        } catch (RestApiException e) {
+        } catch (RuntimeException e) {
             throw new RestApiException(UserErrorCode.USER_501);
         }
+    }
+
+    // 비밀번호 변경
+    @Transactional
+    public void changePassword(String userId, String userPassword) {
+        Optional<User> result = userRepository.findByUserId(userId);
+        if (result.isEmpty()) {
+            throw new RestApiException(UserErrorCode.USER_402);
+        }
+        User getUser = result.get();
+        getUser.setUserPassword(userPassword);
+        result.map(UserResponseDto::new);
     }
 
 }

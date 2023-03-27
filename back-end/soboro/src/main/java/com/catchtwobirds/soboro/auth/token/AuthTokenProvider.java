@@ -1,6 +1,5 @@
 package com.catchtwobirds.soboro.auth.token;
 
-import com.catchtwobirds.soboro.auth.exception.TokenValidFailedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;

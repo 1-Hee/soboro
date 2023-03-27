@@ -1,5 +1,6 @@
 package com.catchtwobirds.soboro.user.controller;
 
+import com.catchtwobirds.soboro.auth.dto.AuthReqModel;
 import com.catchtwobirds.soboro.auth.service.CustomOAuth2UserService;
 import com.catchtwobirds.soboro.auth.service.CustomUserDetailsService;
 import com.catchtwobirds.soboro.common.error.errorcode.UserErrorCode;
@@ -268,5 +269,21 @@ public class UserController {
         return new RestApiResponse<>("인증 번호 일치");
     }
 
-
+    @PatchMapping("/change/pass")
+    @Operation(summary = "비밀번호 변경", description = "비밀번호 변경 API", tags = {"user"})
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)),
+                    @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    public RestApiResponse<?> changePassword(@RequestBody AuthReqModel authReqModel) throws Exception{
+        log.info("/api/user/change/pass | PATCH method | 비밀번호 변경 요청됨");
+        log.info("id : {}", authReqModel.getId());
+        log.info("email : {}", authReqModel.getPassword());
+        authReqModel.setPassword(passwordEncoder.encode(authReqModel.getPassword()));
+        userService.changePassword(authReqModel.getId(), authReqModel.getPassword());
+        return new RestApiResponse<>("비밀번호 변경 완료");
+    }
 }
