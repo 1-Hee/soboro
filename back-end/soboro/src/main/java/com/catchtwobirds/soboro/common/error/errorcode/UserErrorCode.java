@@ -10,13 +10,13 @@ import java.time.LocalDateTime;
 @Getter
 @RequiredArgsConstructor
 public enum UserErrorCode implements ErrorCode {
-    USER_400(HttpStatus.BAD_REQUEST, "로그인 실패 : ID, PW 확인"),
-    USER_401(HttpStatus.BAD_REQUEST, "DB 아이디 중복됨"),
-    USER_402(HttpStatus.BAD_REQUEST, "DB 회원 정보 없음"),
-    USER_410(HttpStatus.BAD_REQUEST, "회원 아이디 중복됨"),
-    USER_411(HttpStatus.BAD_REQUEST, "회원 휴대폰 미인증"),
-    USER_500(HttpStatus.INTERNAL_SERVER_ERROR, "DB 등록 실패"),
-    USER_501(HttpStatus.INTERNAL_SERVER_ERROR, "DB 수정 실패"),
+    USER_400(HttpStatus.OK, "로그인 실패 : ID, PW 확인"),
+    USER_401(HttpStatus.OK, "DB 아이디 중복됨"),
+    USER_402(HttpStatus.OK, "DB 회원 정보 없음"),
+    USER_410(HttpStatus.OK, "회원 아이디 중복됨"),
+    USER_411(HttpStatus.OK, "회원 휴대폰 미인증"),
+    USER_500(HttpStatus.OK, "DB 등록 실패"),
+    USER_501(HttpStatus.OK, "DB 수정 실패"),
     ;
 
     private final HttpStatus httpStatus;

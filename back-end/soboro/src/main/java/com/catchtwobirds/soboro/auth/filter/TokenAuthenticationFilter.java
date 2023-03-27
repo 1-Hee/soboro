@@ -75,6 +75,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         mapper.writeValue(res.getOutputStream(), result);
-        res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        res.setStatus(HttpServletResponse.SC_OK);
     }
 }
