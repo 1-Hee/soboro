@@ -1,5 +1,6 @@
 package com.catchtwobirds.soboro.user.service;
 
+import java.util.Optional;
 import java.util.Random;
 
 import javax.mail.Message.RecipientType;
@@ -8,19 +9,24 @@ import javax.mail.internet.MimeMessage;
 
 import com.catchtwobirds.soboro.common.error.errorcode.UserErrorCode;
 import com.catchtwobirds.soboro.common.error.exception.RestApiException;
+import com.catchtwobirds.soboro.user.entity.User;
+import com.catchtwobirds.soboro.user.repository.UserRepository;
 import com.catchtwobirds.soboro.utils.RedisUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailService {
 
     private final JavaMailSender emailSender;
     private final RedisUtil redisUtil;
+    private final UserRepository userRepository;
 
     public static final String ePw = createKey();
 
@@ -45,6 +51,34 @@ public class EmailService {
         msgg+= "<div style='font-size:130%'>";
         msgg+= "CODE : <strong>";
         msgg+= ePw+"</strong><div><br/> ";
+        msgg+= "</div>";
+        message.setText(msgg, "utf-8", "html");//내용
+        message.setFrom(new InternetAddress("soboroservice@gmail.com","소보로"));//보내는 사람
+
+        return message;
+    }
+
+    private MimeMessage createMessageUserId(String to, String id)throws Exception{
+        System.out.println("보내는 대상 : "+ to);
+        System.out.println("인증 번호 : "+ePw);
+        MimeMessage  message = emailSender.createMimeMessage();
+
+        message.addRecipients(RecipientType.TO, to);//보내는 대상
+        message.setSubject("[소보로] 아이디 찾기 메일 입니다.");//제목
+
+        String msgg="";
+        msgg+= "<div style='margin:20px;'>";
+        msgg+= "<h1> 안녕하세요 소보로 입니다.</h1>";
+        msgg+= "<br>";
+        msgg+= "<p> 아이디 찾기 메일 입니다. <p>";
+        msgg+= "<br>";
+        msgg+= "<p>감사합니다.<p>";
+        msgg+= "<br>";
+        msgg+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
+        msgg+= "<h3 style='color:blue;'>회원님의 아이디는 다음과 같습니다. </h3>";
+        msgg+= "<div style='font-size:130%'>";
+        msgg+= "ID  : <strong>";
+        msgg+= id +"</strong><div><br/> ";
         msgg+= "</div>";
         message.setText(msgg, "utf-8", "html");//내용
         message.setFrom(new InternetAddress("soboroservice@gmail.com","소보로"));//보내는 사람
@@ -99,6 +133,22 @@ public class EmailService {
         } else if (!getValue.equals(code)) {
             throw new RestApiException(UserErrorCode.USER_411);
         }
+    }
+
+    @Transactional
+    public void sendUserId(String to)throws Exception {
+        Optional<User> result = userRepository.findByUserEmail(to);
+        log.info("result : {}", result);
+        if(result.isPresent()) {
+            MimeMessage message = createMessageUserId(to, result.get().getUserId());
+            try {
+                emailSender.send(message);
+            } catch (MailException es){
+                es.printStackTrace();
+                throw new IllegalArgumentException();
+            }
+        }
+
     }
 
 }

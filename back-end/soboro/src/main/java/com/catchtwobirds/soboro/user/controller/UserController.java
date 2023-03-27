@@ -172,8 +172,8 @@ public class UserController {
         return new RestApiResponse<>("아이디 사용 가능");
     }
 
-    @PostMapping("/sendnumber")
-    @Operation(summary = "인증번호 전송", description = "인증번호 전송 API : 파라미터에 이메일을 입력하세요. (ex. email@naver.com)", tags = {"user"})
+    @PostMapping("/sendnumber/save")
+    @Operation(summary = "회원가입 인증번호 전송", description = "회원가입 이메일 인증번호 전송 API : 파라미터에 이메일을 입력하세요. (ex. email@naver.com)", tags = {"user"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "인증번호 전송됨", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)),
@@ -187,13 +187,31 @@ public class UserController {
         UserResponseDto getUser = userService.getUserByEmail(email);
         if(getUser != null) throw new RestApiException(UserErrorCode.USER_401);
 
-        log.info("/api/user/sendnumber| POST method | 인증번호 전송 요청됨");
+        log.info("/api/user/sendnumber/save | POST method | 회원가입 이메일 인증번호 전송 요청됨");
         log.info("email : {}", email);
         String number = emailService.sendSimpleMessage(email);
-        return new RestApiResponse<>("인증번호 전송됨", number);
+        return new RestApiResponse<>("회원가입 이메일 인증번호 전송됨", number);
     }
 
-    // 미구현
+    @PostMapping("/sendnumber/id")
+    @Operation(summary = "아이디 찾기", description = "인증번호 전송 API : 파라미터에 이메일을 입력하세요. (ex. email@naver.com)", tags = {"user"})
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "인증번호 전송됨", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)),
+                    @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
+            @ApiResponse(responseCode = "USER_401", description = "이메일 중복됨", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    public RestApiResponse<?> sendNumberFindId(@Valid @Email @RequestParam("email") String email) throws Exception {
+        // 동일한 이메일이 있는지 확인함.
+        log.info("/api/user/sendnumber/id | POST method | 아이디 찾기 요청됨");
+        log.info("email : {}", email);
+        emailService.sendUserId(email);
+        return new RestApiResponse<>("아이디 찾기 메일 전송됨");
+    }
+
+
     @PostMapping("/certification")
     @Operation(summary = "인증번호 확인", description = "인증번호 확인 API", tags = {"user"})
     @ApiResponses({
