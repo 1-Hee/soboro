@@ -14,6 +14,7 @@ import org.bson.types.ObjectId;
 @Schema(description = "상담 텍스트 DTO")
 public class ContentDto {
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 =======
@@ -21,6 +22,11 @@ public class ContentDto {
     private ObjectId contentNo;
     @Schema(description = "상담 식별번호")
 >>>>>>> bf67778 (fix : Dto schema 어노테이션 정의)
+=======
+    @Schema(description = "상담 텍스트 식별번호")
+    private ObjectId contentNo;
+    @Schema(description = "상담 식별번호")
+>>>>>>> c72068f (Merge branch 'jaeyoon' into 'BE')
     private Integer consultingNo;
     @Schema(description = "상담 텍스트 내용")
     private String contentText;
