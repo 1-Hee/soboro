@@ -194,7 +194,7 @@ public class UserController {
         return new RestApiResponse<>("회원가입 이메일 인증번호 전송됨", number);
     }
 
-    @PostMapping("/sendnumber/id")
+    @PostMapping("/sendnumber/findid")
     @Operation(summary = "아이디 찾기 메일 전송", description = "아이디 찾기 인증번호 전송 API : 파라미터에 이메일을 입력하세요. (ex. email@naver.com)", tags = {"user"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "인증번호 전송됨", content = {

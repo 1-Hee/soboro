@@ -134,12 +134,11 @@ public class TestController {
 
     }
 
-    @GetMapping("/context")
-    public ResponseEntity<?> contextTest() {
-        UserResponseDto getUser = customUserDetailsService.currentLoadUserByUserId();
-        log.info("result : {}", getUser);
-        return ResponseEntity.ok().body(new RestApiResponse<>("응답됨", getUser));
-
-    }
+//    @GetMapping("/context")
+//    public ResponseEntity<?> contextTest() {
+//        UserResponseDto getUser = customUserDetailsService.currentLoadUserByUserId();
+//        log.info("result : {}", getUser);
+//        return ResponseEntity.ok().body(new RestApiResponse<>("응답됨", getUser));
+//    }
 
 }
