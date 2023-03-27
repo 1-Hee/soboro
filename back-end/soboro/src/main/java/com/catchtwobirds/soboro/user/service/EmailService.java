@@ -6,6 +6,7 @@ import java.util.Random;
 import javax.mail.Message.RecipientType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.swing.text.html.Option;
 
 import com.catchtwobirds.soboro.common.error.errorcode.UserErrorCode;
 import com.catchtwobirds.soboro.common.error.exception.RestApiException;
@@ -42,7 +43,7 @@ public class EmailService {
         msgg+= "<div style='margin:20px;'>";
         msgg+= "<h1> 안녕하세요 소보로 입니다.</h1>";
         msgg+= "<br>";
-        msgg+= "<p>아래 인증 코드를 복사해 이메일 인증 칸에 입력해주세요<p>";
+        msgg+= "<p>아래 인증 코드를 복사해 인증코드 칸에 입력해주세요<p>";
         msgg+= "<br>";
         msgg+= "<p>감사합니다.<p>";
         msgg+= "<br>";
@@ -127,6 +128,19 @@ public class EmailService {
     }
 
     public void checkCode(String email, String code) throws Exception{
+        String getValue = redisUtil.getData(email);
+        if (getValue == null) {
+            throw new RestApiException(UserErrorCode.USER_411);
+        } else if (!getValue.equals(code)) {
+            throw new RestApiException(UserErrorCode.USER_411);
+        }
+    }
+
+    public void checkCodeFindPass(String id, String email, String code) throws Exception{
+        Optional<User> result = userRepository.findByUserEmailAndUserId(id, email);
+        if (result.isEmpty()) {
+            throw new RestApiException(UserErrorCode.USER_411);
+        }
         String getValue = redisUtil.getData(email);
         if (getValue == null) {
             throw new RestApiException(UserErrorCode.USER_411);
