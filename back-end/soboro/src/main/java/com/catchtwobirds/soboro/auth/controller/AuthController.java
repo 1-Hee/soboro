@@ -1,6 +1,8 @@
 package com.catchtwobirds.soboro.auth.controller;
 
 import com.catchtwobirds.soboro.auth.dto.AuthReqModel;
+import com.catchtwobirds.soboro.common.error.errorcode.UserErrorCode;
+import com.catchtwobirds.soboro.common.error.exception.RestApiException;
 import com.catchtwobirds.soboro.common.error.response.ErrorResponse;
 import com.catchtwobirds.soboro.common.response.RestApiResponse;
 import com.catchtwobirds.soboro.config.properties.AppProperties;
@@ -22,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -66,12 +70,17 @@ public class AuthController {
     ) {
         log.info("일반로그인 post 요청");
         log.info("authReqModel : {}", authReqModel);
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authReqModel.getId(),
-                        authReqModel.getPassword()
-                )
-        );
+        Authentication authentication = null;
+        try {
+            authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            authReqModel.getId(),
+                            authReqModel.getPassword()
+                    )
+            );
+        }catch (BadCredentialsException | InternalAuthenticationServiceException e) {
+            throw new RestApiException(UserErrorCode.USER_400);
+        }
 
         log.info("authentication : {} ", authentication);
 

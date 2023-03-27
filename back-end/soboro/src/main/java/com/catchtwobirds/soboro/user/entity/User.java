@@ -3,6 +3,7 @@ package com.catchtwobirds.soboro.user.entity;
 import com.catchtwobirds.soboro.auth.entity.ProviderType;
 import com.catchtwobirds.soboro.auth.entity.RoleType;
 import com.catchtwobirds.soboro.consulting.entity.Consulting;
+import com.catchtwobirds.soboro.user.dto.UserResponseDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -71,5 +72,4 @@ public class User {
     @Column(name = "user_active")
     @NotNull
     private boolean userActive;
-
 }

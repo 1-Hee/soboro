@@ -1,6 +1,7 @@
 package com.catchtwobirds.soboro.user.controller;
 
 import com.catchtwobirds.soboro.auth.service.CustomOAuth2UserService;
+import com.catchtwobirds.soboro.auth.service.CustomUserDetailsService;
 import com.catchtwobirds.soboro.common.error.errorcode.UserErrorCode;
 import com.catchtwobirds.soboro.common.error.exception.RestApiException;
 import com.catchtwobirds.soboro.common.error.response.ErrorResponse;
@@ -33,6 +34,7 @@ public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     // 중요한 코드 삭제하지 말것
 //    @GetMapping
@@ -58,17 +60,8 @@ public class UserController {
     @SecurityRequirement(name = "bearerAuth")
     public RestApiResponse<?> getUserInfo(@RequestHeader(required = false) String Authorization) {
         log.info("/api/user | GET method | 회원 정보 반환 요청됨");
-        log.info("Authorization : {}", Authorization);
-        String token = HeaderUtil.getAccessTokenString(Authorization);
-        String id = customOAuth2UserService.getId(token);
-        // DB에서 회원 정보 가져오기
-        UserResponseDto result = userService.getUser(id);
-        // 회원 정보가 없다면
-        if(result == null) {
-            throw new RestApiException(UserErrorCode.USER_401);
-        }
-
-        return new RestApiResponse<>("회원 정보 반환 완료", result);
+        UserResponseDto getUser = customUserDetailsService.currentLoadUserByUserId();
+        return new RestApiResponse<>("회원 정보 반환 완료", getUser);
     }
 
     @PostMapping

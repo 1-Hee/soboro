@@ -51,10 +51,10 @@ public class UserService {
         User user = userRepository.findByUserId(userId).orElseThrow(()-> new RestApiException(UserErrorCode.USER_402));
         try {
             user.setUserActive(false);
+            return true;
         } catch (RestApiException e) {
             throw new RestApiException(UserErrorCode.USER_501);
         }
-        return true;
     }
 
 }
