@@ -10,6 +10,7 @@ import com.catchtwobirds.soboro.consulting.dto.ConsultingResponseDto;
 import com.catchtwobirds.soboro.consulting.entity.Consulting;
 import com.catchtwobirds.soboro.consulting.repository.ConsultingRepository;
 import com.catchtwobirds.soboro.consulting.service.ConsultingService;
+import com.catchtwobirds.soboro.user.dto.UserRequestDto;
 import com.catchtwobirds.soboro.user.dto.UserResponseDto;
 import com.catchtwobirds.soboro.user.entity.User;
 import com.catchtwobirds.soboro.user.service.UserService;
@@ -39,6 +40,8 @@ public class ConsultingController {
     private final ConsultingService consultingService;
     private final CustomUserDetailsService customUserDetailsService;
 
+    private final UserService userService;
+
     @GetMapping("/list")
     @Operation(summary = "컨설팅 리스트 출력", description = "컨설팅 정보에 대한 리스트를 제공한다", tags = {"consult"})
     public RestApiResponse<?> consultingAll(@RequestHeader String Authorization, @PageableDefault(size = 10) Pageable pageable) {
@@ -64,35 +67,36 @@ public class ConsultingController {
     }
 
     //쿼리스트링으로 넘길때는 RequestParam(value="?이후에 들어갈 이름")
-//    @GetMapping("/detail")
-//    @Operation(summary = "컨설팅 디테일 출력", description = "컨설팅 상세 정보를 제공한다", tags = {"consult"})
-//    public ResponseEntity consultingDetail(
-//            @RequestHeader String Authorization,
-//            @RequestParam(value = "consultingNo", required = false) Integer consultingNo
-//        ) {
-//        String token = HeaderUtil.getAccessTokenString(Authorization);
-//        String id = customOAuth2UserService.getId(token);
-//        Integer userNo = userService.getUser(id).getUserNo();
-//
-//        log.info("userNo : {}", userNo);
-//        List<ConsultingDetailDto> consultingDetailDto = consultingService.consultingDetailList(userNo, consultingNo);
+    @GetMapping("/detail")
+    @Operation(summary = "컨설팅 디테일 출력", description = "컨설팅 상세 정보를 제공한다", tags = {"consult"})
+    public RestApiResponse<?> consultingDetail(
+            @RequestHeader String Authorization,
+            @RequestParam(value = "consultingNo", required = false) Integer consultingNo
+        ) {
+        UserResponseDto getUser = customUserDetailsService.currentLoadUserByUserId();
+        Integer userNo = getUser.getUserNo();
+
+        log.info("userNo : {}", userNo);
+        List<ConsultingDetailDto> consultingDetailDto = consultingService.consultingDetailList(userNo, consultingNo);
+        return new RestApiResponse<>("상담 내역 디테일 출력", consultingDetailDto);
 //        return ResponseEntity.ok().body(consultingDetailDto);
-//    }
+
+    }
 
     /**
      필요한 것 : 계정 정보로 저장
      입력받아서 저장 : 위치정보, 상담날짜, 상담 업종, 비디오 주소
      */
-//    @PostMapping("/save")
-//    @Operation(summary = "상담정보 저장", description = "상담 정보를 저장한다", tags = {"consult"})
-//    public ResponseEntity consultingSave(
-//            @RequestHeader String Authorization,
-//            @RequestBody ConsultingRequestDto consultingRequestDto
-//            ) {
-//        String token = HeaderUtil.getAccessTokenString(Authorization);
-//        String id = customOAuth2UserService.getId(token);
-//        User user = userService.getUser(id);
-//
-//        return ResponseEntity.ok().body(consultingService.addConsulting(consultingRequestDto, user));
-//    }
+    @PostMapping("/save")
+    @Operation(summary = "상담정보 저장", description = "상담 정보를 저장한다", tags = {"consult"})
+    public ResponseEntity consultingSave(
+            @RequestHeader String Authorization,
+            @RequestBody ConsultingRequestDto consultingRequestDto
+            ) {
+        UserResponseDto getUser = customUserDetailsService.currentLoadUserByUserId();
+        String id = getUser.getUserId();
+        User user = userService.getUserEntity(id);
+
+        return ResponseEntity.ok().body(consultingService.addConsulting(consultingRequestDto, user));
+    }
 }

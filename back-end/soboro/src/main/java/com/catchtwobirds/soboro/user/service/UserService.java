@@ -27,6 +27,13 @@ public class UserService {
         return result.map(UserResponseDto::new).orElse(null);
     }
 
+    // 회원 정보 가져오기 User 그대로
+    public User getUserEntity(String userId) {
+        return userRepository.findEntityByUserId(userId);
+    }
+
+
+
     // 회원 가입
     @Transactional
     public UserResponseDto insertUser(UserRequestDto userDto) {

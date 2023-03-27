@@ -6,6 +6,8 @@ import com.catchtwobirds.soboro.consulting.dto.ConsultingRequestDto;
 import com.catchtwobirds.soboro.consulting.dto.ConsultingResponseDto;
 import com.catchtwobirds.soboro.consulting.entity.Consulting;
 import com.catchtwobirds.soboro.consulting.repository.ConsultingRepository;
+import com.catchtwobirds.soboro.user.dto.UserRequestDto;
+import com.catchtwobirds.soboro.user.dto.UserResponseDto;
 import com.catchtwobirds.soboro.user.entity.User;
 import com.catchtwobirds.soboro.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
