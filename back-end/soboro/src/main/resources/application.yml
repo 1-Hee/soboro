@@ -4,7 +4,7 @@ server:
 
 spring:
   profiles:
-    active: local
+    active: server
 
 AdminMail:
   password: qeogczoriszdrykk
