@@ -18,8 +18,8 @@ public class ErrorResponse {
 
     @Schema(description = "응답시간")
     private final LocalDateTime timestamp = LocalDateTime.now();
-    @Schema(description = "상태코드")
-    private final int status;
+//    @Schema(description = "상태코드")
+//    private final int status;
     @Schema(description = "에러코드")
     private final String error; 
     @Schema(description = "상태메세지")

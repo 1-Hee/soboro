@@ -69,7 +69,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         log.info("JwtExceptionFilter 에서 에러 받기");
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        ErrorResponse result = new ErrorResponse(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized", ex.getMessage());
+//        ErrorResponse result = new ErrorResponse(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized", ex.getMessage());
+        ErrorResponse result = new ErrorResponse("Unauthorized", ex.getMessage());
         log.info("JwtExceptionFilter ErrorResponse : {}", result);
         final ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());

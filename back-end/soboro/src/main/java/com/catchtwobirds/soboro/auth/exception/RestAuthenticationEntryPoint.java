@@ -40,7 +40,8 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
         
         // Unauthorized 응답 커스터 마이징
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        ErrorResponse result = new ErrorResponse(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized", authException.getMessage());
+//        ErrorResponse result = new ErrorResponse(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized", authException.getMessage());
+        ErrorResponse result = new ErrorResponse("Unauthorized", authException.getMessage());
         log.info("RestAuthenticationEntryPoint ErrorResponse : {}", result);
         final ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());

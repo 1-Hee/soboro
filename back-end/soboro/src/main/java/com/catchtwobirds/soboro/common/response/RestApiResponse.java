@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 public class RestApiResponse<T> {
     @Schema(description = "응답 시간")
     LocalDateTime timestamp;
-    @Schema(description = "상태 코드", example = "200")
-    int status = 200;
+//    @Schema(description = "상태 코드", example = "200")
+//    int status = 200;
     @Schema(description = "상태 메세지", example = "상태메세지")
     String message;
     @Schema(description = "응답 데이터")
@@ -24,7 +24,7 @@ public class RestApiResponse<T> {
     @Builder
     public RestApiResponse(String message, T data) {
         this.timestamp = LocalDateTime.now();
-        this.status = 200;
+//        this.status = 200;
         this.message = message;
         this.data = data;
     }
@@ -32,7 +32,7 @@ public class RestApiResponse<T> {
     @Builder
     public RestApiResponse(String message) {
         this.timestamp = LocalDateTime.now();
-        this.status = 200;
+//        this.status = 200;
         this.message = message;
         this.data = null;
     }

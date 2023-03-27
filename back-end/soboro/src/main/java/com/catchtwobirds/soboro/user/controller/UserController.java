@@ -169,7 +169,7 @@ public class UserController {
         return new RestApiResponse<>("아이디 사용 가능");
     }
 
-    @PostMapping("/sendnumber/id")
+    @PostMapping("/sendnumber")
     @Operation(summary = "인증번호 전송", description = "인증번호 전송 API", tags = {"user"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK", content = {
