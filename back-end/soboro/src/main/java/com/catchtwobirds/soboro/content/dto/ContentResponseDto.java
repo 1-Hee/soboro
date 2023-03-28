@@ -16,6 +16,7 @@ public class ContentResponseDto {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     @Schema(description = "상담 텍스트 식별번호")
     private ObjectId contentNo;
@@ -28,6 +29,10 @@ public class ContentResponseDto {
 =======
     @Schema(description = "상담 텍스트 식별번호")
     private ObjectId contentNo;
+=======
+//    @Schema(description = "상담 텍스트 식별번호")
+//    private ObjectId contentNo;
+>>>>>>> 678bb58 (Merge branch 'doyeong' into 'BE')
     @Schema(description = "상담 식별번호")
 >>>>>>> c72068f (Merge branch 'jaeyoon' into 'BE')
     private Integer consultingNo;
