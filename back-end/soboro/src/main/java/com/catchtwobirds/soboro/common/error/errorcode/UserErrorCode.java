@@ -19,6 +19,8 @@ public enum UserErrorCode implements ErrorCode {
     USER_500(HttpStatus.OK, "DB 등록 실패"),
     USER_501(HttpStatus.OK, "DB 수정 실패"),
     USER_444(HttpStatus.OK, "토큰 에러"),
+
+    USER_600(HttpStatus.OK, "파일 경로에 해당 파일이 존재하지않음"),
     ;
 
     private final HttpStatus httpStatus;

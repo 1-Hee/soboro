@@ -1,6 +1,7 @@
 package com.catchtwobirds.soboro.auth.token;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -49,6 +50,11 @@ public class AuthTokenProvider {
         return new AuthToken(token, key);
     }
 
+    public String getPayload(String token, String className) {
+        return Jwts.parserBuilder().setSigningKey(key)
+                        .build().parseClaimsJws(token).getBody().get(className,String.class);
+    }
+
     public Authentication getAuthentication(AuthToken authToken) {
 
 //        if(authToken.validate()) {
@@ -67,5 +73,9 @@ public class AuthTokenProvider {
 //        else {
 //            throw new TokenValidFailedException();
 //        }
+    }
+
+    public Claims getClaims (AuthToken authToken){
+        return authToken.getTokenClaims();
     }
 }

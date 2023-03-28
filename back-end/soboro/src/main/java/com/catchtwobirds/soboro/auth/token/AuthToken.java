@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -106,18 +107,20 @@ public class AuthToken {
         }
     }
 
-//    public Claims getExpiredTokenClaims() {
-//        try {
-//            Jwts.parserBuilder()
-//                    .setSigningKey(key)
-//                    .build()
-//                    .parseClaimsJws(token)
-//                    .getBody();
-//        } catch (ExpiredJwtException e) {
-//            log.info("Expired JWT token.");
-//            return e.getClaims();
-//        }
-//        return null;
-//    }
+
+
+    public Claims getExpiredTokenClaims() {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            log.info("Expired JWT token.");
+            return e.getClaims();
+        }
+        return null;
+    }
 
 }

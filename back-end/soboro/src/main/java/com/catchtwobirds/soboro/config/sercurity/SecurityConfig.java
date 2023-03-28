@@ -54,10 +54,6 @@ public class SecurityConfig {
     private final UserRefreshTokenRepository userRefreshTokenRepository;
     private final RedisUtil redisUtil;
     private final CustomLogoutSuccessHandler logoutSuccessHandler;
-    private final UserService userService;
-    private final CookieUtil cookieUtil;
-//    private final AuthToken authToken;
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -152,7 +148,7 @@ public class SecurityConfig {
      * */
     @Bean
     public TokenAuthenticationFilter tokenAuthenticationFilter() {
-        return new TokenAuthenticationFilter(tokenProvider, cookieUtil);
+        return new TokenAuthenticationFilter(tokenProvider, redisUtil, appProperties);
     }
 
     /*

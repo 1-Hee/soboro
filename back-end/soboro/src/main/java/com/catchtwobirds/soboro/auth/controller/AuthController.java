@@ -115,7 +115,7 @@ public class AuthController {
         }
 
         // DB에 refresh 토큰 새로 넣기
-        redisUtil.setDataExpire((String) userId, refreshToken.getToken(), refreshTokenExpiry);
+        redisUtil.setDataExpire(userId, refreshToken.getToken(), refreshTokenExpiry);
         
         // 쿠키 만료시간 설정
         int cookieMaxAge = (int) refreshTokenExpiry / 60;
@@ -125,76 +125,76 @@ public class AuthController {
         return ResponseEntity.ok().body(new RestApiResponse<>("로그인 완료", accessToken.getToken()));
     }
 
-    @GetMapping("/refresh")
-    @Operation(summary = "Refresh token 재발급 (페기 예정)", description = "Refresh token 재발급 API", tags = {"auth"})
-    public ResponseEntity<?> refreshToken (HttpServletRequest request, HttpServletResponse response) {
-        // access token 확인
-        String accessToken = HeaderUtil.getAccessToken(request);
-        AuthToken authToken = tokenProvider.convertAuthToken(accessToken);
-//        authToken.validate();
-
-//        if (!authToken.validate()) {
-//            return ApiResponse.invalidAccessToken();
+//    @GetMapping("/refresh")
+//    @Operation(summary = "Refresh token 재발급 (페기 예정)", description = "Refresh token 재발급 API", tags = {"auth"})
+//    public ResponseEntity<?> refreshToken (HttpServletRequest request, HttpServletResponse response) {
+//        // access token 확인
+//        String accessToken = HeaderUtil.getAccessToken(request);
+//        AuthToken authToken = tokenProvider.convertAuthToken(accessToken);
+////        authToken.validate();
+//
+////        if (!authToken.validate()) {
+////            return ApiResponse.invalidAccessToken();
+////        }
+//
+//        // expired access token 인지 확인
+////        Claims claims = authToken.getExpiredTokenClaims();
+//        Claims claims = authToken.getTokenClaims();
+//
+////        if (claims == null) {
+////            return ApiResponse.notExpiredTokenYet();
+////        }
+//
+//        String userId = claims.getSubject();
+//        RoleType roleType = RoleType.of(claims.get("role", String.class));
+//
+//        // refresh token
+//        String refreshToken = CookieUtil.getCookie(request, REFRESH_TOKEN)
+//                .map(Cookie::getValue)
+//                .orElse((null));
+//        AuthToken authRefreshToken = tokenProvider.convertAuthToken(refreshToken);
+//        authRefreshToken.validate();
+//
+////        if (authRefreshToken.validate()) {
+////            return ApiResponse.invalidRefreshToken();
+////        }
+//
+//        // userId refresh token 으로 DB 확인
+//        String userRefreshToken = redisUtil.getData((String) userId);
+//        // UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserIdAndRefreshToken(userId, refreshToken);
+//        if (userRefreshToken == null) {
+//            throw new JwtException("토큰이 유효하지 않음");
 //        }
-
-        // expired access token 인지 확인
-//        Claims claims = authToken.getExpiredTokenClaims();
-        Claims claims = authToken.getTokenClaims();
-
-//        if (claims == null) {
-//            return ApiResponse.notExpiredTokenYet();
+//
+//        Date now = new Date();
+//        AuthToken newAccessToken = tokenProvider.createAuthToken(
+//                userId,
+//                roleType.getCode(),
+//                new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
+//        );
+//
+//        long validTime = authRefreshToken.getTokenClaims().getExpiration().getTime() - now.getTime();
+//
+//        // refresh 토큰 기간이 3일 이하로 남은 경우, refresh 토큰 갱신
+//        if (validTime <= THREE_DAYS_MSEC) {
+//            // refresh 토큰 설정
+//            long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
+//
+//            authRefreshToken = tokenProvider.createAuthToken(
+//                    userId,
+//                    roleType.getCode(),
+//                    new Date(now.getTime() + refreshTokenExpiry)
+//            );
+//
+//            // DB에 refresh 토큰 업데이트
+//            // userRefreshToken.setRefreshToken(authRefreshToken.getToken());
+//            redisUtil.setDataExpire(userId, authRefreshToken.getToken(), refreshTokenExpiry);
+//
+//            int cookieMaxAge = (int) refreshTokenExpiry / 60;
+//            CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
+//            CookieUtil.addCookie(response, REFRESH_TOKEN, authRefreshToken.getToken(), cookieMaxAge);
 //        }
-
-        String userId = claims.getSubject();
-        RoleType roleType = RoleType.of(claims.get("role", String.class));
-
-        // refresh token
-        String refreshToken = CookieUtil.getCookie(request, REFRESH_TOKEN)
-                .map(Cookie::getValue)
-                .orElse((null));
-        AuthToken authRefreshToken = tokenProvider.convertAuthToken(refreshToken);
-        authRefreshToken.validate();
-
-//        if (authRefreshToken.validate()) {
-//            return ApiResponse.invalidRefreshToken();
-//        }
-
-        // userId refresh token 으로 DB 확인
-        String userRefreshToken = redisUtil.getData((String) userId);
-        // UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserIdAndRefreshToken(userId, refreshToken);
-        if (userRefreshToken == null) {
-            throw new JwtException("토큰이 유효하지 않음");
-        }
-
-        Date now = new Date();
-        AuthToken newAccessToken = tokenProvider.createAuthToken(
-                userId,
-                roleType.getCode(),
-                new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
-        );
-
-        long validTime = authRefreshToken.getTokenClaims().getExpiration().getTime() - now.getTime();
-
-        // refresh 토큰 기간이 3일 이하로 남은 경우, refresh 토큰 갱신
-        if (validTime <= THREE_DAYS_MSEC) {
-            // refresh 토큰 설정
-            long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
-
-            authRefreshToken = tokenProvider.createAuthToken(
-                    userId,
-                    roleType.getCode(),
-                    new Date(now.getTime() + refreshTokenExpiry)
-            );
-
-            // DB에 refresh 토큰 업데이트
-            // userRefreshToken.setRefreshToken(authRefreshToken.getToken());
-            redisUtil.setDataExpire(userId, authRefreshToken.getToken(), refreshTokenExpiry);
-
-            int cookieMaxAge = (int) refreshTokenExpiry / 60;
-            CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
-            CookieUtil.addCookie(response, REFRESH_TOKEN, authRefreshToken.getToken(), cookieMaxAge);
-        }
-
-        return ResponseEntity.ok().body(newAccessToken.getToken());
-    }
+//
+//        return ResponseEntity.ok().body(newAccessToken.getToken());
+//    }
 }
