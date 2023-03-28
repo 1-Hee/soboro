@@ -22,5 +22,4 @@ public interface ContentRepository extends MongoRepository<Content, ObjectId> {
 //    List<Content> findByUser_UserNoAndConsultingNo(@Param("userNo") Integer userNo, @Param("consultingNo") Integer consultingNo);
 //    List<Content> findAllByConsultingNoWithUserNo(@Param("userNo") Integer userNo, @Param("consultingNo") Integer consultingNo);
     Page<Content> findAllByConsultingNo(@Param("consultingNo") Integer consultingNo, Pageable pageable);
-
 }

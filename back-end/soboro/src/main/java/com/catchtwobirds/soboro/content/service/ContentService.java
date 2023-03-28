@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +46,22 @@ public class ContentService {
 
     @Transactional
     public ContentResponseDto addContent(ContentRequestDto contentRequestDto ) {
+        System.out.println("contentRequestDto = " + contentRequestDto);
         return new ContentResponseDto(contentRepository.save(contentRequestDto.toEntity()));
+    }
+    // 벌크연산 테스트
+    @Transactional
+    public ContentResponseDto addManyContent(List<ContentRequestDto> contentRequestDtos) {
+        List<Content> contents = new ArrayList<>();
+        for (ContentRequestDto dto : contentRequestDtos) {
+            contents.add(dto.toEntity());
+        }
+        System.out.println("contents = " + contents);
+        contentRepository.saveAll(contents);
+        return null;
+//        for (ContentRequestDto dto : contentRequestDtos) {
+//            System.out.println("dto = " + dto);
+//            new ContentResponseDto(contentRepository.save(dto.toEntity()));
+//        }
     }
 }
