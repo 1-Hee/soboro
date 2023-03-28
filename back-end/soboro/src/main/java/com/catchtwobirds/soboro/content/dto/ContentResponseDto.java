@@ -17,6 +17,7 @@ public class ContentResponseDto {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     @Schema(description = "상담 텍스트 식별번호")
     private ObjectId contentNo;
@@ -24,6 +25,10 @@ public class ContentResponseDto {
 //    @Schema(description = "상담 텍스트 식별번호")
 //    private ObjectId contentNo;
 >>>>>>> ba39b7f (chore : 상담내역 DTO 스키마 수정)
+=======
+//    @Schema(description = "상담 텍스트 식별번호")
+//    private ObjectId contentNo;
+>>>>>>> a6a0cde (Merge branch 'BE' of https://lab.ssafy.com/s08-ai-speech-sub2/S08P22B202 into jaeyoon)
     @Schema(description = "상담 식별번호")
 >>>>>>> bf67778 (fix : Dto schema 어노테이션 정의)
 =======
