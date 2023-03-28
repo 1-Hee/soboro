@@ -1,5 +1,6 @@
 package com.catchtwobirds.soboro.config.sercurity;
 
+import com.catchtwobirds.soboro.auth.token.AuthToken;
 import com.catchtwobirds.soboro.config.properties.AppProperties;
 import com.catchtwobirds.soboro.config.properties.CorsProperties;
 import com.catchtwobirds.soboro.auth.exception.RestAuthenticationEntryPoint;
@@ -13,6 +14,7 @@ import com.catchtwobirds.soboro.auth.token.AuthTokenProvider;
 import com.catchtwobirds.soboro.auth.handler.CustomLogoutSuccessHandler;
 import com.catchtwobirds.soboro.user.repository.UserRefreshTokenRepository;
 import com.catchtwobirds.soboro.user.service.UserService;
+import com.catchtwobirds.soboro.utils.CookieUtil;
 import com.catchtwobirds.soboro.utils.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -52,6 +55,9 @@ public class SecurityConfig {
     private final RedisUtil redisUtil;
     private final CustomLogoutSuccessHandler logoutSuccessHandler;
     private final UserService userService;
+    private final CookieUtil cookieUtil;
+//    private final AuthToken authToken;
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -104,18 +110,15 @@ public class SecurityConfig {
         return http.build();
     }
 
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer(){
-//        return web -> {
-//            web.ignoring()
-//                    .antMatchers(
-//                            "/actuator/health",
-//                            "/",
-//                            "/member/nickname",
-//                            "/member/nicknamecheck",
-//                            "/info/news");
-//        };
-//    }
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer(){
+        return web -> {
+            web.ignoring()
+                    .antMatchers(
+                            "/"
+                            );
+        };
+    }
 
     //    @Bean
 //    public WebMvcConfigurer corsConfigurer() {
@@ -149,7 +152,7 @@ public class SecurityConfig {
      * */
     @Bean
     public TokenAuthenticationFilter tokenAuthenticationFilter() {
-        return new TokenAuthenticationFilter(tokenProvider);
+        return new TokenAuthenticationFilter(tokenProvider, cookieUtil);
     }
 
     /*

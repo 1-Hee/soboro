@@ -3,16 +3,19 @@ package com.catchtwobirds.soboro.auth.filter;
 import com.catchtwobirds.soboro.auth.token.AuthToken;
 import com.catchtwobirds.soboro.auth.token.AuthTokenProvider;
 import com.catchtwobirds.soboro.common.error.response.ErrorResponse;
+import com.catchtwobirds.soboro.utils.CookieUtil;
 import com.catchtwobirds.soboro.utils.HeaderUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -40,6 +43,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private final AuthTokenProvider tokenProvider;
+    private final CookieUtil cookieUtil;
+//    private final AuthToken authToken;
 
     @Override
     protected void doFilterInternal(
@@ -47,7 +52,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain)  throws ServletException, IOException {
         log.info("TokenAuthenticationFilter 호출됨");
-
+        String refreshtoken = null;
         try {
             String tokenStr = HeaderUtil.getAccessToken(request);
             if (tokenStr != null) {
@@ -59,7 +64,24 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 //                }
             }
             filterChain.doFilter(request, response);
-        } catch (Exception e) {
+        }
+        // 엑세스 토큰만료되면 리프래쉬 보고 재갱신 합시다.
+//        catch (ExpiredJwtException e) {
+//            log.info("토큰 만료 예외 처리 실행");
+//            refreshtoken = CookieUtil.getRefreshTokenCookie(request);
+//            String id = null;
+//            try {
+//                id = authToken.getToken()
+////                Claims claims =
+////                id =
+////                tokenProvider.
+////                id = tokenProvider.getAuthentication(refreshtoken);
+//            } catch(Exception a){
+//                throw new JwtException("RefreshToken Expired or Error");
+//            }
+//        }
+
+        catch (Exception e) {
             // 예외 발생하면 바로 setErrorResponse 호출
             setErrorResponse(request, response, e);
         }

@@ -1,6 +1,7 @@
 package com.catchtwobirds.soboro.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 
 @Slf4j
+@Component
 public class HeaderUtil {
 
     private final static String HEADER_AUTHORIZATION = "Authorization";

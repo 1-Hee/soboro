@@ -18,6 +18,7 @@ public enum UserErrorCode implements ErrorCode {
     USER_411(HttpStatus.OK, "유효하지 않은 코드"),
     USER_500(HttpStatus.OK, "DB 등록 실패"),
     USER_501(HttpStatus.OK, "DB 수정 실패"),
+    USER_444(HttpStatus.OK, "토큰 에러"),
     ;
 
     private final HttpStatus httpStatus;

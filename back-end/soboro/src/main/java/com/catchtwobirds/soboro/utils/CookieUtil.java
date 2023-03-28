@@ -2,6 +2,7 @@ package com.catchtwobirds.soboro.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.jwt.JwtException;
+import org.springframework.stereotype.Component;
 import org.springframework.util.SerializationUtils;
 
 import javax.servlet.http.Cookie;
@@ -23,12 +24,13 @@ import java.util.Optional;
  */
 
 @Slf4j
+@Component
 public class CookieUtil {
 
     public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
-        log.info("getCookie cookie : {} ", cookies);
-        if (cookies != null && cookies.length > 0) {
+        log.info("getCookie cookie : {} ", (Object) cookies);
+        if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (name.equals(cookie.getName())) {
                     return Optional.of(cookie);
@@ -40,7 +42,7 @@ public class CookieUtil {
 
     public static String getRefreshTokenCookie(HttpServletRequest request) {
         for (Cookie cookie : request.getCookies()) {
-            log.info("Cookie name = {}, Cookie Value = {}", cookie.getName(),cookie.getValue());
+            log.info("getRefreshTokenCookie | Cookie name = {}, Cookie Value = {}", cookie.getName(),cookie.getValue());
             if (cookie.getName().equals("refresh_token")) {
                 return cookie.getValue();
             }
@@ -50,6 +52,7 @@ public class CookieUtil {
 
 
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
+        log.info("addCookie");
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
@@ -59,9 +62,9 @@ public class CookieUtil {
     }
 
     public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
+        log.info("deleteCookie");
         Cookie[] cookies = request.getCookies();
-
-        if (cookies != null && cookies.length > 0) {
+        if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (name.equals(cookie.getName())) {
                     cookie.setValue("");
