@@ -34,12 +34,12 @@ public class ContentController {
     // 컨설팅 번호와 일치하는 모든 텍스트를 가져옵니다.
     @GetMapping("/content/detail")
     @Operation(summary = "컨설팅 컨텐츠 출력", description = "컨설팅 컨텐츠를 출력한다", tags = {"consult"})
-    public ResponseEntity<?> contentDetail(
+    public RestApiResponse<?> contentDetail(
             @RequestParam(value = "consultingNo", required = false) Integer consultingNo,
             @PageableDefault(size = 10) Pageable pageable
     ) {
         Page<ContentDto> contentList = contentService.contentDetailList(consultingNo, pageable);
-        return ResponseEntity.ok().body(contentList);
+        return new RestApiResponse<>("상담 컨텐츠 출력", contentList);
     }
 
     // 상담 텍스트를 저장
