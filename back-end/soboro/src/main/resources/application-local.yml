@@ -1,6 +1,10 @@
 spring:
   datasource:
+<<<<<<< HEAD
     url: jdbc:mariadb://host.docker.internal:3306/soborodb
+=======
+    url: jdbc:mariadb://localhost:3306/soborodb
+>>>>>>> 6a3ba33 (chore  : local yml 참조주소 변경 및 tts 저장 aws 주소 추가)
     driver-class-name: org.mariadb.jdbc.Driver
     username: root
     password: root
@@ -25,7 +29,11 @@ spring:
     defer-datasource-initialization: true
   data:
     mongodb:
+<<<<<<< HEAD
       host: host.docker.internal
+=======
+      host: localhost
+>>>>>>> 6a3ba33 (chore  : local yml 참조주소 변경 및 tts 저장 aws 주소 추가)
       port: 27017
       authentication-database: admin
       database: soborodb
@@ -38,7 +46,11 @@ spring:
         max-idle: 10
         min-idle: 2
     port: 6363
+<<<<<<< HEAD
     host: host.docker.internal
+=======
+    host: localhost
+>>>>>>> 6a3ba33 (chore  : local yml 참조주소 변경 및 tts 저장 aws 주소 추가)
     password: '1q2w3e4r'
   security:
     oauth2.client:
@@ -81,9 +93,12 @@ app:
   oauth2:
     authorizedRedirectUris:
       - http://localhost:3000/oauth/redirect
+  prefix:
+    ttsPrefix : /home/ubuntu/data/temp-tts/
 
 logging:
   level:
     root: info
     org:
       hibernate: info
+
