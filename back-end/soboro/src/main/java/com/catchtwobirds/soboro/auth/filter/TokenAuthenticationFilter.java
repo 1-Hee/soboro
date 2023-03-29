@@ -77,6 +77,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         // 엑세스 토큰만료되면 리프래쉬 보고 재갱신 합시다.
         catch (ExpiredJwtException e) {
             log.info("엑세스 토큰 만료 리프래쉬 토큰 가져오기");
+            e.printStackTrace();
             // refresh token 가져오기
             refreshToken = CookieUtil.getCookie(request, REFRESH_TOKEN)
                     .map(Cookie::getValue)
@@ -149,6 +150,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
         catch (Exception e) {
             // 예외 발생하면 바로 setErrorResponse 호출
+            e.printStackTrace();
             setErrorResponse(request, response, e);
         }
     }

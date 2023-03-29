@@ -38,8 +38,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(RestApiException.class)
     public ResponseEntity<Object> handleQuizException(final RestApiException e) {
+        log.warn("RestApiException", e);
         final ErrorCode errorCode = e.getErrorCode();
         return handleExceptionInternal(errorCode);
+//        return handleExceptionInternal(errorCode, e.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

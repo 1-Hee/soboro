@@ -2,14 +2,17 @@ package com.catchtwobirds.soboro.common.error.exception;
 
 import com.catchtwobirds.soboro.common.error.errorcode.ErrorCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Getter
-@RequiredArgsConstructor
-public class RestApiException extends RuntimeException {
 
-    private final ErrorCode errorCode;
+public class RestApiException extends RuntimeException {
+    private ErrorCode errorCode;
+    public RestApiException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
+    }
+
 
 }
