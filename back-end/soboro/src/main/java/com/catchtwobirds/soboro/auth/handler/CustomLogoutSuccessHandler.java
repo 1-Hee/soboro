@@ -11,15 +11,14 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Optional;
 
 @Slf4j
 @Component
@@ -40,8 +39,9 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
             // Redis에 엑세스 토큰 블랙리스트 등록
             redisUtil.setDataExpire(accesstoken, "true", appProperties.getAuth().getTokenExpiry());
             log.info("엑세스 토큰 블랙리스트 등록");
-        }catch(Exception e){
+        }catch(RuntimeException e){
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         // Cookie에서 RefreshToken을 가져와 Redis에서 RefreshToken 삭제
@@ -52,6 +52,7 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
         log.info("Log out id = {}", id);
         redisUtil.delData(id);
 
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         final ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
