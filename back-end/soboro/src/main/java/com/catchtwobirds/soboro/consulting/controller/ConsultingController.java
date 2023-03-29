@@ -24,6 +24,7 @@ import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +49,7 @@ public class ConsultingController {
         UserResponseDto getUser = customUserDetailsService.currentLoadUserByUserId();
         Integer userNo = getUser.getUserNo();
         log.info("userNo : {}", userNo);
-        Page<ConsultingListDto> consultingList = consultingService.consultingList(userNo, pageable);
+        Slice<ConsultingListDto> consultingList = consultingService.consultingList(userNo, pageable);
         return new RestApiResponse<>("상담 내역 출력 완료", consultingList);
 //        return ResponseEntity.ok().body(consultingList);
     }
@@ -61,7 +62,7 @@ public class ConsultingController {
             @PageableDefault(size = 10) Pageable pageable
     ) {
         Integer userNo = customUserDetailsService.currentLoadUserByUserId().getUserNo();
-        Page<ConsultingListDto> consultingListPaging = consultingService.consultingListPaging(userNo, consultingVisitClass, pageable);
+        Slice<ConsultingListDto> consultingListPaging = consultingService.consultingListPaging(userNo, consultingVisitClass, pageable);
         return new RestApiResponse<>("상담 검색 리스트 출력", consultingListPaging);
 //        return ResponseEntity.ok().body(consultingListPaging);
     }

@@ -5,6 +5,7 @@ import com.catchtwobirds.soboro.user.entity.User;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -20,11 +21,11 @@ public interface ConsultingRepository extends JpaRepository<Consulting, Integer>
 
 //    List<Consulting> findByUser_UserNo(Integer userNo);
 
-    Page<Consulting> findByUser_UserNo(Integer userNo, Pageable pageable);
+    Slice<Consulting> findByUser_UserNo(Integer userNo, Pageable pageable);
 
 //    Page<Consulting> findByUser_UserNoAndConsultingVisitClass(Integer userNo, String consultingVisitClass, Pageable pageable);
 
-    Page<Consulting> findByUser_UserNoAndConsultingVisitClassContaining(Integer userNo, String consultingVisitClass, Pageable pageable);
+    Slice<Consulting> findByUser_UserNoAndConsultingVisitClassContaining(Integer userNo, String consultingVisitClass, Pageable pageable);
 
 
 

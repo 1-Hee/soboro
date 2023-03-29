@@ -8,6 +8,7 @@ import com.catchtwobirds.soboro.content.repository.ContentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,9 +24,9 @@ public class ContentService {
     private final ContentRepository contentRepository;
 
     // 컨설팅 번호를 찍어서 해당 컨텐츠를 전체조회
-    public Page<ContentDto> contentDetailList(Integer consultingNo, Pageable pageable) {
-        Page<Content> page = contentRepository.findAllByConsultingNo(consultingNo, pageable);
-        Page<ContentDto> res = page.map(ContentDto::new);
+    public Slice<ContentDto> contentDetailList(Integer consultingNo, Pageable pageable) {
+        Slice<Content> page = contentRepository.findAllByConsultingNo(consultingNo, pageable);
+        Slice<ContentDto> res = page.map(ContentDto::new);
         return res;
     }
 

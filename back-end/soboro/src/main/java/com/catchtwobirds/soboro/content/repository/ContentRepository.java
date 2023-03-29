@@ -5,6 +5,7 @@ import com.catchtwobirds.soboro.content.entity.Content;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.data.repository.query.Param;
@@ -21,5 +22,5 @@ public interface ContentRepository extends MongoRepository<Content, ObjectId> {
 
 //    List<Content> findByUser_UserNoAndConsultingNo(@Param("userNo") Integer userNo, @Param("consultingNo") Integer consultingNo);
 //    List<Content> findAllByConsultingNoWithUserNo(@Param("userNo") Integer userNo, @Param("consultingNo") Integer consultingNo);
-    Page<Content> findAllByConsultingNo(@Param("consultingNo") Integer consultingNo, Pageable pageable);
+    Slice<Content> findAllByConsultingNo(@Param("consultingNo") Integer consultingNo, Pageable pageable);
 }

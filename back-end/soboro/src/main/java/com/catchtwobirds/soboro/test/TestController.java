@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -79,7 +80,7 @@ public class TestController {
             @Parameter(description = "회원 식별번호") @RequestParam (name = "userno") Integer userNo
     ) {
         log.info("userNo : {}", userNo);
-        Page<ConsultingListDto> consultingList = consultingService.consultingList(userNo, pageable);
+        Slice<ConsultingListDto> consultingList = consultingService.consultingList(userNo, pageable);
 
         return ResponseEntity.ok().body(consultingList);
     }

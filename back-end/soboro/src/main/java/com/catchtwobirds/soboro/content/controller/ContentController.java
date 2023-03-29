@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.bson.Document;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ public class ContentController {
             @RequestParam(value = "consultingNo", required = false) Integer consultingNo,
             @PageableDefault(size = 10) Pageable pageable
     ) {
-        Page<ContentDto> contentList = contentService.contentDetailList(consultingNo, pageable);
+        Slice<ContentDto> contentList = contentService.contentDetailList(consultingNo, pageable);
         return new RestApiResponse<>("상담 컨텐츠 출력", contentList);
     }
 

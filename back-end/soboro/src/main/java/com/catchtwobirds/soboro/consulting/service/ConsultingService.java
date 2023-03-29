@@ -13,6 +13,7 @@ import com.catchtwobirds.soboro.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,9 +39,9 @@ public class ConsultingService {
 //    }
 
     // 컨설팅 리스트 페이지화
-    public Page<ConsultingListDto> consultingList(Integer userNo, Pageable pageable) {
-        Page<Consulting> page = consultingRepository.findByUser_UserNo(userNo, pageable);
-        Page<ConsultingListDto> result = page.map(ConsultingListDto::new);
+    public Slice<ConsultingListDto> consultingList(Integer userNo, Pageable pageable) {
+        Slice<Consulting> page = consultingRepository.findByUser_UserNo(userNo, pageable);
+        Slice<ConsultingListDto> result = page.map(ConsultingListDto::new);
         return result;
 //        return result.stream()
 //                .map(ConsultingListDto::new)
@@ -48,10 +49,10 @@ public class ConsultingService {
     }
 
     // 컨설팅 리스트 검색 + 페이징
-    public Page<ConsultingListDto> consultingListPaging(Integer userNo, String consultingVisitClass, Pageable pageable) {
+    public Slice<ConsultingListDto> consultingListPaging(Integer userNo, String consultingVisitClass, Pageable pageable) {
 //        Page<Consulting> page = consultingRepository.findByUser_UserNoAndConsultingVisitClass(userNo, consultingVisitClass, pageable);
-        Page<Consulting> page = consultingRepository.findByUser_UserNoAndConsultingVisitClassContaining(userNo, consultingVisitClass, pageable);
-        Page<ConsultingListDto> result = page.map(ConsultingListDto::new);
+        Slice<Consulting> page = consultingRepository.findByUser_UserNoAndConsultingVisitClassContaining(userNo, consultingVisitClass, pageable);
+        Slice<ConsultingListDto> result = page.map(ConsultingListDto::new);
         return result;
     }
 
