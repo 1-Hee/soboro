@@ -12,6 +12,8 @@ import com.catchtwobirds.soboro.user.dto.UserResponseDto;
 import com.catchtwobirds.soboro.user.entity.User;
 import com.catchtwobirds.soboro.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,9 +23,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,8 +50,10 @@ public class ConsultingController {
             @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
+    @Parameter(in = ParameterIn.QUERY, description = "페이지 번호 (0..N)", name = "page", content = @Content(schema = @Schema(type = "Integer", defaultValue = "0")))
+    @Parameter(in = ParameterIn.QUERY, description = "페이지 크기", name = "size", content = @Content(schema = @Schema(type = "Integer", defaultValue = "10")))
     @SecurityRequirement(name = "bearerAuth")
-    public RestApiResponse<?> consultingAll(@PageableDefault(size = 10) Pageable pageable) {
+    public RestApiResponse<?> consultingAll(@ParameterObject Pageable pageable) {
         log.info("/api/consult/list | GET method | 컨설팅 리스트 출력 호출됨");
 
         Integer userNo = customUserDetailsService.currentLoadUserByUserId().getUserNo();
@@ -67,8 +71,11 @@ public class ConsultingController {
             @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
+    @Parameter(in = ParameterIn.QUERY, description = "페이지 번호 (0..N)", name = "page", content = @Content(schema = @Schema(type = "Integer", defaultValue = "0")))
+    @Parameter(in = ParameterIn.QUERY, description = "페이지 크기", name = "size", content = @Content(schema = @Schema(type = "Integer", defaultValue = "10")))
     @SecurityRequirement(name = "bearerAuth")
-    public RestApiResponse<?> consultingSearch(@PathVariable String consultingVisitClass, @PageableDefault(size = 10) Pageable pageable) {
+    //@PageableDefault(size = 10)
+    public RestApiResponse<?> consultingSearch(@PathVariable String consultingVisitClass, @ParameterObject Pageable pageable) {
         log.info("/api/consult/list/search/{consultingVisitClass} | GET method | 컨설팅 리스트 검색 호출됨");
 
         Integer userNo = customUserDetailsService.currentLoadUserByUserId().getUserNo();
