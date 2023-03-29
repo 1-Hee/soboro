@@ -86,6 +86,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             refreshToken = CookieUtil.getCookie(request, REFRESH_TOKEN)
                     .map(Cookie::getValue)
                     .orElse((null));
+
+            if (refreshToken == null) {
+                throw new JwtException("리프래쉬 토큰이 없습니다.");
+            }
+
             log.info("refreshToken : {}", refreshToken);
             AuthToken authRefreshToken = tokenProvider.convertAuthToken(refreshToken);
             log.info("authRefreshToken : {}", authRefreshToken );
