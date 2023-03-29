@@ -1,10 +1,14 @@
 spring:
   datasource:
 <<<<<<< HEAD
+<<<<<<< HEAD
     url: jdbc:mariadb://host.docker.internal:3306/soborodb
 =======
     url: jdbc:mariadb://localhost:3306/soborodb
 >>>>>>> 6a3ba33 (chore  : local yml 참조주소 변경 및 tts 저장 aws 주소 추가)
+=======
+    url: jdbc:mariadb://host.docker.internal:3306/soborodb
+>>>>>>> d1b55a8 (Merge branch 'BE' into 'doyeong')
     driver-class-name: org.mariadb.jdbc.Driver
     username: root
     password: root
@@ -30,10 +34,14 @@ spring:
   data:
     mongodb:
 <<<<<<< HEAD
+<<<<<<< HEAD
       host: host.docker.internal
 =======
       host: localhost
 >>>>>>> 6a3ba33 (chore  : local yml 참조주소 변경 및 tts 저장 aws 주소 추가)
+=======
+      host: host.docker.internal
+>>>>>>> d1b55a8 (Merge branch 'BE' into 'doyeong')
       port: 27017
       authentication-database: admin
       database: soborodb
@@ -47,10 +55,14 @@ spring:
         min-idle: 2
     port: 6363
 <<<<<<< HEAD
+<<<<<<< HEAD
     host: host.docker.internal
 =======
     host: localhost
 >>>>>>> 6a3ba33 (chore  : local yml 참조주소 변경 및 tts 저장 aws 주소 추가)
+=======
+    host: host.docker.internal
+>>>>>>> d1b55a8 (Merge branch 'BE' into 'doyeong')
     password: '1q2w3e4r'
   security:
     oauth2.client:

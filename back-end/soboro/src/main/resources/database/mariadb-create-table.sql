@@ -36,6 +36,7 @@ CREATE TABLE `consulting` (
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 )
 =======
                         `user_no` int(11) NOT NULL AUTO_INCREMENT,
@@ -106,6 +107,10 @@ CREATE TABLE `emailauth` (
 =======
 =======
 >>>>>>> b6a07b8 (Merge branch 'jaeyoon' into 'BE')
+=======
+);
+
+>>>>>>> d1b55a8 (Merge branch 'BE' into 'doyeong')
 LOCK TABLES `consulting` WRITE;
 /*!40000 ALTER TABLE `consulting` DISABLE KEYS */;
 INSERT INTO `consulting` VALUES
@@ -129,8 +134,12 @@ INSERT INTO `consulting` VALUES
                              (18,1,'2023-03-21 12:53:35','봉명동 동사무소5','복지센터','www.video.com');
 /*!40000 ALTER TABLE `consulting` ENABLE KEYS */;
 <<<<<<< HEAD
+<<<<<<< HEAD
 UNLOCK TABLES;
 >>>>>>> f6d1c1d (fix : create table.sql)
 =======
 UNLOCK TABLES;
 >>>>>>> b6a07b8 (Merge branch 'jaeyoon' into 'BE')
+=======
+UNLOCK TABLES;
+>>>>>>> d1b55a8 (Merge branch 'BE' into 'doyeong')
