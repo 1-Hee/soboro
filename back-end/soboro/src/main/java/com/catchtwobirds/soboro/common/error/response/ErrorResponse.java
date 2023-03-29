@@ -1,18 +1,17 @@
 package com.catchtwobirds.soboro.common.error.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.FieldError;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Builder
 @RequiredArgsConstructor
+@ToString
 @Schema(description = "전역 에러 반환 DTO")
 public class ErrorResponse {
 

@@ -4,9 +4,7 @@ import com.catchtwobirds.soboro.auth.entity.RoleType;
 import com.catchtwobirds.soboro.auth.token.AuthToken;
 import com.catchtwobirds.soboro.auth.token.AuthTokenProvider;
 import com.catchtwobirds.soboro.common.error.response.ErrorResponse;
-import com.catchtwobirds.soboro.common.response.RestApiResponse;
 import com.catchtwobirds.soboro.config.properties.AppProperties;
-import com.catchtwobirds.soboro.user.entity.UserRefreshToken;
 import com.catchtwobirds.soboro.utils.CookieUtil;
 import com.catchtwobirds.soboro.utils.HeaderUtil;
 import com.catchtwobirds.soboro.utils.RedisUtil;
@@ -67,6 +65,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             if (tokenStr != null) {
                 AuthToken token = tokenProvider.convertAuthToken(tokenStr);
                 log.info("TokenAuthenticationFilter token : {}", token);
+
+                // 블랙리스트 토큰인지 먼저 확인
+                if(redisUtil.getData(token.getToken()) != null) {
+                    throw new JwtException("블랙리스트 토큰");
+                }
+
 //                if (token.validate()) {
                 Authentication authentication = tokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);

@@ -106,15 +106,15 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer(){
-        return web -> {
-            web.ignoring()
-                    .antMatchers(
-                            "/"
-                            );
-        };
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer(){
+//        return web -> {
+//            web.ignoring()
+//                    .antMatchers(
+//                            "/"
+//                            );
+//        };
+//    }
 
     //    @Bean
 //    public WebMvcConfigurer corsConfigurer() {

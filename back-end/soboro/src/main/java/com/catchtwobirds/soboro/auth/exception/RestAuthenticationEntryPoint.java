@@ -1,7 +1,5 @@
 package com.catchtwobirds.soboro.auth.exception;
 
-import com.catchtwobirds.soboro.common.error.errorcode.CommonErrorCode;
-import com.catchtwobirds.soboro.common.error.exception.RestApiException;
 import com.catchtwobirds.soboro.common.error.response.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -15,8 +13,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 이 코드는 Spring Security에서 인증되지 않은 사용자가 보호된 리소스에 접근했을 때 호출되는 AuthenticationEntryPoint의 구현체이다. <br>
@@ -37,7 +33,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
             AuthenticationException authException
     ) throws IOException, ServletException {
         log.info("RestAuthenticationEntryPoint 메서드 호출");
-        
+
         // Unauthorized 응답 커스터 마이징
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 //        ErrorResponse result = new ErrorResponse(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized", authException.getMessage());

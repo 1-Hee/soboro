@@ -1,6 +1,9 @@
 package com.catchtwobirds.soboro.auth.handler;
 
 import com.catchtwobirds.soboro.auth.service.CustomOAuth2UserService;
+import com.catchtwobirds.soboro.common.error.errorcode.UserErrorCode;
+import com.catchtwobirds.soboro.common.error.exception.RestApiException;
+import com.catchtwobirds.soboro.common.error.response.ErrorResponse;
 import com.catchtwobirds.soboro.common.response.RestApiResponse;
 import com.catchtwobirds.soboro.config.properties.AppProperties;
 import com.catchtwobirds.soboro.utils.CookieUtil;
@@ -34,33 +37,41 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
         try {
             // 헤더에서 accesstoken 가져오기
             String accesstoken = HeaderUtil.getAccessToken(request);
-            log.info("Logout access_token = {}",accesstoken);
-
+            log.info("Logout access_token = {}", accesstoken);
+            if (accesstoken == null) {
+                throw new RestApiException(UserErrorCode.USER_403);
+            }
             // Redis에 엑세스 토큰 블랙리스트 등록
             redisUtil.setDataExpire(accesstoken, "true", appProperties.getAuth().getTokenExpiry());
             log.info("엑세스 토큰 블랙리스트 등록");
-        }catch(RuntimeException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
 
-        // Cookie에서 RefreshToken을 가져와 Redis에서 RefreshToken 삭제
-        String refreshtoken = CookieUtil.getRefreshTokenCookie(request);
+            //Cookie에서 RefreshToken을 가져와 Redis에서 RefreshToken 삭제
+            String refreshtoken = CookieUtil.getRefreshTokenCookie(request);
 
-        log.info("refreshtoken 가져오기 : {}", refreshtoken);
-        String id = customOAuth2UserService.getId(refreshtoken);
-        log.info("Log out id = {}", id);
-        redisUtil.delData(id);
+            log.info("refreshtoken 가져오기 : {}", refreshtoken);
+            String id = customOAuth2UserService.getId(refreshtoken);
+            log.info("Log out id = {}", id);
+            redisUtil.delData(id);
 
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        final ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        mapper.writeValue(response.getOutputStream(), new RestApiResponse<>("로그아웃 완료"));
-        response.setStatus(HttpServletResponse.SC_OK);
-
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            mapper.writeValue(response.getOutputStream(), new RestApiResponse<>("로그아웃 완료"));
+            response.setStatus(HttpServletResponse.SC_OK);
 //        response.setStatus(HttpServletResponse.SC_OK);
 //        response.sendRedirect("/");
+        } catch (Exception e) {
+            log.info("JwtExceptionFilter 에서 에러 받기");
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            ErrorResponse result = new ErrorResponse("Unauthorized", e.getMessage());
+            log.info("Logout ErrorResponse : {}", result);
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            mapper.writeValue(response.getOutputStream(), result);
+            response.setStatus(HttpServletResponse.SC_OK);
+        }
     }
 }
 

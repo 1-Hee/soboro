@@ -22,7 +22,6 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
 import java.time.LocalDateTime;
 import java.util.Optional;
 

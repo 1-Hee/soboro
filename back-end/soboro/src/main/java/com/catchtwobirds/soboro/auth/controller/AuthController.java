@@ -1,7 +1,7 @@
 package com.catchtwobirds.soboro.auth.controller;
 
 import com.catchtwobirds.soboro.auth.dto.AuthReqModel;
-import com.catchtwobirds.soboro.auth.entity.RoleType;
+import com.catchtwobirds.soboro.auth.service.CustomUserDetailsService;
 import com.catchtwobirds.soboro.common.error.errorcode.UserErrorCode;
 import com.catchtwobirds.soboro.common.error.exception.RestApiException;
 import com.catchtwobirds.soboro.common.error.response.ErrorResponse;
@@ -10,18 +10,17 @@ import com.catchtwobirds.soboro.config.properties.AppProperties;
 import com.catchtwobirds.soboro.auth.entity.UserPrincipal;
 import com.catchtwobirds.soboro.auth.token.AuthToken;
 import com.catchtwobirds.soboro.auth.token.AuthTokenProvider;
+import com.catchtwobirds.soboro.user.dto.UserResponseDto;
 import com.catchtwobirds.soboro.user.repository.UserRefreshTokenRepository;
 import com.catchtwobirds.soboro.utils.CookieUtil;
-import com.catchtwobirds.soboro.utils.HeaderUtil;
 import com.catchtwobirds.soboro.utils.RedisUtil;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +33,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
@@ -51,6 +49,7 @@ public class AuthController {
     private final AuthTokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
     private final UserRefreshTokenRepository userRefreshTokenRepository;
+    private final CustomUserDetailsService customUserDetailsService;
     private final RedisUtil redisUtil;
 
     private final static long THREE_DAYS_MSEC = 259200000;
@@ -125,20 +124,21 @@ public class AuthController {
         return ResponseEntity.ok().body(new RestApiResponse<>("로그인 완료", accessToken.getToken()));
     }
 
-//    @PostMapping("/logout")
-//    @Operation(summary = "일반 로그아웃", description = "일반 로그아웃 API", tags = {"auth"})
-//    @ApiResponses({
-//            @ApiResponse(responseCode = "200", description = "OK : 성공", content = {
-//                    @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)),
-//                    @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
-//            @ApiResponse(responseCode = "400", description = "BAD REQUEST : 잘못된 요청", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-//            @ApiResponse(responseCode = "404", description = "NOT FOUND : 잘못된 서버 경로 요청", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-//            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR : 서버 에러", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-//            @ApiResponse(responseCode = "USER_400", description = "로그인 실패 : ID, PW 확인", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-//    })
-//    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
-//        return ResponseEntity.ok().body(new RestApiResponse<>("로그아웃 완료"));
-//    }
+    @PostMapping("/logout")
+    @Operation(summary = "일반 로그아웃", description = "일반 로그아웃 API", tags = {"auth"})
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK : 성공", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)),
+                    @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST : 잘못된 요청", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND : 잘못된 서버 경로 요청", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR : 서버 에러", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+        UserResponseDto userResponseDto = customUserDetailsService.currentLoadUserByUserId();
+        return ResponseEntity.ok().body(new RestApiResponse<>("로그아웃 완료", userResponseDto));
+    }
 
 //    @GetMapping("/refresh")
 //    @Operation(summary = "Refresh token 재발급 (페기 예정)", description = "Refresh token 재발급 API", tags = {"auth"})
