@@ -1,29 +1,28 @@
 package com.catchtwobirds.soboro.content.controller;
 
-import com.catchtwobirds.soboro.auth.service.CustomOAuth2UserService;
+import com.catchtwobirds.soboro.common.error.response.ErrorResponse;
 import com.catchtwobirds.soboro.common.response.RestApiResponse;
 import com.catchtwobirds.soboro.content.dto.ContentDto;
 import com.catchtwobirds.soboro.content.dto.ContentRequestDto;
-import com.catchtwobirds.soboro.content.dto.ContentResponseDto;
-import com.catchtwobirds.soboro.content.entity.Content;
 import com.catchtwobirds.soboro.content.service.ContentService;
-import com.catchtwobirds.soboro.user.service.UserService;
-import com.catchtwobirds.soboro.utils.HeaderUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.bson.Document;
-import org.springframework.data.domain.Page;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/consult")
@@ -35,10 +34,18 @@ public class ContentController {
     // 컨설팅 번호와 일치하는 모든 텍스트를 가져옵니다.
     @GetMapping("/content/detail")
     @Operation(summary = "컨설팅 컨텐츠 출력", description = "컨설팅 컨텐츠를 출력한다", tags = {"consult"})
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ContentDto.class)),
+                    @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @io.swagger.v3.oas.annotations.media.Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
     public RestApiResponse<?> contentDetail(
             @RequestParam(value = "consultingNo", required = false) Integer consultingNo,
             @PageableDefault(size = 10) Pageable pageable
     ) {
+        log.info("/api/consult/content/detail | GET method | 컨설팅 컨텐츠 출력 호출됨");
         Slice<ContentDto> contentList = contentService.contentDetailList(consultingNo, pageable);
         return new RestApiResponse<>("상담 컨텐츠 출력", contentList);
     }
@@ -56,9 +63,16 @@ public class ContentController {
     private List<ContentRequestDto> accumulatedData = new ArrayList<>();
     @PostMapping("save/text")
     @Operation(summary = "컨설팅 컨텐츠 저장", description = "컨설팅 컨텐츠를 저장한다", tags = {"consult"})
-    public RestApiResponse<String> contentSaveTest(
-            @RequestBody ContentRequestDto contentRequestDto
-    ) {
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = Integer.class)),
+                    @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @io.swagger.v3.oas.annotations.media.Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    public RestApiResponse<?> contentSaveTest(@RequestBody ContentRequestDto contentRequestDto) {
+        log.info("/api/consult/save/test | POSt method | 컨설팅 컨텐츠 저장 호출됨");
+        
         accumulatedData.add(contentRequestDto);
         if (accumulatedData.size() == 10) {
             contentService.addManyContent(accumulatedData);
@@ -70,8 +84,17 @@ public class ContentController {
 
     // 모든 상담텍스트를 조회하는 테스트용도입니다
     @GetMapping("/content/findall")
-    public ResponseEntity<?> findAllTest() {
+    @Operation(summary = "컨설팅 컨텐츠 조회", description = "컨설팅 컨텐츠를 조회한다", tags = {"consult"})
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ContentDto.class))),
+                    @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @io.swagger.v3.oas.annotations.media.Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    public RestApiResponse<?> findAllTest() {
+        log.info("/api/consult/content/findall | GET method | 컨설팅 컨텐츠 조회 호출됨");
         List<ContentDto> contentList = contentService.findAllTest();
-        return ResponseEntity.ok().body(contentList);
+        return new RestApiResponse<>("상담 컨센트 조회됨", contentList);
     }
 }

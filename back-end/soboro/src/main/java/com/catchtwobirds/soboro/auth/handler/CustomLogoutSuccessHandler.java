@@ -1,10 +1,14 @@
 package com.catchtwobirds.soboro.auth.handler;
 
 import com.catchtwobirds.soboro.auth.service.CustomOAuth2UserService;
+import com.catchtwobirds.soboro.common.response.RestApiResponse;
 import com.catchtwobirds.soboro.config.properties.AppProperties;
 import com.catchtwobirds.soboro.utils.CookieUtil;
 import com.catchtwobirds.soboro.utils.HeaderUtil;
 import com.catchtwobirds.soboro.utils.RedisUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -48,8 +52,14 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
         log.info("Log out id = {}", id);
         redisUtil.delData(id);
 
+        final ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mapper.writeValue(response.getOutputStream(), new RestApiResponse<>("로그아웃 완료"));
         response.setStatus(HttpServletResponse.SC_OK);
-        response.sendRedirect("/");
+
+//        response.setStatus(HttpServletResponse.SC_OK);
+//        response.sendRedirect("/");
     }
 }
 

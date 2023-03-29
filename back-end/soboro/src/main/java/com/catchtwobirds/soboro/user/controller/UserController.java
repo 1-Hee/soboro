@@ -62,8 +62,9 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @SecurityRequirement(name = "bearerAuth")
-    public RestApiResponse<?> getUserInfo(@RequestHeader(required = false) String Authorization) {
+    public RestApiResponse<?> getUserInfo() {
         log.info("/api/user | GET method | 회원 정보 반환 요청됨");
+
         UserResponseDto getUser = customUserDetailsService.currentLoadUserByUserId();
         return new RestApiResponse<>("회원 정보 반환 완료", getUser);
     }
@@ -102,7 +103,6 @@ public class UserController {
     }
 
     @PatchMapping
-    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "회원 정보 수정", description = "회원 정보 수정 API", tags = {"user"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK", content = {
@@ -112,16 +112,14 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
+    @SecurityRequirement(name = "bearerAuth")
     public RestApiResponse<?> modifyUserInfo(
-            @RequestHeader(required = false) String Authorization,
             @Valid @RequestBody UserModifyDto userModifyDto) {
         log.info("/api/user | PATCH method | 회원 정보 수정 요청됨");
-        log.info("HeaderUtil.getAccessTokenString(Authorization) : {} ", HeaderUtil.getAccessTokenString(Authorization));
         log.info("userModifyRequestDto : {}", userModifyDto);
 
-        String token = HeaderUtil.getAccessTokenString(Authorization);
-        String id = customOAuth2UserService.getId(token);
-        userModifyDto.setUserId(id);
+        UserResponseDto getUser = customUserDetailsService.currentLoadUserByUserId();
+        userModifyDto.setUserId(getUser.getUserId());
         UserModifyDto result = userService.modifyUser(userModifyDto);
         if(result == null) throw new RestApiException(UserErrorCode.USER_501);
 
@@ -129,7 +127,6 @@ public class UserController {
     }
 
     @DeleteMapping
-    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "회원 정보 삭제", description = "회원 정보 삭제 API", tags = {"user"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK", content = {
@@ -139,14 +136,12 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public RestApiResponse<?> modifyUserInfo(
-            @RequestHeader(required = false) String Authorization) {
+    @SecurityRequirement(name = "bearerAuth")
+    public RestApiResponse<?> modifyUserInfo() {
         log.info("/api/user | PATCH method | 회원 정보 삭제 요청됨");
-        log.info("HeaderUtil.getAccessTokenString(Authorization) : {} ", HeaderUtil.getAccessTokenString(Authorization));
 
-        String token = HeaderUtil.getAccessTokenString(Authorization);
-        String id = customOAuth2UserService.getId(token);
-        userService.deleteUser(id);
+        UserResponseDto getUser = customUserDetailsService.currentLoadUserByUserId();
+        userService.deleteUser(getUser.getUserId());
         return new RestApiResponse<>("회원 정보 삭제 완료");
     }
 

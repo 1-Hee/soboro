@@ -12,6 +12,7 @@ import com.catchtwobirds.soboro.user.service.UserService;
 import com.catchtwobirds.soboro.utils.HeaderUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -20,7 +21,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
@@ -38,9 +38,8 @@ import java.util.List;
 public class TestController {
 
     private final ConsultingService consultingService;
-    private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomUserDetailsService customUserDetailsService;
-    private final UserService userService;
+
     @GetMapping("/call")
     @Operation(summary = "서버 응답 테스트", description = "서버 응답 테스트 API", tags = {"test"})
     @ApiResponses({
@@ -54,7 +53,7 @@ public class TestController {
     }
 
     @GetMapping("/tokenheader")
-    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "AUTH HEADER 테스트", description = "HEADER -> body형태로 토큰, ID반환 API", tags = {"test"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
@@ -62,16 +61,17 @@ public class TestController {
             @ApiResponse(responseCode = "404", description = "NOT FOUND"),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
-    @Operation(summary = "AUTH HEADER 테스트", description = "HEADER -> body형태로 토큰, ID반환 API", tags = {"test"})
-    public ResponseEntity<?> authTest (@RequestHeader(required = false) String Authorization ) {
+    @SecurityRequirement(name = "bearerAuth")
+    public RestApiResponse<?> authTest (HttpServletRequest request) {
         UserResponseDto getUser = customUserDetailsService.currentLoadUserByUserId();
-        return ResponseEntity.ok().body("server call auth test | token : " + HeaderUtil.getAccessTokenString(Authorization) + " id : " + getUser.getUserName());
+        return new RestApiResponse<>("AUTH HEADER 테스트 호출됨",
+                "server call auth test | token : " + HeaderUtil.getAccessTokenString(request.getHeader("Authorization")) + " id : " + getUser.getUserName());
     }
 
     @GetMapping("/consult/list/noauth")
     @Operation(summary = "컨설팅 리스트 출력 (회원정보X)", description = "컨설팅 정보에 대한 리스트를 제공한다 page=0,1... size=10 userno=1 sort는 지우고 요청할 것", tags = {"test"})
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK" , content = @Content(schema = @Schema(implementation = ConsultingListDto.class))),
+            @ApiResponse(responseCode = "200", description = "OK" , content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultingListDto.class)))),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
@@ -125,7 +125,7 @@ public class TestController {
     @GetMapping("/response/list")
     @Operation(summary = "리스트 응답은 이렇게 반환됩니다.", description = "객체 응답 코드", tags = {"test"})
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK" , content = @Content(schema = @Schema(implementation = ConsultingListDto.class))),
+            @ApiResponse(responseCode = "200", description = "OK" , content = @Content( array = @ArraySchema(schema = @Schema(implementation = ConsultingListDto.class)))),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
@@ -134,12 +134,5 @@ public class TestController {
         return ResponseEntity.ok().body(new RestApiResponse<>("응답됨", consultingListDtoLis));
 
     }
-
-//    @GetMapping("/context")
-//    public ResponseEntity<?> contextTest() {
-//        UserResponseDto getUser = customUserDetailsService.currentLoadUserByUserId();
-//        log.info("result : {}", getUser);
-//        return ResponseEntity.ok().body(new RestApiResponse<>("응답됨", getUser));
-//    }
 
 }

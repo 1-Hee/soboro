@@ -125,6 +125,21 @@ public class AuthController {
         return ResponseEntity.ok().body(new RestApiResponse<>("로그인 완료", accessToken.getToken()));
     }
 
+//    @PostMapping("/logout")
+//    @Operation(summary = "일반 로그아웃", description = "일반 로그아웃 API", tags = {"auth"})
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "OK : 성공", content = {
+//                    @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)),
+//                    @Content(mediaType = "*/*", schema = @Schema(implementation = RestApiResponse.class)) }),
+//            @ApiResponse(responseCode = "400", description = "BAD REQUEST : 잘못된 요청", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+//            @ApiResponse(responseCode = "404", description = "NOT FOUND : 잘못된 서버 경로 요청", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+//            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR : 서버 에러", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+//            @ApiResponse(responseCode = "USER_400", description = "로그인 실패 : ID, PW 확인", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+//    })
+//    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+//        return ResponseEntity.ok().body(new RestApiResponse<>("로그아웃 완료"));
+//    }
+
 //    @GetMapping("/refresh")
 //    @Operation(summary = "Refresh token 재발급 (페기 예정)", description = "Refresh token 재발급 API", tags = {"auth"})
 //    public ResponseEntity<?> refreshToken (HttpServletRequest request, HttpServletResponse response) {
