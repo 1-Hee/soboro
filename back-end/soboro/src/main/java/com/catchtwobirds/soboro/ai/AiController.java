@@ -5,8 +5,10 @@ import com.catchtwobirds.soboro.config.properties.AiConfig;
 import io.swagger.v3.core.util.Json;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.UrlResource;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.MalformedURLException;
 import java.util.Optional;
 
 @RestController
@@ -27,9 +29,15 @@ public class AiController {
     @GetMapping("/tts")
     public RestApiResponse<?> ttsAddress(
             @RequestParam(value = "address") String address
-    ) {
+    ) throws MalformedURLException {
+//        String baseUrl = aiConfig.getTtsPrefix();
         String baseUrl = aiConfig.getTtsPrefix();
         String URL = baseUrl + address;
-        return new RestApiResponse<>("음성파일 주소 전달", URL);
+        UrlResource resource = new UrlResource(URL);
+//        return new UrlResource(URL);
+//        UrlResource urlResource = new UrlResource("https", "file");
+//        return new RestApiResponse<>("음성파일 주소 전달", URL);
+        return new RestApiResponse<>("음성파일 주소 전달", resource);
+
     }
 }
