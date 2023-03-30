@@ -5,10 +5,7 @@ import com.catchtwobirds.soboro.config.properties.AiConfig;
 import io.swagger.v3.core.util.Json;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -19,10 +16,19 @@ import java.util.Optional;
 public class AiController {
 
     private final AiConfig aiConfig;
+//    @GetMapping("/tts")
+//    public RestApiResponse<?> ttsAddress(@RequestBody AiDto aiDto) {
+//        String baseUrl = aiConfig.getTtsPrefix();
+//        String address = aiDto.getAddress();
+//        String URL = baseUrl + address;
+//        return new RestApiResponse<>("음성파일 주소 전달", URL);
+//    }
+
     @GetMapping("/tts")
-    public RestApiResponse<?> ttsAddress(@RequestBody AiDto aiDto) {
+    public RestApiResponse<?> ttsAddress(
+            @RequestParam(value = "address") String address
+    ) {
         String baseUrl = aiConfig.getTtsPrefix();
-        String address = aiDto.getAddress();
         String URL = baseUrl + address;
         return new RestApiResponse<>("음성파일 주소 전달", URL);
     }
