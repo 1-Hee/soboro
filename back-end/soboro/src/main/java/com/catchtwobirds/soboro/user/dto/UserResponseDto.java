@@ -4,7 +4,7 @@ import com.catchtwobirds.soboro.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -28,6 +28,10 @@ public class UserResponseDto {
     private String userGender;
     @Schema(description = "회원 이용약관 동의")
     private boolean userTerms;
+    @Schema(description = "회원 가입 일시")
+    private LocalDateTime userCreateTime;
+    @Schema(description = "회원 인증 방식")
+    private String userAuthType;
     @Schema(description = "회원 활성화 여부")
     private boolean userActive;
     @Builder
@@ -39,6 +43,8 @@ public class UserResponseDto {
         this.userPhone = user.getUserPhone();
         this.userGender = user.getUserGender();
         this.userTerms = user.isUserTerms();
+        this.userCreateTime = user.getCreatedAt();
+        this.userAuthType = "이메일 인증";
         this.userActive = user.isUserActive();
     }
 }
