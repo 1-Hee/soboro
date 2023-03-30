@@ -28,10 +28,6 @@ def return_idx():
         idx += 1
         yield idx
 
-@app.get("/")
-def root():
-    return {"message": "test clear"}
-
 @app.get("/tts/{text}")
 def tts(text: str):
     with open("config.json") as f:
