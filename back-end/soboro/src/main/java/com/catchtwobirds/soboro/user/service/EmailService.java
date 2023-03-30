@@ -28,10 +28,9 @@ public class EmailService {
     private final JavaMailSender emailSender;
     private final RedisUtil redisUtil;
     private final UserRepository userRepository;
+//    public static final String ePw = createKey();
 
-    public static final String ePw = createKey();
-
-    private MimeMessage createMessage(String to)throws Exception{
+    private MimeMessage createMessage(String to, String ePw)throws Exception{
         System.out.println("보내는 대상 : "+ to);
         System.out.println("인증 번호 : "+ePw);
         MimeMessage  message = emailSender.createMimeMessage();
@@ -59,7 +58,7 @@ public class EmailService {
         return message;
     }
 
-    private MimeMessage createMessageUserId(String to, String id)throws Exception{
+    private MimeMessage createMessageUserId(String to, String id, String ePw)throws Exception{
         System.out.println("보내는 대상 : "+ to);
         System.out.println("인증 번호 : "+ePw);
         MimeMessage  message = emailSender.createMimeMessage();
@@ -90,6 +89,7 @@ public class EmailService {
     public static String createKey() {
         StringBuffer key = new StringBuffer();
         Random rnd = new Random();
+        rnd.setSeed(System.currentTimeMillis());
 
         for (int i = 0; i < 8; i++) { // 인증코드 8자리
             int index = rnd.nextInt(3); // 0~2 까지 랜덤
@@ -114,7 +114,8 @@ public class EmailService {
 
     @Transactional
     public String sendSimpleMessage(String to)throws Exception {
-        MimeMessage message = createMessage(to);
+        String ePw = createKey();
+        MimeMessage message = createMessage(to, ePw);
         try {
             emailSender.send(message);
             redisUtil.setDataExpire(to, ePw, 1000L * 60L * 5L);
@@ -151,10 +152,11 @@ public class EmailService {
 
     @Transactional
     public void sendUserId(String to)throws Exception {
+        String ePw = createKey();
         Optional<User> result = userRepository.findByUserEmail(to);
         log.info("result : {}", result);
         if(result.isPresent()) {
-            MimeMessage message = createMessageUserId(to, result.get().getUserId());
+            MimeMessage message = createMessageUserId(to, result.get().getUserId(), ePw);
             try {
                 emailSender.send(message);
             } catch (MailException es){
