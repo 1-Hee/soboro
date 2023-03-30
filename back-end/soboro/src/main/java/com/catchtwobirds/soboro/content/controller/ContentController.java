@@ -33,7 +33,7 @@ public class ContentController {
 
     // 컨설팅 번호와 일치하는 모든 텍스트를 가져옵니다.
     @GetMapping("/content/detail")
-    @Operation(summary = "컨설팅 컨텐츠 출력", description = "컨설팅 컨텐츠를 출력한다", tags = {"consult"})
+    @Operation(summary = "컨설팅 컨텐츠 출력", description = "컨설팅 컨텐츠를 출력한다", tags = {"content"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = ContentDto.class)),
@@ -62,7 +62,7 @@ public class ContentController {
     // 상담 컨텐츠 저장
     private List<ContentRequestDto> accumulatedData = new ArrayList<>();
     @PostMapping("save/text")
-    @Operation(summary = "컨설팅 컨텐츠 저장", description = "컨설팅 컨텐츠를 저장한다", tags = {"consult"})
+    @Operation(summary = "컨설팅 컨텐츠 저장", description = "컨설팅 컨텐츠를 저장한다", tags = {"content"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Integer.class)),
@@ -84,7 +84,7 @@ public class ContentController {
 
     // 모든 상담텍스트를 조회하는 테스트용도입니다
     @GetMapping("/content/findall")
-    @Operation(summary = "컨설팅 컨텐츠 조회", description = "컨설팅 컨텐츠를 조회한다", tags = {"consult"})
+    @Operation(summary = "컨설팅 컨텐츠 조회", description = "컨설팅 컨텐츠를 조회한다", tags = {"content"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK", content = {
                     @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ContentDto.class))),
