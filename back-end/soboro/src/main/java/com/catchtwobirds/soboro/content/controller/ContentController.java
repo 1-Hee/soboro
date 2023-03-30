@@ -6,6 +6,8 @@ import com.catchtwobirds.soboro.content.dto.ContentDto;
 import com.catchtwobirds.soboro.content.dto.ContentRequestDto;
 import com.catchtwobirds.soboro.content.service.ContentService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
@@ -41,9 +44,11 @@ public class ContentController {
             @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @io.swagger.v3.oas.annotations.media.Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
+    @Parameter(in = ParameterIn.QUERY, description = "페이지 번호 (0..N)", name = "page", content = @Content(schema = @Schema(type = "Integer", defaultValue = "0")))
+    @Parameter(in = ParameterIn.QUERY, description = "페이지 크기", name = "size", content = @Content(schema = @Schema(type = "Integer", defaultValue = "10")))
     public RestApiResponse<?> contentDetail(
             @RequestParam(value = "consultingNo", required = false) Integer consultingNo,
-            @PageableDefault(size = 10) Pageable pageable
+            @ParameterObject Pageable pageable
     ) {
         log.info("/api/consult/content/detail | GET method | 컨설팅 컨텐츠 출력 호출됨");
         Slice<ContentDto> contentList = contentService.contentDetailList(consultingNo, pageable);
