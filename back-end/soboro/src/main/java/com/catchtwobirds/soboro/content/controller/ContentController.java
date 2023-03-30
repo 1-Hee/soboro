@@ -60,7 +60,6 @@ public class ContentController {
 //    }
 
     // 상담 컨텐츠 저장
-    private List<ContentRequestDto> accumulatedData = new ArrayList<>();
     @PostMapping("save/text")
     @Operation(summary = "컨설팅 컨텐츠 저장", description = "컨설팅 컨텐츠를 저장한다", tags = {"consult"})
     @ApiResponses({
@@ -72,14 +71,9 @@ public class ContentController {
     })
     public RestApiResponse<?> contentSaveTest(@RequestBody ContentRequestDto contentRequestDto) {
         log.info("/api/consult/save/test | POSt method | 컨설팅 컨텐츠 저장 호출됨");
-        
-        accumulatedData.add(contentRequestDto);
-        if (accumulatedData.size() == 10) {
-            contentService.addManyContent(accumulatedData);
-            accumulatedData = new ArrayList<>();
-            return new RestApiResponse<>("상담 컨텐츠 저장 완료");
-        }
-        return new RestApiResponse<>("상담 컨텐츠 사이즈 :" + accumulatedData.size());
+
+        contentService.addRedisTest(contentRequestDto);
+        return new RestApiResponse<>("상담 컨텐츠 전송 완료");
     }
 
     // 모든 상담텍스트를 조회하는 테스트용도입니다
