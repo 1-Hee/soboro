@@ -8,6 +8,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @Getter
 public class AiConfig {
-    @Value("${app.prefix.ttsPrefix}")
+    @Value("${file.ttsDir}")
     private String ttsPrefix;
 }
