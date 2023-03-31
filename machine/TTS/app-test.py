@@ -65,8 +65,10 @@ def tts(text: str):
     sf.write(path.join(save_dir, filename),
         audio.astype("int16"),
         22050)
+    os.chmod(path.join(save_dir, filename), 0o755)
     with open(valid_file_path, "w") as f:
-        f.write(filename)
+        f.write(path=filename)
+    os.chmod(path.join(save_dir, valid_file_path), 0o755)
     return {"filename": "{}".format(filename)}
 
 if __name__ == "__main__":
