@@ -9,7 +9,7 @@ from gan import Generator
 from melgan_eval import find_endpoint
 # Fast API
 from fastapi import FastAPI
-import uvicorn
+import uvicorn, requests, json
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 app = FastAPI()
@@ -29,13 +29,14 @@ def return_idx():
         yield idx
 
 @app.get("/tts/{text}")
-def tts(text: str):
+def tts(text: str, cons_num: int = -1):
     with open("config.json") as f:
         data = f.read()
     config = json.loads(data)
     save_dir = config["save_dir"]
     load_dir = config["load_dir"]
     ckpt = config["ckpt"]
+    cons_url = config["cons_url"]
     # parameter
     device = "cuda" if torch.cuda.is_available() else "cpu"
     valid_file_path = save_dir+"/"+text
@@ -63,11 +64,25 @@ def tts(text: str):
     audio = audio[:find_endpoint(audio)]
     filename = "generated_{}.wav".format(next(return_idx()))
     filepath = path.join(save_dir, filename)
-    response = {"filename": "{}".format(filename)}
+    response = {
+            "filename": "{}".format(filename),
+    }
     with open(filepath, 'wb') as f:
         sf.write(f, audio.astype("int16"), 22050)
     os.chmod(filepath, 0o755)
+    if cons_num != -1:
+        _to_back(cons_url, cons_num, text)
     return response
+
+def _to_back(url: str, cons_num: int, cons_text: str):
+    data = {
+        "consultingNo": cons_num,
+        "contentText": cons_text,
+        "contentSpeaker": True
+    }
+    data = json.dumps(data)
+    headers = {"Content-type": "application/json"}
+    response = requests.post(url, data=data, headers=headers)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=13579)
