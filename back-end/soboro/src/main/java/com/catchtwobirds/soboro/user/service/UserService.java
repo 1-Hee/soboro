@@ -51,9 +51,16 @@ public class UserService {
     @Transactional
     public UserModifyDto modifyUser(UserModifyDto userModifyDto) {
         User user = userRepository.findByUserId(userModifyDto.getUserId()).orElseThrow(()-> new RestApiException(UserErrorCode.USER_402));
-        user.setUserName(userModifyDto.getUserName());
-        user.setUserEmail(userModifyDto.getUserEmail());
-        user.setUserPhone(userModifyDto.getUserPhone());
+        if (userModifyDto.getUserName() != null) {
+            user.setUserName(userModifyDto.getUserName());
+        }
+        if (userModifyDto.getUserEmail() != null) {
+            user.setUserEmail(userModifyDto.getUserEmail());
+        }
+        if (userModifyDto.getUserPhone() != null) {
+            user.setUserPhone(userModifyDto.getUserPhone());
+        }
+        user.setUserActive(true);
         return new UserModifyDto(user);
     }
     
