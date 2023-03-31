@@ -100,7 +100,7 @@ public class AiController {
         // Send the file as a response
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment", address);
+        headers.setContentDispositionFormData("inline", address);
         headers.setContentLength(wavResource.contentLength());
         return new ResponseEntity<>(wavResource, headers, HttpStatus.OK);
     }
