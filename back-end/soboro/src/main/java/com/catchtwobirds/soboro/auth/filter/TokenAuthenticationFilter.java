@@ -130,8 +130,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             );
 
             Authentication newAuthentication = tokenProvider.getAuthentication(newAccessToken);
-            log.info("TokenAuthenticationFilter token : {}", newAccessToken);
+            log.info("TokenAuthenticationFilter new Accesstoken : {}", newAccessToken.getToken());
             SecurityContextHolder.getContext().setAuthentication(newAuthentication);
+            response.setContentType("application/json;charset=UTF-8");
+            response.setHeader("Authorization", "Bearer " + newAccessToken.getToken());
 
             long validTime = authRefreshToken.getTokenClaims().getExpiration().getTime() - now.getTime();
 

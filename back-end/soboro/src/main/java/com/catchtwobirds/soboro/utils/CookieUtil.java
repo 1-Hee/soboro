@@ -41,13 +41,15 @@ public class CookieUtil {
     }
 
     public static String getRefreshTokenCookie(HttpServletRequest request) {
+        log.info("request.getCookies() : {} ", request.getCookies().length);
         for (Cookie cookie : request.getCookies()) {
             log.info("getRefreshTokenCookie | Cookie name = {}, Cookie Value = {}", cookie.getName(),cookie.getValue());
             if (cookie.getName().equals("refresh_token")) {
                 return cookie.getValue();
             }
         }
-        throw new JwtException("RefreshToken is invaild");
+//        throw new JwtException("RefreshToken is invaild");
+        return null;
     }
 
 
