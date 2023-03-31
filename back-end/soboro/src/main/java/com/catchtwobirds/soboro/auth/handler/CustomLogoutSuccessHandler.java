@@ -23,6 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.REFRESH_TOKEN;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -46,12 +48,22 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
             log.info("엑세스 토큰 블랙리스트 등록");
 
             //Cookie에서 RefreshToken을 가져와 Redis에서 RefreshToken 삭제
-            String refreshtoken = CookieUtil.getRefreshTokenCookie(request);
-
+            String refreshtoken  = null;
+            try {
+                refreshtoken = CookieUtil.getRefreshTokenCookie(request);
+            } catch (NullPointerException e) {
+                log.info("리프래쉬 토큰이 없는데요.");
+            }
             log.info("refreshtoken 가져오기 : {}", refreshtoken);
-            String id = customOAuth2UserService.getId(refreshtoken);
-            log.info("Log out id = {}", id);
-            redisUtil.delData(id);
+            // 리프래쉬 토큰이 있으면 redis 에서 삭제하고 쿠키에서 삭제하기
+            if(refreshtoken != null) {
+                String id = customOAuth2UserService.getId(refreshtoken);
+                log.info("Log out id = {}", id);
+                redisUtil.delData(id);
+
+                // 쿠키에서 삭제하기
+                CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
+            }
 
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             final ObjectMapper mapper = new ObjectMapper();
@@ -64,6 +76,7 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
         } catch (Exception e) {
             log.info("JwtExceptionFilter 에서 에러 받기");
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            e.printStackTrace();
             ErrorResponse result = new ErrorResponse("Unauthorized", e.getMessage());
             log.info("Logout ErrorResponse : {}", result);
             final ObjectMapper mapper = new ObjectMapper();
