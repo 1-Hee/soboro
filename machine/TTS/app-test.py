@@ -62,9 +62,9 @@ def tts(text: str):
     audio = (g_audio.detach().numpy() * 32768)
     audio = audio[:find_endpoint(audio)]
     filename = "generated_{}.wav".format(next(return_idx()))
-    sf.write(path.join(save_dir, filename),
-        audio.astype("int16"),
-        22050, mode="0o755")
+    os.umask(0o022)
+    with open(path.join(save_dir, filename), 'wb') as f:
+        sf.write(f, audio.astype("int16"), 22050)
     with open(valid_file_path, "w") as f:
         f.write(filename, 'w', 0o755)
     return {"filename": "{}".format(filename)}
