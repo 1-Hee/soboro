@@ -18,14 +18,11 @@ import javax.validation.constraints.NotNull;
 public class UserModifyDto {
     @Schema(description = "회원 아이디")
     private String userId;
-    @NotBlank
     @Schema(description = "회원 이름", example = "testName")
     private String userName;
-    @NotBlank
     @Email
     @Schema(description = "회원 이메일",  example = "testEmail@domain.com")
     private String userEmail;
-    @NotNull
     @Schema(description = "회원 휴대폰 번호", example = "01012345678")
     private String userPhone;
     @Schema(description = "회원 활성화 여부")
@@ -37,6 +34,7 @@ public class UserModifyDto {
         this.userName = user.getUserName();
         this.userEmail = user.getUserEmail();
         this.userPhone = user.getUserPhone();
+        this.userActive = true;
     }
 
     @Builder
@@ -46,6 +44,7 @@ public class UserModifyDto {
                 .userName(userName)
                 .userEmail(userEmail)
                 .userPhone(userPhone)
+                .userActive(true)
                 .build();
     }
 }
