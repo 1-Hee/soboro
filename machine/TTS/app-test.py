@@ -67,8 +67,7 @@ def tts(text: str, cons_num: int = -1):
     response = {
             "filename": "{}".format(filename),
     }
-    with open(filepath, 'wb') as f:
-        sf.write(f, audio.astype("int16"), 22050)
+    sf.write(filepath, audio.astype("int16"), 22050)
     os.chmod(filepath, 0o755)
     if cons_num != -1:
         _to_back(cons_url, cons_num, text)
