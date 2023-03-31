@@ -62,14 +62,15 @@ def tts(text: str):
     audio = (g_audio.detach().numpy() * 32768)
     audio = audio[:find_endpoint(audio)]
     filename = "generated_{}.wav".format(next(return_idx()))
-    os.umask(0o022)
-    with open(path.join(save_dir, filename), 'wb') as f:
+    filepath = path.join(save_dir, filename)
+    response = {"filename": "{}".format(filename)}
+    with open(filepath, 'wb') as f:
         sf.write(f, audio.astype("int16"), 22050)
-    os.chmod(path.join(save_dir, filename), 0o755)
-    with open(path.join(valid_file_path, filename), "wb") as f:
+    val_filepath = path.join(valid_file_path, filename)
+    with open(val_filepath, "wb") as f:
         f.write(f)
-    os.chmod(path.join(valid_file_path, filename), 0o755)
-    return {"filename": "{}".format(filename)}
+    os.chmod(path.join(filepath, filename), 0o755)
+    return response
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=13579)
