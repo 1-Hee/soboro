@@ -66,9 +66,6 @@ def tts(text: str):
     response = {"filename": "{}".format(filename)}
     with open(filepath, 'wb') as f:
         sf.write(f, audio.astype("int16"), 22050)
-    val_filepath = path.join(valid_file_path, filename)
-    with open(val_filepath, "wb") as f:
-        f.write(f)
     os.chmod(path.join(filepath, filename), 0o755)
     return response
 
