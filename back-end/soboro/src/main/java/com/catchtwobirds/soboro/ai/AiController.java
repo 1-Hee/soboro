@@ -10,10 +10,11 @@ import org.springframework.core.io.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -100,10 +101,29 @@ public class AiController {
         // Send the file as a response
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+//        headers.setContentType(MediaType.ALL);
         headers.setContentDispositionFormData("inline", address);
         headers.setContentLength(wavResource.contentLength());
         return new ResponseEntity<>(wavResource, headers, HttpStatus.OK);
     }
+
+    @GetMapping("/tts/test")
+    public ResponseEntity<byte[]> getWavFileTest(
+            @RequestParam(value = "address") String address
+    ) throws IOException, UnsupportedAudioFileException {
+        String stringPath = baseUrl + address;
+
+        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
+                new File(stringPath));
+        AudioFormat audioFormat = audioInputStream.getFormat();
+        byte[] bytes = new byte[(int) (audioInputStream.getFrameLength() * audioFormat.getFrameSize())];
+        audioInputStream.read(bytes);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType("audio/wav"));
+        headers.setContentLength(bytes.length);
+        return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
+    }
+
 
 //    @GetMapping("/tts")
 //    public ResponseEntity<byte[]> getFile(
