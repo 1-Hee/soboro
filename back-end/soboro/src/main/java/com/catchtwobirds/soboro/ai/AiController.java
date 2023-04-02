@@ -112,7 +112,7 @@ public class AiController {
             @RequestParam(value = "address") String address
     ) throws IOException, UnsupportedAudioFileException {
         String stringPath = baseUrl + address;
-
+        System.out.println("stringPath = " + stringPath);
         AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
                 new File(stringPath));
         AudioFormat audioFormat = audioInputStream.getFormat();
@@ -122,6 +122,37 @@ public class AiController {
         headers.setContentType(MediaType.parseMediaType("audio/wav"));
         headers.setContentLength(bytes.length);
         return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/tts/test2")
+    public ResponseEntity<?> ttsAddress(
+            @RequestParam(value = "address") String address
+    ) throws IOException, URISyntaxException {
+
+        String stringPath = baseUrl + address;
+        System.out.println("stringPath = " + stringPath);
+
+        Path filePath = Paths.get(stringPath);
+        System.out.println("filePath = " + filePath);
+
+
+        UrlResource resource = new UrlResource(filePath.toUri());
+        System.out.println("resource = " + resource);
+
+
+        InputStream inputStream = Files.newInputStream(filePath);
+        System.out.println("inputStream = " + inputStream);
+
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.ALL);
+
+        headers.setContentDisposition(ContentDisposition.builder("inline").filename(address).build());
+        InputStreamResource inputStreamResource = new InputStreamResource(inputStream);
+        System.out.println("inputStreamResource = " + inputStreamResource);
+
+        return new ResponseEntity<>(inputStreamResource, headers, HttpStatus.OK);
     }
 
 
