@@ -2,7 +2,6 @@ package com.catchtwobirds.soboro.ai;
 
 import com.catchtwobirds.soboro.common.response.RestApiResponse;
 import com.catchtwobirds.soboro.config.properties.AiConfig;
-import io.swagger.v3.core.util.Json;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,13 +14,11 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URI;
+
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
