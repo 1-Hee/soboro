@@ -146,13 +146,29 @@ public class AiController {
 
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.ALL);
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 
         headers.setContentDisposition(ContentDisposition.builder("inline").filename(address).build());
         InputStreamResource inputStreamResource = new InputStreamResource(inputStream);
         System.out.println("inputStreamResource = " + inputStreamResource);
 
         return new ResponseEntity<>(inputStreamResource, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/tts/test3")
+    public ResponseEntity<byte[]> getFile(
+            @RequestParam(value = "address") String address
+    )
+            throws IOException, UnsupportedAudioFileException {
+
+        String stringPath = baseUrl + address;
+
+        UrlResource resource = new UrlResource(stringPath);
+        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(resource.getInputStream());
+        byte[] data = audioInputStream.readAllBytes();
+        audioInputStream.close();
+
+        return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
 
