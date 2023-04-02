@@ -53,6 +53,7 @@ pipeline {
 										cleanRemote: false, 
 										excludes: '', 
 										execCommand: '''
+rm -rf /home/ubuntu/data/temp-tts/*
 cd compose/ttsapiservice
 sudo docker-compose pull
 sudo docker-compose up --force-recreate -d''',
