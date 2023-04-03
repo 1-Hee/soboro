@@ -8,7 +8,7 @@ from os import path
 from gan import Generator
 from melgan_eval import find_endpoint
 # Fast API
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 import uvicorn, requests, json
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
@@ -66,6 +66,8 @@ def tts(text: str, cons_num: int = -1):
     g_audio = g_audio.squeeze().cpu()
     audio = (g_audio.detach().numpy() * 32768)
     audio = audio[:find_endpoint(audio)]
+    if audio.shape[0] == 8820: # minimum length
+        return HTTPException(status_code=412, detail="Not enough text length")
     filename = "generated_{}.wav".format(next(return_idx()))
     filepath = path.join(save_dir, filename)
     response = {
