@@ -183,6 +183,30 @@ public class AiController {
                 .body(wavResource);
     }
 
+    @GetMapping("/getWavFile")
+    public ResponseEntity<Resource> B(@RequestParam(value = "address") String address) throws FileNotFoundException {
+
+        String stringPath = baseUrl + address;
+
+        Path wavPath = Paths.get(stringPath);
+        FileInputStream wavStream = new FileInputStream(wavPath.toFile());
+        InputStreamResource wavResource = new InputStreamResource(wavStream);
+
+
+
+//        ResourceLoader resourceLoader = new DefaultResourceLoader();
+//        Resource wavResource = resourceLoader.getResource("file:" + wavPath.toString());
+
+//        return ResponseEntity.ok()
+//                .contentType(MediaType.parseMediaType("audio/wav"))
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + wavPath.getFileName().toString() + "\"")
+//                .body(wavResource);
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("audio/wav"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + wavPath.getFileName().toString() + "\"")
+                .body(wavResource);
+    }
+
 
 //    @GetMapping("/tts")
 //    public ResponseEntity<byte[]> getFile(
