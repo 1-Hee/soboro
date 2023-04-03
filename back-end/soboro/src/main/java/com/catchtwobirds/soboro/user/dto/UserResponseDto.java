@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Builder
 @Getter
@@ -29,11 +30,17 @@ public class UserResponseDto {
     @Schema(description = "회원 이용약관 동의")
     private boolean userTerms;
     @Schema(description = "회원 가입 일시")
-    private LocalDateTime userCreateTime;
+    private String userCreateTime;
     @Schema(description = "회원 인증 방식")
     private String userAuthType;
     @Schema(description = "회원 활성화 여부")
     private boolean userActive;
+
+    public String DateToString(LocalDateTime userCreateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy. MM. dd. hh:mm:ss");
+        String formattedDateTime = userCreateTime.format(formatter);
+        return formattedDateTime;
+    }
     @Builder
     public UserResponseDto(User user) {
         this.userNo = user.getUserNo();
@@ -43,7 +50,7 @@ public class UserResponseDto {
         this.userPhone = user.getUserPhone();
         this.userGender = user.getUserGender();
         this.userTerms = user.isUserTerms();
-        this.userCreateTime = user.getCreatedAt();
+        this.userCreateTime =  DateToString(user.getCreatedAt());
         this.userAuthType = "이메일 인증";
         this.userActive = user.isUserActive();
     }
