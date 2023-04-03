@@ -84,106 +84,106 @@ public class AiController {
 //        return new ResponseEntity<>(inputStreamResource, headers, HttpStatus.OK);
 //    }
 
+//    @GetMapping("/tts")
+//    public ResponseEntity<UrlResource> getWavFile(
+//            @RequestParam(value = "address") String address
+//    ) throws IOException {
+//        // Load the WAV file as a UrlResource
+//
+//        String stringPath = baseUrl + address;
+//
+//        Path path = Paths.get(stringPath);
+//        UrlResource wavResource = new UrlResource(path.toUri());
+//
+//        // Send the file as a response
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+////        headers.setContentType(MediaType.ALL);
+//        headers.setContentDispositionFormData("inline", address);
+//        headers.setContentLength(wavResource.contentLength());
+//        return new ResponseEntity<>(wavResource, headers, HttpStatus.OK);
+//    }
+
+//    @GetMapping("/tts/test")
+//    public ResponseEntity<byte[]> getWavFileTest(
+//            @RequestParam(value = "address") String address
+//    ) throws IOException, UnsupportedAudioFileException {
+//        String stringPath = baseUrl + address;
+//        System.out.println("stringPath = " + stringPath);
+//        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
+//                new File(stringPath));
+//        AudioFormat audioFormat = audioInputStream.getFormat();
+//        byte[] bytes = new byte[(int) (audioInputStream.getFrameLength() * audioFormat.getFrameSize())];
+//        audioInputStream.read(bytes);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.parseMediaType("audio/wav"));
+//        headers.setContentLength(bytes.length);
+//        return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
+//    }
+//
+//    @GetMapping("/tts/test2")
+//    public ResponseEntity<?> ttsAddress(
+//            @RequestParam(value = "address") String address
+//    ) throws IOException, URISyntaxException {
+//
+//        String stringPath = baseUrl + address;
+//        System.out.println("stringPath = " + stringPath);
+//
+//        Path filePath = Paths.get(stringPath);
+//        System.out.println("filePath = " + filePath);
+//
+//
+//        UrlResource resource = new UrlResource(filePath.toUri());
+//        System.out.println("resource = " + resource);
+//
+//
+//        InputStream inputStream = Files.newInputStream(filePath);
+//        System.out.println("inputStream = " + inputStream);
+//
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+//
+//        headers.setContentDisposition(ContentDisposition.builder("inline").filename(address).build());
+//        InputStreamResource inputStreamResource = new InputStreamResource(inputStream);
+//        System.out.println("inputStreamResource = " + inputStreamResource);
+//
+//        return new ResponseEntity<>(inputStreamResource, headers, HttpStatus.OK);
+//    }
+//
+//    @GetMapping("/tts/test3")
+//    public ResponseEntity<byte[]> getFile(
+//            @RequestParam(value = "address") String address
+//    )
+//            throws IOException, UnsupportedAudioFileException {
+//
+//        String stringPath = baseUrl + address;
+//
+//        UrlResource resource = new UrlResource(stringPath);
+//        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(resource.getInputStream());
+//        byte[] data = audioInputStream.readAllBytes();
+//        audioInputStream.close();
+//
+//        return new ResponseEntity<>(data, HttpStatus.OK);
+//    }
+//
+//    @GetMapping("/getWavFile")
+//    public ResponseEntity<Resource> G(@RequestParam(value = "address") String address) {
+//
+//        String stringPath = baseUrl + address;
+//
+//        Path wavPath = Paths.get(stringPath);
+//
+//        ResourceLoader resourceLoader = new DefaultResourceLoader();
+//        Resource wavResource = resourceLoader.getResource("file:" + wavPath.toString());
+//
+//        return ResponseEntity.ok()
+//                .contentType(MediaType.parseMediaType("audio/wav"))
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + wavPath.getFileName().toString() + "\"")
+//                .body(wavResource);
+//    }
+
     @GetMapping("/tts")
-    public ResponseEntity<UrlResource> getWavFile(
-            @RequestParam(value = "address") String address
-    ) throws IOException {
-        // Load the WAV file as a UrlResource
-
-        String stringPath = baseUrl + address;
-
-        Path path = Paths.get(stringPath);
-        UrlResource wavResource = new UrlResource(path.toUri());
-
-        // Send the file as a response
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-//        headers.setContentType(MediaType.ALL);
-        headers.setContentDispositionFormData("inline", address);
-        headers.setContentLength(wavResource.contentLength());
-        return new ResponseEntity<>(wavResource, headers, HttpStatus.OK);
-    }
-
-    @GetMapping("/tts/test")
-    public ResponseEntity<byte[]> getWavFileTest(
-            @RequestParam(value = "address") String address
-    ) throws IOException, UnsupportedAudioFileException {
-        String stringPath = baseUrl + address;
-        System.out.println("stringPath = " + stringPath);
-        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
-                new File(stringPath));
-        AudioFormat audioFormat = audioInputStream.getFormat();
-        byte[] bytes = new byte[(int) (audioInputStream.getFrameLength() * audioFormat.getFrameSize())];
-        audioInputStream.read(bytes);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType("audio/wav"));
-        headers.setContentLength(bytes.length);
-        return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
-    }
-
-    @GetMapping("/tts/test2")
-    public ResponseEntity<?> ttsAddress(
-            @RequestParam(value = "address") String address
-    ) throws IOException, URISyntaxException {
-
-        String stringPath = baseUrl + address;
-        System.out.println("stringPath = " + stringPath);
-
-        Path filePath = Paths.get(stringPath);
-        System.out.println("filePath = " + filePath);
-
-
-        UrlResource resource = new UrlResource(filePath.toUri());
-        System.out.println("resource = " + resource);
-
-
-        InputStream inputStream = Files.newInputStream(filePath);
-        System.out.println("inputStream = " + inputStream);
-
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-
-        headers.setContentDisposition(ContentDisposition.builder("inline").filename(address).build());
-        InputStreamResource inputStreamResource = new InputStreamResource(inputStream);
-        System.out.println("inputStreamResource = " + inputStreamResource);
-
-        return new ResponseEntity<>(inputStreamResource, headers, HttpStatus.OK);
-    }
-
-    @GetMapping("/tts/test3")
-    public ResponseEntity<byte[]> getFile(
-            @RequestParam(value = "address") String address
-    )
-            throws IOException, UnsupportedAudioFileException {
-
-        String stringPath = baseUrl + address;
-
-        UrlResource resource = new UrlResource(stringPath);
-        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(resource.getInputStream());
-        byte[] data = audioInputStream.readAllBytes();
-        audioInputStream.close();
-
-        return new ResponseEntity<>(data, HttpStatus.OK);
-    }
-
-    @GetMapping("/getWavFile")
-    public ResponseEntity<Resource> G(@RequestParam(value = "address") String address) {
-
-        String stringPath = baseUrl + address;
-
-        Path wavPath = Paths.get(stringPath);
-
-        ResourceLoader resourceLoader = new DefaultResourceLoader();
-        Resource wavResource = resourceLoader.getResource("file:" + wavPath.toString());
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType("audio/wav"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + wavPath.getFileName().toString() + "\"")
-                .body(wavResource);
-    }
-
-    @GetMapping("/getWavFileTest")
     public ResponseEntity<Resource> B(@RequestParam(value = "address") String address) throws FileNotFoundException {
 
         String stringPath = baseUrl + address;
@@ -192,15 +192,6 @@ public class AiController {
         FileInputStream wavStream = new FileInputStream(wavPath.toFile());
         InputStreamResource wavResource = new InputStreamResource(wavStream);
 
-
-
-//        ResourceLoader resourceLoader = new DefaultResourceLoader();
-//        Resource wavResource = resourceLoader.getResource("file:" + wavPath.toString());
-
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.parseMediaType("audio/wav"))
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + wavPath.getFileName().toString() + "\"")
-//                .body(wavResource);
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("audio/wav"))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + wavPath.getFileName().toString() + "\"")
