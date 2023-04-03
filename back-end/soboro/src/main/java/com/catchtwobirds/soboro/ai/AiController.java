@@ -183,7 +183,7 @@ public class AiController {
                 .body(wavResource);
     }
 
-    @GetMapping("/getWavFile")
+    @GetMapping("/getWavFileTest")
     public ResponseEntity<Resource> B(@RequestParam(value = "address") String address) throws FileNotFoundException {
 
         String stringPath = baseUrl + address;
