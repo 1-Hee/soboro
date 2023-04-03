@@ -141,7 +141,6 @@ public class AiController {
         System.out.println("inputStream = " + inputStream);
 
 
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 
@@ -166,6 +165,22 @@ public class AiController {
         audioInputStream.close();
 
         return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
+    @GetMapping("/getWavFile")
+    public ResponseEntity<Resource> G(@RequestParam(value = "address") String address) {
+
+        String stringPath = baseUrl + address;
+
+        Path wavPath = Paths.get(stringPath);
+
+        ResourceLoader resourceLoader = new DefaultResourceLoader();
+        Resource wavResource = resourceLoader.getResource("file:" + wavPath.toString());
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("audio/wav"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + wavPath.getFileName().toString() + "\"")
+                .body(wavResource);
     }
 
 
