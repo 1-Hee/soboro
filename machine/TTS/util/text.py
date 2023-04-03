@@ -155,7 +155,7 @@ def normalize(text):
 
     text = re.sub('\(\d+일\)', '', text)
     text = re.sub('\([⺀-⺙⺛-⻳⼀-⿕々〇〡-〩〸-〺〻㐀-䶵一-鿃豈-鶴侮-頻並-龎]+\)', '', text)
-    text = re.sub("|".join(list(PUNC)), '', text)
+    text = re.sub('[-=+,#/\?:^.@*\"※~ㆍ!』‘|\(\)\[\]`\'…》\”\“\’·]', ' ', text)
 
     text = normalize_with_dictionary(text, etc_dictionary)
     text = normalize_english(text)
