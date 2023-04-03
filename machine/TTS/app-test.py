@@ -47,6 +47,10 @@ def tts(text: str, cons_num: int = -1):
             filename = f.readline()
         return {"filename": "{}".format(filename)}
     
+    # prefix bug
+    if len(text) <= 5:
+        text += "아"
+
     # taco-eval
     synth = Synthesizer()
     synth.load(ckpt)
@@ -67,6 +71,8 @@ def tts(text: str, cons_num: int = -1):
     response = {
             "filename": "{}".format(filename),
     }
+    with open(valid_file_path, "w") as f:
+        f.write(filename)
     sf.write(filepath, audio.astype("int16"), 22050)
     os.chmod(filepath, 0o755)
     if cons_num != -1:
