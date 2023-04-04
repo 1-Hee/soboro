@@ -65,9 +65,11 @@ def tts(text: str, cons_num: int = -1):
     g_audio = vocoder(mel)
     g_audio = g_audio.squeeze().cpu()
     audio = (g_audio.detach().numpy() * 32768)
-    audio = audio[:find_endpoint(audio)]
+    trim_audio = audio[:find_endpoint(audio)]
     if audio.shape[0] == 8820: # minimum length
-        return HTTPException(status_code=412, detail="Not enough text length")
+        audio = audio[:66150]
+    else:
+        audio = trim_audio
     filename = "generated_{}.wav".format(next(return_idx()))
     filepath = path.join(save_dir, filename)
     response = {
