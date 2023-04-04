@@ -1,0 +1,6 @@
+{
+	"origin_dir": "http://$DOMAIN/",
+	"model_dir": "/app/datas/model.h5",
+	"sentence_dir": "/app/datas/sentence_model.pkl",
+	"data_dir": "/app/datas/sentence_data.xlsx"
+}

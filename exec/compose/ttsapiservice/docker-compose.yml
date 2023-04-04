@@ -1,0 +1,19 @@
+version: "3"
+services:
+  ttsapiservice:
+    image: $DOMAIN:$PORT/soboro/ttsapiservice:$TTS_BUILD_NUMBER
+    container_name: ttsapiservice
+    restart: always
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - /home/ubuntu/model/tacotron/:/app/logs-tacotron/
+      - /home/ubuntu/model/melgan/:/app/logs-melgan/
+      - /home/ubuntu/compose/config/ttsconfig.json:/app/config.json
+      - /home/ubuntu/data/temp-tts/:/app/output/
+    ports:
+      - 13579:13579
+networks:
+  default:
+    external:
+      name: back-net

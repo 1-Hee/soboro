@@ -1,0 +1,6 @@
+{
+    "save_dir": "/app/output",
+    "load_dir": "/app/logs-melgan/ckpt-970k.pt",
+    "ckpt": "/app/logs-tacotron/model.ckpt-120000",
+    "cons_url": "http://$DOMAIN:8080/api/consult/save/text"
+}

@@ -1,0 +1,16 @@
+version: "3"
+services:
+  backapiservice:
+    image: $DOMAIN:$PORT/soboro/backapiservice:$BACK_BUILD_NUMBER
+    container_name: backapiservice
+    restart: always
+    volumes:
+      - /home/ubuntu/data/temp-tts/:/home/ubuntu/soboro/
+    ports:
+      - 8080:8080
+    environment:
+      - TZ=Asia/Seoul
+networks:
+  default:
+    external:
+      name: back-net

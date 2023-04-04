@@ -1,0 +1,17 @@
+version: "3"
+services:
+  vttapiservice:
+    image: $DOMAIN:$PORT/soboro/vttapiservice:$VTT_BUILD_NUMBER
+    container_name: vttapiservice
+    restart: always
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - /home/ubuntu/model/h5/:/app/datas/
+      - /home/ubuntu/compose/config/vttconfig.json:/app/config.json
+    ports:
+      - 5001:5001
+networks:
+  default:
+    external:
+      name: back-net
