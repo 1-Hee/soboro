@@ -184,7 +184,7 @@ public class AiController {
 //    }
 
     @GetMapping("/tts")
-    public ResponseEntity<Resource> B(@RequestParam(value = "address") String address) throws FileNotFoundException {
+    public ResponseEntity<Resource> getWavFile(@RequestParam(value = "address") String address) throws FileNotFoundException {
 
         String stringPath = baseUrl + address;
 
