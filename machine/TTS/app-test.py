@@ -66,7 +66,7 @@ def tts(text: str, cons_num: int = -1):
     g_audio = g_audio.squeeze().cpu()
     audio = (g_audio.detach().numpy() * 32768)
     trim_audio = audio[:find_endpoint(audio)]
-    if audio.shape[0] == 8820: # minimum length
+    if trim_audio.shape[0] == 8820: # minimum length
         audio = audio[:66150]
     else:
         audio = trim_audio
