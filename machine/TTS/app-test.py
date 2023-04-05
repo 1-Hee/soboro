@@ -62,12 +62,13 @@ def tts(text: str, cons_num: int = -1):
     mel = mel.unsqueeze(0)
 
     # melgan-eval
+    samplerate = 22050
     g_audio = vocoder(mel)
     g_audio = g_audio.squeeze().cpu()
-    audio = (g_audio.detach().numpy() * 32768)
+    audio = (g_audio.detach().numpy() * 32768)[samplerate*0.4:]
     trim_audio = audio[:find_endpoint(audio)]
-    if trim_audio.shape[0] == 8820: # minimum length
-        audio = audio[:66150]
+    if trim_audio.shape[0] == samplerate*0.4: # minimum length
+        audio = audio[:samplerate*3]
     else:
         audio = trim_audio
     filename = "generated_{}.wav".format(next(return_idx()))
