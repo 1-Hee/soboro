@@ -11,7 +11,6 @@ import User from './User';
 import './styles/style.css';
 import { useCallback } from "react";
 
-
 function Main() {
   const canvasRef = useRef(null);
   const videoRef = useRef(null);
@@ -22,7 +21,6 @@ function Main() {
   const [chatdata, setChat] = useState([]);
   const [num, setNum] = useState(null);
   const [error, setError] = useState("한 단어씩 말씀해 주세요.")
-  const [connect, setConnect] = useState(false)
 
   // 음성 녹음 부분
   const [audioStream, setAudioStream] = useState(null); 
@@ -40,6 +38,12 @@ function Main() {
   const stt_url = process.env.REACT_APP_STT_URL
   const tts_url = process.env.REACT_APP_TTS_URL
   const location = useLocation(); 
+
+    
+  //소켓 연결합니다.
+  socket.on("connect", () => {console.log("연결됨");})
+  socket.on("connect_error", (e) => console.log(e))
+
 
   // 오디오 녹음 시작하는 부분
   const startRecording = async () => {
@@ -98,7 +102,7 @@ function Main() {
     axios.get(tts_url + `${data}?cons_num${islogin ? num : -1}` , headers)
     .then((res)=>{
       setChat([...chatdata, user])
-      setAudio(process.env.REACT_APP_REST_API + "/api/ai/tts?address=" + res.data.filename)
+      setAudio(url + "/api/ai/tts?address=" + res.data.filename)
       })
   });
 
@@ -146,7 +150,7 @@ function Main() {
     // 만약 로그인이 된 상태이면 해당 토큰을 서버로 보내서 생성된 컨설팅 룸 번호를 받아오는 부분
     if (location.state.log === true){
       setIslogin(true)
-      axios.post(url + '/api/consult/save', {headers: {
+      axios.post(url + 'api/consult/save', {headers: {
         // 해당 유저의 정보를 헤더에 토큰을 담아서 보냄
         Authorization : `Bearer ${location.state.token}`
       },body : {
@@ -204,10 +208,7 @@ function Main() {
       minTrackingConfidence: 0.5
     });
     holistic.onResults(onResults);
-  
-    //소켓 연결합니다.
-    socket.on("connect", () => {console.log("연결됨");setConnect(true)})
-    socket.on("connect_error", (e) => console.log(e))
+
   }, []);
   
   
