@@ -63,7 +63,7 @@ def tts(text: str, cons_num: int = -1):
 
     # melgan-eval
     samplerate = 22050
-    audioinit = samplerate*0.4
+    audioinit = int(samplerate*0.4)
     audiobasic = samplerate*3
     g_audio = vocoder(mel)
     g_audio = g_audio.squeeze().cpu()
