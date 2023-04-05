@@ -32,7 +32,8 @@ function Main() {
   let chunks = [] // 오디오 정보를 넣는 리스트
   let formData = new FormData()
 
-  var socket = io(process.env.REACT_APP_FLASK_URL);
+  var socket = io.connect(process.env.REACT_APP_FLASK_URL);
+  // var socket = io("http://localhost:5001")
   const url = process.env.REACT_APP_REST_API
   const stt_url = process.env.REACT_APP_STT_URL
   const tts_url = process.env.REACT_APP_TTS_URL
