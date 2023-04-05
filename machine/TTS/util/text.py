@@ -205,12 +205,8 @@ def normalize_english(text):
     return text
 
 def normalize_upper(text):
-    text = text.group(0)
-
-    if all([char.isupper() for char in text]):
-        return "".join(upper_to_kor[char] for char in text)
-    else:
-        return text
+    text = normalize_with_dictionary(text, upper_to_kor)
+    return text
 
 def normalize_form(text):
     text = normalize_with_dictionary(text, form_to_kor)
