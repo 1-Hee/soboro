@@ -37,7 +37,6 @@ english_dictionary = {
         # JTBC
         'IT': '아이티',
         'IQ': '아이큐',
-        'JTBC': '제이티비씨',
         'trickle down effect': '트리클 다운 이펙트',
         'trickle up effect': '트리클 업 이펙트',
         'down': '다운',
@@ -54,7 +53,6 @@ english_dictionary = {
         'YS': '와이에스',
         'Y': '와이',
         'S': '에스',
-        'JTBC': '제이티비씨',
         'PC': '피씨',
         'bill': '빌',
         'Halmuny': '하모니', #####

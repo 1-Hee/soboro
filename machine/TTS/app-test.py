@@ -91,7 +91,7 @@ def _to_back(url: str, cons_num: int, cons_text: str):
     }
     data = json.dumps(data)
     headers = {"Content-type": "application/json"}
-    response = requests.post(url, data=data, headers=headers)
+    requests.post(url, data=data, headers=headers)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=13579)

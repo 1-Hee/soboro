@@ -41,14 +41,7 @@ def get_mode(char):
         return -1
 
 def text_to_sequence(text): # tokenize(text, True)
-  #sequence = []
-  #if not 0x1100 <= ord(text[0]) <= 0x1113:
-  #  text = ''.join(list(hangul_to_jamo(text)))
-  #for s in text:
-  #  sequence.append(_symbol_to_id[s])
-  #sequence.append(_symbol_to_id['~'])
   
-  tokens = text
   text = normalize(text)
   tokens = list(hangul_to_jamo(text))
   sequence = [_symbol_to_id[token] for token in tokens] + [_symbol_to_id[EOS]]
@@ -171,7 +164,7 @@ upper_to_kor = {
         'v': '브이',
         'w': '더블유',
         'x': '엑스',
-        'u': '와이',
+        'y': '와이',
         'z': '지',
 }
 
@@ -251,7 +244,6 @@ num_to_kor1 = [""] + list("일이삼사오육칠팔구")
 num_to_kor2 = [""] + list("만억조경해")
 num_to_kor3 = [""] + list("십백천")
 
-#count_to_kor1 = [""] + ["하나","둘","셋","넷","다섯","여섯","일곱","여덟","아홉"]
 count_to_kor1 = [""] + ["한","두","세","네","다섯","여섯","일곱","여덟","아홉"]
 
 count_tenth_dict = {
