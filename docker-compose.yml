@@ -8,3 +8,5 @@ services:
     build: ./machine/TTS
   sttapiservice:
     build: ./machine/STT
+  vttapiservice:
+    build: ./machine/VTT
