@@ -205,6 +205,7 @@ def normalize_english(text):
     return text
 
 def normalize_upper(text):
+    text = text.group(0)
     text = normalize_with_dictionary(text, upper_to_kor)
     return text
 
