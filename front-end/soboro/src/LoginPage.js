@@ -9,21 +9,36 @@ function Login() {
     const [errors, setErrors] = useState(false);
     const [ishorizon, setIshorizon] = useState(false)
     const navigate = useNavigate();
-    
-    const getRoom = (data) => {
-      const url = process.env.REACT_APP_REST_API  
-      const bodys = {
-        "consultingVisitPlace" : localStorage.getItem("location"),
-        "consultiongVisitClass" : localStorage.getItem("category")
-      }
-      axios.post(url + 'api/consult/save',{},{ headers : { Authorization : `Bearer ${data.data}`}, body : bodys}).then((res) =>{
+
+    const getRoom = async (data) => {
+      console.log(data.data)
+      const url = process.env.REACT_APP_REST_API
+      const location = localStorage.getItem("location")
+      const category = localStorage.getItem("category")
+      try {
+        const res = await axios.post(
+          url + 'api/consult/save',
+          {
+            "consultingVisitPlace" : location,
+            "consultingVisitClass" : category
+          },
+          {
+            headers: {
+              // Authorization token in the header
+              Authorization: `Bearer ${data.data}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
         if("error" in res.data) console.log()
         else{
           navigate(
           '/soboro',
         { state : { log : true, ishor : ishorizon, token : res.data.data }}
         );}
-      })
+      } catch (err) {
+        console.log(err)
+      }
     }
 
     const handleScan = (data) => {
