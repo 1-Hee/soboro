@@ -147,18 +147,9 @@ function Main() {
     // 해당 링크에 로그인 상태와 가로모드 세로모드의 정보가 담겨 있는지를 확인하는 부분
     if (!location.state) return;
     // 만약 로그인이 된 상태이면 해당 토큰을 서버로 보내서 생성된 컨설팅 룸 번호를 받아오는 부분
-    if (location.state.log === true){
+    if (location.state.log === true && location.state.token){
       setIslogin(true)
-      axios.post(url + 'api/consult/save', {headers: {
-        // 해당 유저의 정보를 헤더에 토큰을 담아서 보냄
-        Authorization : `Bearer ${location.state.token}`
-      },body : {
-        "consultingVisitPlace" : localStorage.getItem("location"),
-        "consultiongVisitClass" : localStorage.getItem("category")
-      }}).then((res) =>{
-        // 생성 된 컨설팅 룸 번호를 저장
-        setNum(res.data.data)
-      })
+      setNum(location.state.token)
     }
     else setIslogin(false)
     // 현재 가로모드인지 세로 모드인지를 설정하는 부분
