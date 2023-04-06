@@ -67,7 +67,8 @@ function Main() {
         const audioBlob = new Blob(chunks, { type: 'webm' });
         formData = new FormData()
         if(islogin) formData.append('consulting_no', num)
-        formData.append('webm_file', audioBlob)      
+        formData.append('webm_file', audioBlob)
+        formData.append('naver', true)      
         setRecording(false);
         handleUpload()
       });
@@ -212,8 +213,7 @@ function Main() {
         // 가로모드
         <div className="main_hor">
           <div className="canvasbox_hor">
-            <canvas ref={canvasRef} className="canvas_hor">
-            </canvas> 
+            <canvas ref={canvasRef} className="canvas_hor"></canvas> 
             <div className="error_msg_hor">{error}</div>  
             <div className="bottom_hor">
             <img src="/end_btn.png" onClick={() => {navigate('/'); socket.disconnect();
@@ -243,9 +243,8 @@ function Main() {
         // 세로모드
         <div className="main_ver">
           <div className="canvasbox_ver">
-            <canvas ref={canvasRef} className="canvas_ver">
+            <canvas ref={canvasRef} className="canvas_ver"></canvas> 
               <div className="error_msg_ver">{error}</div>    
-            </canvas> 
             <div className="bottom_ver">
             <img src="/end_btn.png" className="end_btn" alt="end" />
             </div>
