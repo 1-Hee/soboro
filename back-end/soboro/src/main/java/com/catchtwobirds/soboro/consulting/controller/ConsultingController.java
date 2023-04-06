@@ -121,6 +121,7 @@ public class ConsultingController {
     @SecurityRequirement(name = "bearerAuth")
     public RestApiResponse<?> consultingSave(@RequestBody ConsultingRequestDto consultingRequestDto) {
         log.info("/api/consult/save | POST method | 상담 정보 저장 호출됨");
+        log.info("컨텐츠 리퀘스트 디티오: {}", consultingRequestDto);
 
         UserResponseDto getUser = customUserDetailsService.currentLoadUserByUserId();
         String id = getUser.getUserId();
