@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  유효성 텍스트 칼라  -->
+    <color name="wrong_color">#bf0526</color>
+    <color name="currect_color">#66a502</color>
+
+    <color name="accent_pink">#FFD4EC</color>
+    <color name="accent_pink_dark">#F49DC7</color>
+    <!-- primary 색상 등... -->
+    <!-- light 모드 -->
+    <color name="primary_color_light">#CCE9F1</color>
+    <color name="accent_color_light">#FFD4EC</color>
+    <color name="text_color_light">#6d6666</color>
+
+    <color name="log_btn_color">#F0F0F0</color>
+    <color name="guide_btn_color">#FFF5C6</color>
+    <color name="practice_btn_color">#DCFFED</color>
+    <color name="qr_btn_color">#CFE9FF</color>
+    <color name="translation_btn_color">#FFE1E9</color>
+
+
+    <!-- dark mode -->
+    <color name="primary_color_dark">#4C74C2</color>
+    <color name="accent_color_dark">#F49DC7</color>
+    <color name="text_color_dark">#FDFDFD</color>
+
+    <!-- -->
+
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#1C1B1F</color>
+    <color name="white">#FDFDFD</color>
+    <color name="none">#00FDFDFD</color>
+
+    <!-- primary colors -->
+    <color name="mint_50">#FBFEFF</color>
+    <color name="mint_100">#DCF7FF</color>
+    <color name="mint_200_p">#CCE9F1</color>>
+    <color name="mint_300">#B5D2DA</color>
+    <color name="mint_400">#9FBCC4</color>
+    <color name="mint_500">#89A5AD</color>
+    <color name="mint_600">#758F96</color>
+    <color name="mint_700">#617980</color>
+    <color name="mint_800">#4E6369</color>
+    <color name="mint_900">#3B4D52</color>
+
+    <!-- red tokens -->
+    <color name="red_50">#FFF0EE</color>
+    <color name="red_100">#FFCEC9</color>
+    <color name="red_200">#FFADA4</color>
+    <color name="red_300">#FF8B7F</color>
+    <color name="red_400">#FF6A5A</color>
+    <color name="red_500">#E85647</color>
+    <color name="red_600">#A42E22</color>
+    <color name="red_700">#821F15</color>
+    <color name="red_800">#60130B</color>
+
+    <!-- green tokens -->
+    <color name="green_900">#335400</color>
+    <color name="green_800">#4c7c00</color>
+    <color name="green_700">#66a502</color>
+    <color name="green_600">#84ce16</color>
+    <color name="green_500">#a8f733</color>
+    <color name="green_400">#bcff59</color>
+    <color name="green_300">#ccff7c</color>
+    <color name="green_200">#d8ffa3</color>
+    <color name="green_100">#e8ffc6</color>
+    <color name="green_50">#f7ffea</color>
+
+    <!-- main color tokens -->
+    <color name="main_navy_900">#1c2642</color>
+    <color name="main_navy_800">#2b3860</color>
+    <color name="main_navy_700_p">#3d4c7c</color>
+    <color name="main_navy_600">#516399</color>
+    <color name="main_navy_500">#687cb7</color>
+    <color name="main_navy_400">#7f96d3</color>
+    <color name="main_navy_300">#9bb2f2</color>
+    <color name="main_navy_200">#bcccf9</color>
+    <color name="main_navy_100">#dbe2ff</color>
+    <color name="main_navy_50">#f4f7ff</color>
+
+
+    <!-- dark  yello tokens -->
+    <color name="dark_yellow_900">#4f4200</color>
+    <color name="dark_yellow_800">#776300</color>
+    <color name="dark_yellow_700">#a08700</color>
+    <color name="dark_yellow_600">#c9a800</color>
+    <color name="dark_yellow_500_p">#f2cc05</color>
+    <color name="dark_yellow_400">#ffdd33</color>
+    <color name="dark_yellow_300">#ffe55e</color>
+    <color name="dark_yellow_200">#ffea8c</color>
+    <color name="dark_yellow_100">#fff2ba</color>
+    <color name="dark_yellow_50">#fff9e5</color>
+
+    <!-- mono tokens -->
+    <color name="mono_900">#443d3d</color>
+    <color name="mono_800">#595151</color>
+    <color name="mono_700">#6d6666</color>
+    <color name="mono_600">#827c7c</color>
+    <color name="mono_500">#969191</color>
+    <color name="mono_400">#aaa8a8</color>
+    <color name="mono_300">#bfbfbf</color>
+    <color name="mono_200">#d3d3d3</color>
+    <color name="mono_100">#e8e8e8</color>
+    <color name="mono_50">#fcfcfc</color>
+
+    <!-- yellow tokens -->
+    <color name="yellow_200_p">#FFF5C6</color>
+    
+    <!-- yellow btn -->
+    <color name="main_log_color">#F0F0F0</color>
+    <color name="main_guide_color">#FFF5C6</color>
+    <color name="main_practice_color">#DCFFED</color>
+    <color name="main_translation_color">#FFE1E9</color>
+    <color name="main_qrlogin_color">#CFE9FF</color>
+
+
+</resources>
