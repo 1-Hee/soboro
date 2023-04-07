@@ -9,7 +9,11 @@ function Login() {
     const [errors, setErrors] = useState(false);
     const [ishorizon, setIshorizon] = useState(false)
     const navigate = useNavigate();
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 402c2203ba8a9752a2b1d53fd292bad62376ce6e
     const getRoom = async (data) => {
       console.log(data.data)
       const url = process.env.REACT_APP_REST_API
@@ -32,7 +36,10 @@ function Login() {
         );
         if("error" in res.data) console.log()
         else{
+<<<<<<< HEAD
           console.log(res.data.data)
+=======
+>>>>>>> 402c2203ba8a9752a2b1d53fd292bad62376ce6e
           navigate(
           '/soboro',
         { state : { log : true, ishor : ishorizon, token : res.data.data }}
