@@ -11,7 +11,6 @@ function Login() {
     const navigate = useNavigate();
 
     const getRoom = async (data) => {
-      console.log(data.data)
       const url = process.env.REACT_APP_REST_API
       const location = localStorage.getItem("location")
       const category = localStorage.getItem("category")

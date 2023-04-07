@@ -99,7 +99,10 @@ function Main() {
   socket.on('results', function(data){
     const user = {"user" : data}
     const headers = {'Content-Type' : 'application/json' }
-    axios.get(tts_url + `${data}?cons_num${islogin ? num : -1}` , headers)
+    let number
+    if(location.state.log) number = location.state?.token
+    else number = -1
+    axios.get(tts_url + `${data}?cons_num=${number}` , headers)
     .then((res)=>{
       setChat([...chatdata, user])
       setAudio(url + "/api/ai/tts?address=" + res.data.filename)
