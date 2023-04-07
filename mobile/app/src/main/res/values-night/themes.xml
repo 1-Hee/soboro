@@ -1,0 +1,50 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Soboro" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!--    액션바   -->
+        <item name="titleTextColor">@color/white</item>
+
+        <item name="colorPrimary">@color/primary_color_dark</item>
+        <item name="colorPrimaryDark">@color/primary_color_dark</item>
+        <item name="colorAccent">@color/white</item>
+
+        <!--    Edit 텍스트 밑에 줄 색상-->
+        <item name="colorControlNormal">@color/white</item> <!-- 밑에 줄 색상 -->
+        <item name="colorControlActivated">@color/accent_color_dark</item> <!-- 활성화 시 색상 -->
+        <item name="colorControlHighlight">@color/red_300</item>  <!-- 뭔지 모르겠음... -->
+
+        <!-- 커스텀 스타일 -->
+        <item name="editTextStyle">@style/SoboroEditTextStyle</item>
+        <item name="checkboxStyle">@style/SoboroCheckBoxStyle</item>
+        <item name="radioButtonStyle">@style/SoboroRadioBtnStyle</item>
+
+        <item name="textFillColor">@color/white</item>
+        <item name="android:textColorHint">@color/mono_50</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16dp</item>
+        <!-- Customize your theme here. -->
+        <!--        <item name="windowActionBar">false</item>-->
+        <!--        <item name="windowNoTitle">true</item>-->
+
+        <!--        백그라운드 색상 -->
+        <item name="backgroundColor">@color/black</item>
+
+        <!-- Customize your theme here. -->
+        <item name="android:windowSplashScreenBackground">@drawable/landing_page_m</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@color/none</item>
+        <item name="android:duration">1000</item>
+
+    </style>
+
+    <style name="SoboroEditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="SoboroRadioBtnStyle" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="SoboroCheckBoxStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:textColor">@color/white</item>
+    </style>
+</resources>

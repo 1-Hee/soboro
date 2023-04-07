@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="search_option_array">
+        <item>최신순</item>
+        <item>과거순</item>
+        <item>장소순</item>
+    </string-array>
+</resources>
