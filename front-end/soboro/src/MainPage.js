@@ -11,6 +11,8 @@ import User from './User';
 import './styles/style.css';
 import { useCallback } from "react";
 
+let naver = true
+
 function Main() {
   const canvasRef = useRef(null);
   const videoRef = useRef(null);
@@ -40,8 +42,8 @@ function Main() {
 
     
   //소켓 연결합니다.
-  socket.on("connect", () => {console.log("연결됨");})
-  socket.on("connect_error", (e) => console.log(e))
+  let isconnect = false
+  socket.on("connect", () => isconnect = true)
 
 
   // 오디오 녹음 시작하는 부분
@@ -67,6 +69,7 @@ function Main() {
         const audioBlob = new Blob(chunks, { type: 'webm' });
         formData = new FormData()
         if(islogin) formData.append('consulting_no', num)
+        formData.append('naver', naver)
         formData.append('webm_file', audioBlob)      
         setRecording(false);
         handleUpload()
@@ -98,7 +101,7 @@ function Main() {
   socket.on('results', function(data){
     const user = {"user" : data}
     const headers = {'Content-Type' : 'application/json' }
-    axios.get(tts_url + `${data}?cons_num${islogin ? num : -1}` , headers)
+    axios.get(tts_url + `${data}?cons_num${num ? num : -1}` , headers)
     .then((res)=>{
       setChat([...chatdata, user])
       setAudio(url + "/api/ai/tts?address=" + res.data.filename)
@@ -147,18 +150,9 @@ function Main() {
     // 해당 링크에 로그인 상태와 가로모드 세로모드의 정보가 담겨 있는지를 확인하는 부분
     if (!location.state) return;
     // 만약 로그인이 된 상태이면 해당 토큰을 서버로 보내서 생성된 컨설팅 룸 번호를 받아오는 부분
-    if (location.state.log === true){
+    if (location.state.log){
       setIslogin(true)
-      axios.post(url + 'api/consult/save', {headers: {
-        // 해당 유저의 정보를 헤더에 토큰을 담아서 보냄
-        Authorization : `Bearer ${location.state.token}`
-      },body : {
-        "consultingVisitPlace" : localStorage.getItem("location"),
-        "consultiongVisitClass" : localStorage.getItem("category")
-      }}).then((res) =>{
-        // 생성 된 컨설팅 룸 번호를 저장
-        setNum(res.data.data)
-      })
+      setNum(location.state.token)
     }
     else setIslogin(false)
     // 현재 가로모드인지 세로 모드인지를 설정하는 부분
@@ -168,17 +162,17 @@ function Main() {
 
 
   useCallback(() => {
-        // 오디오, 비디오 사용 허가 받는 코드
-        const getUserMedia = async () => {
-          try {
-            const stream = await navigator.mediaDevices.getUserMedia({video: true, audio : true});
-            const videoR = videoRef.current;
-            videoR.srcObject = stream;
-          } catch (e) {
-            // console.log(e)
-          }
-        };
-        getUserMedia();
+    // 오디오, 비디오 사용 허가 받는 코드
+    const getUserMedia = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({video: true, audio : true});
+        const videoR = videoRef.current;
+        videoR.srcObject = stream;
+      } catch (e) {
+        // console.log(e)
+      }
+    };
+    getUserMedia();
   }, [])
 
   // eslint-disable-next-line
@@ -253,8 +247,8 @@ function Main() {
         <div className="main_ver">
           <div className="canvasbox_ver">
             <canvas ref={canvasRef} className="canvas_ver">
-              <div className="error_msg_ver">{error}</div>    
             </canvas> 
+            <div className="error_msg_ver">{error}</div>    
             <div className="bottom_ver">
             <img src="/end_btn.png" className="end_btn" alt="end" />
             </div>
@@ -269,9 +263,9 @@ function Main() {
               </div>
             <div className="bottom_ver">
               {recording ? (
-                <img src="/record_end_btn.png" onClick={stopRecording} alt="end" className="end_btn"/>
+                <img src="/record_end_btn.png" onClick={() => stopRecording} alt="end" className="end_btn"/>
                 ) : (
-                <img src="/record_on_btn.png" onClick={startRecording} alt="on" className="end_btn"/>
+                <img src="/record_on_btn.png" onClick={() => startRecording} alt="on" className="end_btn"/>
               )}
             </div>
           </div>

@@ -395,6 +395,16 @@ input {
   color: red;
   font-size: 40px;
   font-family: "jamsil";
-  top: 70%;
-  left: 15%;
+  top: 75%;
+  left : 5%
+}
+
+.error_msg_ver {
+  position: fixed;
+  z-index: 10;
+  color: red;
+  font-size: 40px;
+  font-family: "jamsil";
+  top: 40%;
+  left : 10%
 }

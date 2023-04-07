@@ -10,6 +10,38 @@ function Login() {
     const [ishorizon, setIshorizon] = useState(false)
     const navigate = useNavigate();
     
+    const getRoom = async (data) => {
+      console.log(data.data)
+      const url = process.env.REACT_APP_REST_API
+      const location = localStorage.getItem("location")
+      const category = localStorage.getItem("category")
+      try {
+        const res = await axios.post(
+          url + 'api/consult/save',
+          {
+            "consultingVisitPlace" : location,
+            "consultingVisitClass" : category
+          },
+          {
+            headers: {
+              // Authorization token in the header
+              Authorization: `Bearer ${data.data}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+        if("error" in res.data) console.log()
+        else{
+          console.log(res.data.data)
+          navigate(
+          '/soboro',
+        { state : { log : true, ishor : ishorizon, token : res.data.data }}
+        );}
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
     const handleScan = (data) => {
       if (data) {
         const url = process.env.REACT_APP_REST_API  
@@ -19,11 +51,8 @@ function Login() {
         {
           if('error' in res){setErrors(true)}
           else {
-            navigate(
-              '/soboro',
-             { state : { log : true, ishor : ishorizon, token : data.data }}
-            );
-          }
+            getRoom(data)
+        }
         }).catch(() => setErrors(true))        
       }
     };
