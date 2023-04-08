@@ -1,0 +1,14 @@
+version: "3"
+services:
+   frontapiservice:
+     image: $DOMAIN:$PORT/soboro/frontapiservice:$FRONT_BUILD_NUMBER
+     container_name: frontapiservice
+     restart: always
+     ports:
+       - 80:80
+       - 443:443
+     environment:
+       - TZ=Asia/Seoul
+     volumes:
+       - /etc/letsencrypt/archive/$DOMAIN/:/etc/letsencrypt/archive/$DOMAIN/
+       - /home/ubuntu/compose/config/default.conf:/etc/nginx/conf.d/default.conf
