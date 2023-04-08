@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="340dp"
+    android:layout_height="160dp"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="?attr/backgroundColor"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="정말로 회원 탈퇴 하시겠습니까?"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:padding="16dp"
+            android:layout_gravity="center"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        >
+
+        <Button
+            android:id="@+id/withdrawalCancelBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="취소"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:background="@drawable/round_primary_white_btn"
+            android:textSize="20dp"
+            />
+
+        <Button
+            android:id="@+id/withdrawalBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="회원탈퇴"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:background="@drawable/round_red_btn"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+
+            />
+    </LinearLayout>
+
+</LinearLayout>

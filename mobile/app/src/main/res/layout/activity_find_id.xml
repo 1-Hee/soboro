@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
+    >
+<!-- 아이디 찾기 폼 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+<!--         아이디 찾기 가이드 텍스트 프레임 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="16dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="아이디 찾기"
+                android:textSize="20dp"
+                android:textAlignment="center"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="아이디는 가입 시 입력하신 이메일을 통해 찾을 수 있습니다."
+                android:textAlignment="center"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                />
+        </LinearLayout>
+
+<!--        이메일 입력 창 -->
+        <LinearLayout
+            android:id="@+id/findIdItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/findIdTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="이메일"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                />
+
+            <EditText
+                android:id="@+id/findIdEmailEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:ems="10"
+                android:hint="이메일을 입력해주세요"
+                android:inputType="textEmailAddress"
+                />
+            <TextView
+                android:id="@+id/findIdGuideText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red_700"
+                android:textSize="0dp"
+                android:visibility="invisible"
+                />
+        </LinearLayout>
+
+<!--        아이디 찾기 버튼 프레임 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            >
+
+<!--            아이디 찾기 버튼 -->
+            <Button
+                android:id="@+id/findIdBtn"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/round_primary_btn"
+                android:text="아이디 찾기"
+                />
+
+<!--            취소 버튼 -->
+            <Button
+                android:id="@+id/findIdCancelBtn"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/round_primary_white_btn"
+                android:text="취소"
+                />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

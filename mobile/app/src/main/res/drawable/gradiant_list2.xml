@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@drawable/audio_listen_filter"
+        android:duration="1500"
+        />
+<!--    <item-->
+<!--        android:drawable="@drawable/voice_btn_gradiant2"-->
+<!--        android:duration="1500"-->
+<!--        />-->
+<!--    <item-->
+<!--        android:drawable="@drawable/voice_btn_gradiant3"-->
+<!--        android:duration="1500"-->
+<!--        />-->
+</animation-list>
