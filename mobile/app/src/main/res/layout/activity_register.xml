@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.regist.RegisterActivity"
+    android:background="?attr/backgroundColor"
+    >
+
+    <!-- 회원가입 폼 스크롤 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+<!--        회원가입 폼 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
+<!--            아이디 입력 -->
+            <LinearLayout
+                android:id="@+id/idItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/registIdTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:text="아이디"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/registIdEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:ems="10"
+                        android:hint="아이디를 입력해주세요"
+                        android:inputType="textPersonName"
+                        android:layout_weight="1"
+                        android:layout_marginRight="8dp"
+                        />
+                    <Button
+                        android:id="@+id/registIdCheckOverlapBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:text="중복확인"
+                        android:background="@drawable/round_primary_btn"
+                        />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/registIdGuideText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="0dp"
+                    android:visibility="invisible"
+                    />
+            </LinearLayout>
+
+<!--            비밀번호 입력 폼 -->
+            <LinearLayout
+                android:id="@+id/pwdItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/registPwdTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:text="비밀번호"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    />
+
+                <EditText
+                    android:id="@+id/registPwdEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:ems="10"
+                    android:hint="비밀번호를 입력해주세요"
+                    android:inputType="textPassword"
+                    />
+
+                <TextView
+                    android:id="@+id/registPwdGuideText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="0dp"
+                    android:visibility="invisible"
+                    />
+            </LinearLayout>
+
+<!--            비밀번호 중복 확인 -->
+            <LinearLayout
+                android:id="@+id/pwdCheckItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/registPwdCheckTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:text="비밀번호 확인"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    />
+
+                <EditText
+                    android:id="@+id/registPwdCheckEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:ems="10"
+                    android:hint="비밀번호를 입력해주세요"
+                    android:inputType="textPassword"
+                    />
+
+                <TextView
+                    android:id="@+id/registPwdCheckText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="0dp"
+                    android:visibility="invisible"
+                    />
+            </LinearLayout>
+
+<!--            이름 입력 폼 -->
+            <LinearLayout
+                android:id="@+id/nameItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/registNameTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="이름"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/registNameEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:ems="10"
+                    android:hint="이름을 입력해주세요"
+                    android:inputType="textPersonName"
+                    />
+                <TextView
+                    android:id="@+id/registNameGuideText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="0dp"
+                    android:visibility="invisible"
+                    />
+            </LinearLayout>
+
+<!--            이메일 입력 폼 -->
+            <LinearLayout
+                android:id="@+id/emailItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/registEmailTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:text="이메일"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/registEmailEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:ems="10"
+                        android:hint="이메일을 입력해주세요"
+                        android:layout_weight="1"
+                        android:layout_marginRight="8dp"
+                        android:inputType="textEmailAddress"
+                        />
+
+                    <Button
+                        android:id="@+id/registEmailSendCodeBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/round_primary_white_btn"
+                        android:text="코드발송"
+                        android:textSize="16dp" />
+
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/registEmailGuideText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="0dp"
+                    android:visibility="invisible" />
+
+            </LinearLayout>
+
+<!--            이메일 인증번호 체크 입력 -->
+            <LinearLayout
+                android:id="@+id/registEmailCheckCodeItem"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/registPhoneCheckTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="인증 코드"
+                        android:textSize="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_gravity="center"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+
+                        <EditText
+                            android:id="@+id/registEmailCheckText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:ems="10"
+                            android:hint="인증코드 입력"
+                            android:inputType="textPassword"
+                            android:layout_weight="1"
+                            android:layout_marginRight="8dp"
+                            />
+                        <Button
+                            android:id="@+id/registEmailCheckBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="36dp"
+                            android:text="인증"
+                            android:layout_weight="2.1"
+                            android:layout_gravity="center"
+                            android:textSize="16dp"
+                            android:background="@drawable/round_primary_btn"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/registEmailCheckTimerText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="남은 시간 : 3:00"
+                    android:textAlignment="textEnd"
+                    android:textSize="16dp"
+                    android:padding="8dp"
+                    />
+            </LinearLayout>
+
+<!--            휴대폰 번호 입력 폼 -->
+            <LinearLayout
+                android:id="@+id/phoneItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/registPhoneTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:text="휴대폰 번호"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/registPhoneEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:ems="10"
+                        android:hint="전화번호를 -를 제외하고 입력해주세요"
+                        android:inputType="phone"
+                        android:layout_weight="1"
+                        android:textSize="16dp"
+                        android:layout_marginRight="8dp"
+                        />
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/registPhoneGuideText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="0dp"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+<!--            성별 선택 -->
+            <LinearLayout
+                android:id="@+id/sexItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/registSexTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="성별"
+                    android:textSize="20dp"
+                    />
+
+                <RadioGroup
+                    android:id="@+id/registSexRadioGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    >
+
+                    <RadioButton
+                        android:id="@+id/maleRadioBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="남성"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/femaleRadioBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="여성"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        />
+                </RadioGroup>
+            </LinearLayout>
+
+<!--            약관 동의 체크박스 -->
+            <CheckBox
+                android:id="@+id/registAgreeAllCheck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="모두 동의합니다"
+                android:layout_marginTop="16dp"
+                />
+
+<!--            이용약관 동의 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <CheckBox
+                    android:id="@+id/registAgreeTermsOfUse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="이용약관 동의"
+                    android:layout_weight="1"
+                    />
+                <TextView
+                    android:id="@+id/registSeeTermsOfUse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="더보기"
+                    android:layout_weight="1"
+                    android:textAlignment="textEnd"
+                    android:paddingRight="8dp"
+                    />
+            </LinearLayout>
+
+<!--            개인정보 취급 방침 동의 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <CheckBox
+                    android:id="@+id/registAgreePrivacyStatement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="개인정보처리방침 동의"
+                    android:layout_weight="1"
+                    />
+                <TextView
+                    android:id="@+id/registSeePrivacyPolicy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="더보기"
+                    android:layout_weight="1"
+                    android:textAlignment="textEnd"
+                    android:paddingRight="8dp"
+                    />
+            </LinearLayout>
+
+<!--            하단 회원가입 버튼 프레임 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="32dp"
+                >
+
+<!--                 회원가입 버튼 -->
+                <Button
+                    android:id="@+id/registBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/round_primary_btn"
+                    android:text="회원가입"
+                    />
+<!--                취소 버튼 -->
+                <Button
+                    android:id="@+id/registCancelBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/round_primary_white_btn"
+                    android:text="취소"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+</LinearLayout>

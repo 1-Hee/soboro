@@ -1,0 +1,88 @@
+pipeline {
+
+	agent any
+
+	options {
+		skipStagesAfterUnstable()
+	}
+
+	tools {
+		jdk("JAVA11")
+	}
+
+	environment {
+		BUILD_VARIANT = "Debug"
+	}
+
+	stages {
+		stage("Checkout") {
+			steps {
+				checkout scm
+			}
+		}
+
+		stage("Environment") {
+			steps {
+				script {
+					withCredentials([string(credentialsId: 'build-pwd', variable: 'PWD')]){
+						env.DevKeyPassword = "${PWD}"
+						env.DevStorePassword = "${PWD}"
+						env.ProductKeyPassword = "${PWD}"
+						env.ProductStorePassword = "${PWD}"
+					}
+				}
+			}
+		}
+
+		stage("Unit Test") {
+			steps {
+				dir ('mobile') {
+					sh "./gradlew test${env.BUILD_VARIANT}UnitTest --stacktrace"
+					//junit "**/TEST-*.xml"
+				}
+			}
+		}
+
+		stage("Assemble") {
+			steps {
+				dir ('mobile') {
+					sh "./gradlew assemble${env.BUILD_VARIANT} --stacktrace"
+					archiveArtifacts artifacts: "**/*.apk, **/mapping.txt", fingerprint: true
+				}
+			}
+		}
+
+		stage("Get app bundle") {
+			steps {
+				script {
+					sshPublisher(
+						publishers: [
+							sshPublisherDesc(
+								configName: 'ubuntu', 
+								transfers: [
+									sshTransfer(
+										cleanRemote: false, 
+										excludes: '', 
+										execCommand: 'sudo docker cp jenkins-docker:/var/jenkins_home/workspace/app-pipeline/mobile/app/release /home/ubuntu/data/application',
+										execTimeout: 120000, 
+										flatten: false, 
+										makeEmptyDirs: false, 
+										noDefaultExcludes: false, 
+										patternSeparator: '[, ]+', 
+										remoteDirectory: '', 
+										remoteDirectorySDF: false, 
+										removePrefix: '', 
+										sourceFiles: ''
+									)
+								], 
+								usePromotionTimestamp: false, 
+								useWorkspaceInPromotion: false, 
+								verbose: true
+							)
+						]
+					)
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,12 @@
+version: "3"
+services:
+  backapiservice:
+    build: ./back-end/soboro
+  frontapiservice:
+    build: ./front-end/soboro
+  ttsapiservice:
+    build: ./machine/TTS
+  sttapiservice:
+    build: ./machine/STT
+  vttapiservice:
+    build: ./machine/VTT

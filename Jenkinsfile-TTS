@@ -1,0 +1,81 @@
+def component = [
+	ttsapiservice: true
+]
+pipeline {
+	agent any
+	stages {
+		stage("Checkout") {
+			steps {
+				checkout scm
+			}
+		}
+		stage("Build") {
+			steps {
+				script {	
+					component.each{ entry ->
+						stage ("${entry.key} Build"){
+							if(entry.value){
+								var = entry.key
+								sh "docker-compose build ${var.toLowerCase()}"
+							}
+						}
+					}
+				}
+			}
+		}
+		stage("Tag and Push") {
+			steps {
+				script {
+					sh "echo 'TTS_BUILD_NUMBER=${BUILD_NUMBER}' > .env"
+					component.each{ entry ->
+						stage ("${entry.key} Push"){
+							if(entry.value){
+								var = entry.key
+								withCredentials([string(credentialsId: 'registry-domain', variable: 'DOMAIN'), string(credentialsId: 'registry-port', variable: 'PORT')]){
+									sh "docker tag tts-pipeline_${var.toLowerCase()}:latest ${DOMAIN}:${PORT}/soboro/${var.toLowerCase()}:${BUILD_NUMBER}"
+									sh "docker push ${DOMAIN}:${PORT}/soboro/${var.toLowerCase()}:${BUILD_NUMBER}"
+								}
+							}
+						}
+					}
+				}
+			}	
+		}
+		stage("publish") {
+			steps {
+				script {
+					sshPublisher(
+						publishers: [
+							sshPublisherDesc(
+								configName: 'ubuntu', 
+								transfers: [
+									sshTransfer(
+										cleanRemote: false, 
+										excludes: '', 
+										execCommand: '''
+rm -rf /home/ubuntu/data/temp-tts/*
+cd compose/ttsapiservice
+sudo docker-compose pull
+sudo docker-compose up --force-recreate -d''',
+										execTimeout: 120000, 
+										flatten: false, 
+										makeEmptyDirs: false, 
+										noDefaultExcludes: false, 
+										patternSeparator: '[, ]+', 
+										remoteDirectory: 'compose/ttsapiservice', 
+										remoteDirectorySDF: false, 
+										removePrefix: '', 
+										sourceFiles: '.env'
+									)
+								], 
+								usePromotionTimestamp: false, 
+								useWorkspaceInPromotion: false, 
+								verbose: true
+							)
+						]
+					)
+				}
+			}
+		}
+	}
+}
