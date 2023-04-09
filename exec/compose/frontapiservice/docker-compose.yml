@@ -11,4 +11,12 @@ services:
        - TZ=Asia/Seoul
      volumes:
        - /etc/letsencrypt/archive/$DOMAIN/:/etc/letsencrypt/archive/$DOMAIN/
+       - /home/ubuntu/compose/static:/usr/share/nginx/html/bonobono
        - /home/ubuntu/compose/config/default.conf:/etc/nginx/conf.d/default.conf
+     networks:
+       - front-net
+networks:
+  front-net:
+    external: true
+  back-net:
+    external: true

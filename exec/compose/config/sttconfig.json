@@ -1,0 +1,5 @@
+{
+    "client_id":"ze4s6m4dx9",
+    "client_secret":"kCODAv1iCl5BoPoTfPJgzaNgaAISR5415jgoAuyw",
+    "spring_url": "http://$DOMAIN:8080/api/consult/save/text"
+}

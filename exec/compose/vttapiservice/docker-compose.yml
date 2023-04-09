@@ -11,7 +11,11 @@ services:
       - /home/ubuntu/compose/config/vttconfig.json:/app/config.json
     ports:
       - 5001:5001
+    networks:
+      - front-net
+      - back-net
 networks:
-  default:
-    external:
-      name: back-net
+  back-net:
+    external: true
+  front-net:
+    external: true
