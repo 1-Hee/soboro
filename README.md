@@ -1,6 +1,6 @@
 # 특화프로젝트 2팀 일석이조
 
-![](./asset/soboro.png)
+![](./mobile/app/src/main/res/drawable/app_icon_soboro.png)
 
 ## 소보로(SOBORO) : 소리를 보는 길(路)
 
@@ -8,7 +8,9 @@
 
 - 청각 장애인을 위한 언어 번역 도우미
 
-### SOBORO 링크 : ************************
+### SOBORO 웹 : ************************
+
+### [Playstore SOBORO](https://play.google.com/store/apps/details?id=com.project.soboro)
 
 ## :clapper: 프로젝트 기간
 

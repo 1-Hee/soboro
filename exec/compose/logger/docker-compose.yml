@@ -1,0 +1,15 @@
+version: "3"
+services:
+  logger:
+    image: httpd:2.4
+    container_name: logger
+    volumes:
+      - /home/ubuntu/compose/logger/logger.html:/usr/local/apache2/htdocs/index.html
+    ports:
+      - 8888:80
+    environment:
+      - TZ=Asia/Seoul
+networks:
+  default:
+    external:
+      name: front-net

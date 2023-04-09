@@ -8,10 +8,15 @@ services:
       - TZ=Asia/Seoul
     volumes:
       - /home/ubuntu/model/kospeech/:/app/model/
+      - /home/ubuntu/compose/config/sttconfig.json:/app/config.json
     ports:
       - 24680:24680
+    networks:
+      - front-net
+      - back-net
 
 networks:
-  default:
-    external:
-      name: back-net
+  back-net:
+    external: true
+  front-net:
+    external: true

@@ -13,7 +13,11 @@ services:
       - /home/ubuntu/data/temp-tts/:/app/output/
     ports:
       - 13579:13579
+    networks:
+      - front-net
+      - back-net
 networks:
-  default:
-    external:
-      name: back-net
+  back-net:
+    external: true
+  front-net:
+    external: true
