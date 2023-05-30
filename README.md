@@ -1,6 +1,6 @@
 # 소보로(SOBORO) : 소리를 보는 길(路)
 
-![](./asset/soboro-banner.png)
+![](./asset/soboro-banner.jpg)
 
 - 인공지능 언어 통역 서비스
 - 청각 장애인을 위한 언어 번역 도우미
