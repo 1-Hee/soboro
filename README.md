@@ -235,7 +235,7 @@
 - 카메라가 수어를 인식하여 텍스트로 변환
 - 음성이 인식되면 텍스트로 변환
 
-![](./asset/view-VTT1.gif) <br> 
+![](./asset/view-VTT1.gif) <br>
 ![](./asset/view-VTT2.gif) <br>
 <br>
 
@@ -243,70 +243,73 @@
 
 ### 메인 페이지
 
-- Applicaion 메인 페이지
+- 안드로이드 앱 로그인 시 진입하는 메인 액티비티
 - 최근 이용 기록 버튼을 눌러 최근 상담 내역을 조회할 수 있음
 - QR로그인을 이용해 WEB페이지 간편 로그인 지원
 - 음성을 텍스트로 변환하는 발음연습 기능 제공
 - TTS, STT 기능을 지원하는 음성 번역기 제공
 
-<img src="./asset/view-main.jpg" width="350"/>
+<div align="left">
+<img src="./asset/view-landingpage.png" width="256"/>
+<img src="./asset/view-main.jpg" width="256"/>
+</div>
 
 ### 발음 연습 (STT)
 
 - "대전의 자랑 튀김 소보로" 소리를 텍스트로 변환
 
-<img src="./asset/view-stt.gif" width="350"/> <br><br>
-<img src="./asset/view-stt1.jpg" width="350"/>
-<img src="./asset/view-stt2.jpg" width="350"/>
-
+<div align="left">
+<img src="./asset/view-stt.gif" width="256"/> 
+<img src="./asset/view-stt1.jpg" width="256"/>
+<img src="./asset/view-stt2.jpg" width="256"/>
+</div>
 
 ### 음성번역기 (STT, TTS)
 
 - STT(Speech to text), TTS(Text to Speech) 기능 지원
 - STT는 두 가지 모델로 사용가능 (학습 모델, 네이버 클로버 모델)
 
-<img src="./asset/view-trans-STT.gif" width="350"/>
-<img src="./asset/view-trans-TTS.gif" width="350"/> <br><br>
-<img src="./asset/view-trans1.jpg" width="350"/>
-<img src="./asset/view-trans2.jpg" width="350"/>
-
+<div align="left">
+<img src="./asset/view-trans-STT.gif" width="196"/>
+<img src="./asset/view-trans-TTS.gif" width="196"/>
+<img src="./asset/view-trans1.jpg" width="196"/>
+<img src="./asset/view-trans2.jpg" width="196"/>
+</div>
 
 ### 최근 이용 기록
 
 - WEB에서 상담한 내역을 App에서 조회할 수 있음
 
-<img src="./asset/view-consult1.jpg" width="350"/>
-<img src="./asset/view-consult2.jpg" width="350"/><br>
-<img src="./asset/view-consult3.jpg" width="350"/>
-<img src="./asset/view-consult4.jpg" width="350"/>
-
-### 랜딩페이지
-
-<img src="./asset/view-landingpage.png" width="350"/>
+<div align="left">
+<img src="./asset/view-consult1.jpg" width="196"/>
+<img src="./asset/view-consult2.jpg" width="196"/>
+<img src="./asset/view-consult3.jpg" width="196"/>
+<img src="./asset/view-consult4.jpg" width="196"/>
+</div>
 
 ### 로그인 & QR 로그인
 
-- QR로그인을 이용하여 WEB에서 간편 로그인을 수행할 수 있음
+- QR로그인을 이용하여 WEB에서 간편 로그인 할 수 있음
 
-<img src="./asset/view-login.jpg" width="350"/>
-<img src="./asset/view-login-qr.jpg" width="350"/>
+<div algin="left">
+<img src="./asset/view-login.jpg" width="256"/>
+<img src="./asset/view-login-qr.jpg" width="256"/>
+</div>
 
 ### 회원가입
 
-- 회원 가입 페이지
+- 회원 가입 액티비티
 - 회원은 최근 상담 내역을 기록과 조회할 수 있음
-
-<img src="./asset/view-member-join.png" width="350"/>
+  <img src="./asset/view-member-join.png" width="256"/>
 
 ### 회원정보
 
-- 로그인한 사용자 정보를 보여주는 페이지
-
-<img src="./asset/view-member-info.jpg" width="350"/>
+- 앱 내 사용자 정보 확인 액티비티
+  <img src="./asset/view-member-info.jpg" width="256"/>
 
 ## Project Member - 일석2조
 
-- 조원희 (Team Leader, FrontEnd)
+- 조원희 (Team Leader, Android)
 - 김은영 (FrontEnd, AI)
 - 이수민 (AI, CI/CD)
 - 장운창 (AI, CI/CD)
