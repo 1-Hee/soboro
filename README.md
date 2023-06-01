@@ -306,7 +306,8 @@
 ### 회원정보
 
 - 앱 내 사용자 정보 확인 액티비티
-  <img src="./asset/view-member-info.jpg" width="256"/>
+
+<img src="./asset/view-member-info.jpg" width="256"/>
 
 ## Project Member - 일석2조
 
