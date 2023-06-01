@@ -300,7 +300,8 @@
 
 - 회원 가입 액티비티
 - 회원은 최근 상담 내역을 기록과 조회할 수 있음
-  <img src="./asset/view-member-join.png" width="256"/>
+
+<img src="./asset/view-member-join.png" width="256"/>
 
 ### 회원정보
 
